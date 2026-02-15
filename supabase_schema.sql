@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS athletes (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     created_at TIMESTAMPTZ DEFAULT now(),
     name TEXT NOT NULL,
-    email TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
     type TEXT NOT NULL CHECK (type IN ('juniors', 'seniors')),
     state TEXT NOT NULL,
     hac_id TEXT UNIQUE,
