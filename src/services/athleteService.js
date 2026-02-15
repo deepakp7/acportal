@@ -4,7 +4,7 @@ export const athleteService = {
     async getAll() {
         const { data, error } = await supabase
             .from('athletes')
-            .select('*, coaches(*)')
+            .select('*, coach:coaches(*)')
             .order('name', { ascending: true })
         if (error) throw error
         return data.map(item => ({
