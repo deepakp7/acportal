@@ -379,18 +379,25 @@ const AttendanceManager = ({ userType, athleteId = null }) => {
 
     React.useEffect(() => {
         const loadAttendance = async () => {
-            if (loading) return;
+            if (loading || athletes.length === 0) return;
             try {
                 console.log(`Fetching attendance for ${selectedDate}, coach: ${selectedCoachId}`);
                 const data = await attendanceService.getForDateRange(selectedDate, selectedDate, selectedCoachId);
                 console.log('Attendance data received:', data);
-                setAttendanceRows(data || []);
+
+                // Manual join: attach athlete details to each attendance row
+                const joinedData = (data || []).map(row => ({
+                    ...row,
+                    athlete: athletes.find(a => String(a.id) === String(row.athlete_id))
+                }));
+
+                setAttendanceRows(joinedData);
             } catch (err) {
                 console.error('Failed to load attendance rows:', err);
             }
         };
         loadAttendance();
-    }, [selectedDate, selectedCoachId, loading]);
+    }, [selectedDate, selectedCoachId, loading, athletes]);
 
     // Filter athletes relevant to the selected coach
     const visibleAthletes = athletes.filter(a => {
