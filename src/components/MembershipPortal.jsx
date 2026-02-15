@@ -381,7 +381,9 @@ const AttendanceManager = ({ userType, athleteId = null }) => {
         const loadAttendance = async () => {
             if (loading) return;
             try {
+                console.log(`Fetching attendance for ${selectedDate}, coach: ${selectedCoachId}`);
                 const data = await attendanceService.getForDateRange(selectedDate, selectedDate, selectedCoachId);
+                console.log('Attendance data received:', data);
                 setAttendanceRows(data || []);
             } catch (err) {
                 console.error('Failed to load attendance rows:', err);
@@ -392,14 +394,15 @@ const AttendanceManager = ({ userType, athleteId = null }) => {
 
     // Filter athletes relevant to the selected coach
     const visibleAthletes = athletes.filter(a => {
-        if (athleteId) return a.id === athleteId;
-        return selectedCoachId === 'All' || a.coachId === selectedCoachId || a.coach_id === selectedCoachId;
+        if (athleteId) return String(a.id) === String(athleteId);
+        const aCoachId = a.coach_id || a.coachId;
+        return selectedCoachId === 'All' || String(aCoachId) === String(selectedCoachId);
     });
 
     const handleStatusChange = (aId, status) => {
-        const existing = attendanceRows.find(r => r.athlete_id === aId);
+        const existing = attendanceRows.find(r => String(r.athlete_id) === String(aId));
         if (existing) {
-            setAttendanceRows(attendanceRows.map(r => r.athlete_id === aId ? { ...r, status } : r));
+            setAttendanceRows(attendanceRows.map(r => String(r.athlete_id) === String(aId) ? { ...r, status } : r));
         } else {
             setAttendanceRows([...attendanceRows, { athlete_id: aId, status, date: selectedDate, coach_id: selectedCoachId === 'All' ? null : selectedCoachId }]);
         }
@@ -408,7 +411,24 @@ const AttendanceManager = ({ userType, athleteId = null }) => {
     const handleSave = async () => {
         setSaving(true);
         try {
-            const recordsToSave = attendanceRows.filter(r => r.date === selectedDate);
+            // Filter only records that have a status set
+            const recordsToSave = attendanceRows
+                .filter(r => r.date === selectedDate && r.status)
+                .map(r => ({
+                    athlete_id: r.athlete_id,
+                    coach_id: r.coach_id || (athletes.find(a => String(a.id) === String(r.athlete_id))?.coach_id),
+                    date: selectedDate,
+                    status: r.status,
+                    result: r.result || '',
+                    session_name: r.session_name || 'Training Session'
+                }));
+
+            if (recordsToSave.length === 0) {
+                alert('No changes to save.');
+                setSaving(false);
+                return;
+            }
+
             await attendanceService.recordAttendance(recordsToSave);
             alert('Attendance saved successfully!');
         } catch (err) {
@@ -460,7 +480,7 @@ const AttendanceManager = ({ userType, athleteId = null }) => {
                 <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
                     <div>
                         <h3 className="font-black text-slate-900 tracking-tight">
-                            {selectedCoachId === 'All' ? 'Club-wide Session' : `${coaches.find(c => c.id === selectedCoachId)?.team_name || 'Team'} Session`}
+                            {selectedCoachId === 'All' ? 'Club-wide Session' : `${coaches.find(c => String(c.id) === String(selectedCoachId))?.team_name || 'Team'} Session`}
                         </h3>
                         <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">{selectedDate}</p>
                     </div>
@@ -485,7 +505,7 @@ const AttendanceManager = ({ userType, athleteId = null }) => {
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {visibleAthletes.map(athlete => {
-                                const record = attendanceRows.find(r => r.athlete_id === athlete.id);
+                                const record = attendanceRows.find(r => String(r.athlete_id) === String(athlete.id));
                                 return (
                                     <tr key={athlete.id} className="hover:bg-slate-50 transition-colors">
                                         <td className="px-6 py-4">
