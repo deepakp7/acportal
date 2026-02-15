@@ -4,14 +4,10 @@ export const athleteService = {
     async getAll() {
         const { data, error } = await supabase
             .from('athletes')
-            .select('*, coach:coaches(*)')
+            .select('*')
             .order('name', { ascending: true })
         if (error) throw error
-        return data.map(item => ({
-            ...item,
-            coach: item.coaches,
-            teamName: item.coaches?.team_name
-        }))
+        return data;
     },
 
     async getById(id) {
