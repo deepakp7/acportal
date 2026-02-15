@@ -6,14 +6,17 @@ import { gocardlessService } from '../services/gocardlessService';
 export default function PaymentPortal({ athleteData, onComplete }) {
     const [status, setStatus] = useState('idle'); // idle, loading, redirecting, success
     const [error, setError] = useState(null);
+    const [redirectUrl, setRedirectUrl] = useState(null);
 
     const handleSetupDirectDebit = async () => {
         setStatus('loading');
         try {
             const flow = await gocardlessService.createRedirectFlow(athleteData);
+            setRedirectUrl(flow.redirect_url);
             setStatus('redirecting');
-            // In a real app, you'd redirect: window.location.href = flow.redirect_url;
-            console.log('Redirecting to:', flow.redirect_url);
+
+            // For testing: open in new tab
+            window.open(flow.redirect_url, '_blank');
 
             // Simulating a successful return from redirect
             setTimeout(async () => {
@@ -22,7 +25,7 @@ export default function PaymentPortal({ athleteData, onComplete }) {
                     setStatus('success');
                     if (onComplete) onComplete(result.mandate_id);
                 }
-            }, 2000);
+            }, 5000);
         } catch (err) {
             setError('Failed to initiate payment setup. Please try again.');
             setStatus('idle');
@@ -87,6 +90,20 @@ export default function PaymentPortal({ athleteData, onComplete }) {
                             {error && (
                                 <div className="p-4 bg-red-50 border border-red-100 rounded-2xl text-sm text-red-600 font-bold text-center">
                                     {error}
+                                </div>
+                            )}
+
+                            {status === 'redirecting' && redirectUrl && (
+                                <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl">
+                                    <p className="text-xs text-emerald-700 font-bold mb-2">Redirecting to GoCardless Sandbox...</p>
+                                    <a
+                                        href={redirectUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-xs text-emerald-600 underline font-bold"
+                                    >
+                                        Click here if you aren't redirected automatically
+                                    </a>
                                 </div>
                             )}
 

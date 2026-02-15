@@ -489,34 +489,45 @@ const MemberDashboard = ({ currentView }) => {
         .filter(m => filterType === 'All' || m.type === filterType);
 
     const handleStateChange = async (id, newState) => {
+        setMembers(members.map(m => m.id === id ? { ...m, state: newState } : m));
         try {
             await athleteService.update(id, { state: newState });
-            setMembers(members.map(m => m.id === id ? { ...m, state: newState } : m));
         } catch (err) {
-            console.error('Update failed:', err);
+            console.warn('DB Update failed (using local state):', err);
         }
         setShowStateDropdown(null);
     };
 
     const handleCoachChange = async (id, newCoachId) => {
+        // Find coach details locally to update UI immediately
+        const selectedCoach = coaches.find(c => c.id === newCoachId);
+        setMembers(members.map(m => m.id === id ? {
+            ...m,
+            coach_id: newCoachId,
+            coachId: newCoachId, // fallback for mock
+            coach: selectedCoach,
+            teamName: selectedCoach?.team_name || selectedCoach?.teamName
+        } : m));
+
         try {
             await athleteService.update(id, { coach_id: newCoachId });
             const updatedAthlete = await athleteService.getById(id);
-            setMembers(members.map(m => m.id === id ? { ...m, coachId: newCoachId, ...updatedAthlete } : m));
+            setMembers(members => members.map(m => m.id === id ? { ...m, ...updatedAthlete } : m));
         } catch (err) {
-            console.error('Coach update failed:', err);
+            console.warn('Coach DB update failed (using local state):', err);
         }
         setShowCoachDropdown(null);
     };
 
     const toggleTrackFees = async (id) => {
         const member = members.find(m => m.id === id);
+        const newValue = !member.trackFeesPaid;
+        setMembers(members.map(m => m.id === id ? { ...m, trackFeesPaid: newValue } : m));
+
         try {
-            const newValue = !member.trackFeesPaid;
             await athleteService.update(id, { track_fees_paid: newValue });
-            setMembers(members.map(m => m.id === id ? { ...m, trackFeesPaid: newValue } : m));
         } catch (err) {
-            console.error('Track fees update failed:', err);
+            console.warn('Track fees DB update failed (using local state):', err);
         }
     };
 
