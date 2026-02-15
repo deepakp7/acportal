@@ -29,6 +29,7 @@ import { twMerge } from 'tailwind-merge';
 import PaymentPortal from './PaymentPortal';
 import { athleteService } from '../services/athleteService';
 import { coachService } from '../services/coachService';
+import { attendanceService } from '../services/attendanceService';
 
 function cn(...inputs) {
     return twMerge(clsx(inputs));
@@ -351,99 +352,202 @@ const PerformanceHistory = ({ userType, athleteId = null }) => {
 
 const AttendanceManager = ({ userType, athleteId = null }) => {
     const [selectedCoachId, setSelectedCoachId] = useState('All');
+    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+    const [athletes, setAthletes] = useState([]);
+    const [attendanceRows, setAttendanceRows] = useState([]);
+    const [coaches, setCoaches] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
 
-    // Pre-calculate session records with member data to simplify filtering
-    const attendanceWithMembers = ATTENDANCE_DATA.map(session => {
-        const records = session.records.map(record => {
-            const member = MOCK_MEMBERS.find(m => m.id === record.athleteId);
-            const coach = MOCK_COACHES.find(c => c.id === member?.coachId);
-            return { ...record, member, coach };
-        });
+    React.useEffect(() => {
+        const loadInitialData = async () => {
+            try {
+                const [athleteData, coachData] = await Promise.all([
+                    athleteService.getAll(),
+                    coachService.getAll()
+                ]);
+                setAthletes(athleteData || []);
+                setCoaches(coachData || MOCK_COACHES);
+            } catch (err) {
+                console.error('Failed to load attendance data:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadInitialData();
+    }, []);
 
-        const filteredRecords = records.filter(record => {
-            const matchesCoach = selectedCoachId === 'All' || record.member?.coachId === selectedCoachId;
-            const matchesAthlete = athleteId ? record.athleteId === athleteId : true;
-            return matchesCoach && matchesAthlete;
-        });
+    React.useEffect(() => {
+        const loadAttendance = async () => {
+            if (loading) return;
+            try {
+                const data = await attendanceService.getForDateRange(selectedDate, selectedDate, selectedCoachId);
+                setAttendanceRows(data || []);
+            } catch (err) {
+                console.error('Failed to load attendance rows:', err);
+            }
+        };
+        loadAttendance();
+    }, [selectedDate, selectedCoachId, loading]);
 
-        return { ...session, filteredRecords };
-    }).filter(s => s.filteredRecords.length > 0);
+    // Filter athletes relevant to the selected coach
+    const visibleAthletes = athletes.filter(a => {
+        if (athleteId) return a.id === athleteId;
+        return selectedCoachId === 'All' || a.coachId === selectedCoachId || a.coach_id === selectedCoachId;
+    });
+
+    const handleStatusChange = (aId, status) => {
+        const existing = attendanceRows.find(r => r.athlete_id === aId);
+        if (existing) {
+            setAttendanceRows(attendanceRows.map(r => r.athlete_id === aId ? { ...r, status } : r));
+        } else {
+            setAttendanceRows([...attendanceRows, { athlete_id: aId, status, date: selectedDate, coach_id: selectedCoachId === 'All' ? null : selectedCoachId }]);
+        }
+    };
+
+    const handleSave = async () => {
+        setSaving(true);
+        try {
+            const recordsToSave = attendanceRows.filter(r => r.date === selectedDate);
+            await attendanceService.recordAttendance(recordsToSave);
+            alert('Attendance saved successfully!');
+        } catch (err) {
+            console.error('Save failed:', err);
+            alert('Failed to save attendance.');
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    if (loading) return <div className="p-8 text-center text-slate-500 font-bold">Loading Attendance...</div>;
 
     return (
         <div className="space-y-4">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
                     <Calendar size={20} className="text-blue-500" />
-                    {athleteId ? "My Attendance Record" : "Team Attendance / Dropdown"}
+                    {athleteId ? "My Attendance" : "Coach Calendar & Attendance"}
                 </h2>
-                {!athleteId && (
+                <div className="flex flex-wrap gap-2">
                     <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm">
-                        <Users size={16} className="text-slate-400" />
-                        <select
-                            value={selectedCoachId}
-                            onChange={(e) => setSelectedCoachId(e.target.value)}
+                        <Calendar size={16} className="text-slate-400" />
+                        <input
+                            type="date"
+                            value={selectedDate}
+                            onChange={(e) => setSelectedDate(e.target.value)}
                             className="text-xs font-bold outline-none bg-transparent"
-                        >
-                            <option value="All">All Coaches / Teams</option>
-                            {MOCK_COACHES.map(c => (
-                                <option key={c.id} value={c.id}>{c.name} ({c.teamName})</option>
-                            ))}
-                        </select>
+                        />
                     </div>
-                )}
+                    {!athleteId && (
+                        <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm">
+                            <Users size={16} className="text-slate-400" />
+                            <select
+                                value={selectedCoachId}
+                                onChange={(e) => setSelectedCoachId(e.target.value)}
+                                className="text-xs font-bold outline-none bg-transparent"
+                            >
+                                <option value="All">All Coaches</option>
+                                {coaches.map(c => (
+                                    <option key={c.id} value={c.id}>{c.name} ({c.team_name || c.teamName})</option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
+                </div>
             </div>
 
-            <div className="space-y-6">
-                {attendanceWithMembers.map(session => (
-                    <div key={session.date} className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                        <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
-                            <div>
-                                <h3 className="font-black text-slate-900 tracking-tight">{session.session}</h3>
-                                <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">{session.date}</p>
-                            </div>
-                            <span className="px-3 py-1 bg-white rounded-lg border text-[10px] font-black uppercase text-slate-400">Session Log</span>
-                        </div>
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-left text-sm">
-                                <thead className="bg-white/50 border-b border-slate-100">
-                                    <tr>
-                                        <th className="px-6 py-3 font-bold text-slate-400 uppercase text-[10px]">Athlete</th>
-                                        <th className="px-6 py-3 font-bold text-slate-400 uppercase text-[10px]">Team</th>
-                                        <th className="px-6 py-3 font-bold text-slate-400 uppercase text-[10px]">Status</th>
-                                        <th className="px-6 py-3 font-bold text-slate-400 uppercase text-[10px]">Result</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-slate-100">
-                                    {session.filteredRecords.map(record => (
-                                        <tr key={record.athleteId} className="hover:bg-slate-50 transition-colors">
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center gap-3">
-                                                    <img src={record.member?.photo} className="w-8 h-8 rounded-full border border-slate-100" />
-                                                    <span className="font-bold text-slate-900">{record.member?.name}</span>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-slate-100 text-slate-600 text-[10px] font-black uppercase">
-                                                    {record.coach?.teamName || 'Unassigned'}
-                                                </span>
-                                            </td>
-                                            <td className="px-6 py-4">
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+                    <div>
+                        <h3 className="font-black text-slate-900 tracking-tight">
+                            {selectedCoachId === 'All' ? 'Club-wide Session' : `${coaches.find(c => c.id === selectedCoachId)?.team_name || 'Team'} Session`}
+                        </h3>
+                        <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">{selectedDate}</p>
+                    </div>
+                    {!athleteId && (
+                        <button
+                            onClick={handleSave}
+                            disabled={saving}
+                            className="bg-emerald-600 text-white px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest hover:bg-emerald-700 transition-all disabled:opacity-50"
+                        >
+                            {saving ? 'Saving...' : 'Save Attendance'}
+                        </button>
+                    )}
+                </div>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left text-sm">
+                        <thead className="bg-white/50 border-b border-slate-100">
+                            <tr>
+                                <th className="px-6 py-3 font-bold text-slate-400 uppercase text-[10px]">Athlete</th>
+                                <th className="px-6 py-3 font-bold text-slate-400 uppercase text-[10px]">Status</th>
+                                <th className="px-6 py-3 font-bold text-slate-400 uppercase text-[10px]">Result/Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                            {visibleAthletes.map(athlete => {
+                                const record = attendanceRows.find(r => r.athlete_id === athlete.id);
+                                return (
+                                    <tr key={athlete.id} className="hover:bg-slate-50 transition-colors">
+                                        <td className="px-6 py-4">
+                                            <div className="flex items-center gap-3">
+                                                <img src={athlete.photo || `https://i.pravatar.cc/150?u=${athlete.id}`} className="w-8 h-8 rounded-full border border-slate-100" />
+                                                <span className="font-bold text-slate-900">{athlete.name}</span>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            {athleteId ? (
                                                 <span className={cn(
                                                     "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase",
-                                                    record.status === 'Present' ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"
+                                                    record?.status === 'Present' ? "bg-emerald-100 text-emerald-700" :
+                                                        record?.status === 'Absent' ? "bg-red-100 text-red-700" : "bg-slate-100 text-slate-400"
                                                 )}>
-                                                    {record.status === 'Present' ? <CheckCircle2 size={10} /> : <XCircle size={10} />}
-                                                    {record.status}
+                                                    {record?.status || 'No Record'}
                                                 </span>
-                                            </td>
-                                            <td className="px-6 py-4 font-black text-slate-700">{record.result}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                ))}
+                                            ) : (
+                                                <div className="flex gap-2">
+                                                    {['Present', 'Absent', 'Late'].map(s => (
+                                                        <button
+                                                            key={s}
+                                                            onClick={() => handleStatusChange(athlete.id, s)}
+                                                            className={cn(
+                                                                "px-2 py-1 rounded text-[10px] font-black uppercase transition-all",
+                                                                record?.status === s ?
+                                                                    (s === 'Present' ? "bg-emerald-500 text-white" : s === 'Absent' ? "bg-red-500 text-white" : "bg-amber-500 text-white") :
+                                                                    "bg-slate-100 text-slate-400 hover:bg-slate-200"
+                                                            )}
+                                                        >
+                                                            {s}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <input
+                                                type="text"
+                                                placeholder="Result/Note..."
+                                                value={record?.result || ''}
+                                                onChange={(e) => {
+                                                    const val = e.target.value;
+                                                    setAttendanceRows(attendanceRows.map(r => r.athlete_id === athlete.id ? { ...r, result: val } : r));
+                                                }}
+                                                disabled={!!athleteId}
+                                                className="bg-transparent text-xs font-bold text-slate-700 outline-none w-full border-b border-transparent focus:border-slate-200"
+                                            />
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                            {visibleAthletes.length === 0 && (
+                                <tr>
+                                    <td colSpan="3" className="px-6 py-8 text-center text-slate-400 text-sm font-medium italic">
+                                        No athletes found for this group.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );

@@ -35,7 +35,23 @@ CREATE INDEX IF NOT EXISTS idx_athletes_email ON athletes(email);
 CREATE INDEX IF NOT EXISTS idx_athletes_state ON athletes(state);
 CREATE INDEX IF NOT EXISTS idx_athletes_type ON athletes(type);
 
+-- Attendance table
+CREATE TABLE IF NOT EXISTS attendance (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    athlete_id UUID REFERENCES athletes(id) ON DELETE CASCADE,
+    coach_id TEXT REFERENCES coaches(id) ON DELETE SET NULL,
+    date DATE NOT NULL,
+    status TEXT NOT NULL CHECK (status IN ('Present', 'Absent', 'Late')),
+    result TEXT, -- Optional: trial result, notes, etc.
+    session_name TEXT DEFAULT 'Training Session',
+    UNIQUE(athlete_id, date) -- Prevent duplicate attendance for same athlete on same day
+);
+
+-- Index for faster lookups
+CREATE INDEX IF NOT EXISTS idx_attendance_date ON attendance(date);
+CREATE INDEX IF NOT EXISTS idx_attendance_coach_id ON attendance(coach_id);
+CREATE INDEX IF NOT EXISTS idx_attendance_athlete_id ON attendance(athlete_id);
+
 -- Enable Row Level Security (optional but recommended)
--- ALTER TABLE athletes ENABLE ROW LEVEL SECURITY;
--- CREATE POLICY "Public read" ON athletes FOR SELECT USING (true);
--- CREATE POLICY "Admin write" ON athletes FOR ALL USING (true); -- Replace with proper auth check
+-- ...
