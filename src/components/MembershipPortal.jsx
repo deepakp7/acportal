@@ -889,7 +889,7 @@ const MemberDashboard = ({ currentView, athletes = [], coaches = [], onUpdateAth
                         <p className="text-amber-600 text-xs">Awaiting trial session allocation</p>
                     </div>
                     <div className="text-2xl font-black text-amber-500">
-                        {members.filter(m => m.state === 'Awaiting Trials').length}
+                        {athletes.filter(m => m.state === 'Awaiting Trials').length}
                     </div>
                 </div>
                 <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex items-center justify-between">
