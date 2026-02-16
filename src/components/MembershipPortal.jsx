@@ -251,6 +251,17 @@ const TrainingManager = () => {
         </div>
     );
 };
+// Helper to parse time strings (e.g., "3:13", "12.45s") into seconds for comparison
+const parseTimeToSeconds = (timeStr) => {
+    if (!timeStr || timeStr === '-') return Infinity;
+    const cleanTime = String(timeStr).replace(/[^\d:.]/g, '');
+    if (cleanTime.includes(':')) {
+        const parts = cleanTime.split(':');
+        if (parts.length === 2) return (parseInt(parts[0]) * 60) + parseFloat(parts[1]);
+        if (parts.length === 3) return (parseInt(parts[0]) * 3600) + (parseInt(parts[1]) * 60) + parseFloat(parts[2]);
+    }
+    return parseFloat(cleanTime) || Infinity;
+};
 
 const PerformanceHistory = ({ userType, athleteId = null }) => {
     const [filterVenue, setFilterVenue] = useState('All');
@@ -278,7 +289,28 @@ const PerformanceHistory = ({ userType, athleteId = null }) => {
         loadPerformances();
     }, [filterDate, filterVenue, athleteId]);
 
-    const athletesList = Array.from(new Set(performances.map(p => p.athlete?.name).filter(Boolean)));
+    // Matrix Transformation Logic
+    const uniqueDates = Array.from(new Set(performances.map(p => p.date))).sort((a, b) => new Date(b) - new Date(a));
+
+    const athleteRows = performances.reduce((acc, p) => {
+        const aId = p.athlete_id;
+        if (!acc[aId]) {
+            acc[aId] = {
+                id: aId,
+                name: p.athlete?.name || 'Unknown',
+                photo: p.athlete?.photo_url,
+                results: {},
+                bestTime: Infinity
+            };
+        }
+        acc[aId].results[p.date] = p.result;
+        const seconds = parseTimeToSeconds(p.result);
+        if (seconds < acc[aId].bestTime) acc[aId].bestTime = seconds;
+        return acc;
+    }, {});
+
+    // Sort athletes: fastest (lowest bestTime) first
+    const sortedAthletes = Object.values(athleteRows).sort((a, b) => a.bestTime - b.bestTime);
 
     return (
         <div className="space-y-4">
@@ -319,56 +351,73 @@ const PerformanceHistory = ({ userType, athleteId = null }) => {
                 </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-x-auto">
                 {loading ? (
-                    <div className="p-12 text-center text-slate-400 font-bold uppercase tracking-widest text-xs">Loading Performances...</div>
+                    <div className="p-12 text-center text-slate-400 font-bold uppercase tracking-widest text-xs">Loading Matrix...</div>
                 ) : (
-                    <table className="w-full text-left text-sm">
+                    <table className="w-full text-left text-sm border-collapse">
                         <thead className="bg-slate-50 border-b border-slate-200">
                             <tr>
-                                <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Date</th>
-                                <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Athlete</th>
-                                <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Venue / Session</th>
-                                <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Result</th>
-                                {isAdminEdit && <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Actions</th>}
+                                <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px] border-r sticky left-0 bg-slate-50 z-10 w-48">Athlete</th>
+                                {uniqueDates.map(date => (
+                                    <th key={date} className="px-4 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px] text-center min-w-[100px]">
+                                        {new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                                    </th>
+                                ))}
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
-                            {performances.map(p => (
-                                <tr key={p.id} className="hover:bg-slate-50 transition-colors">
-                                    <td className="px-6 py-4 text-slate-500 font-medium">{p.date}</td>
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center gap-2">
-                                            <img src={p.athlete?.photo_url || `https://i.pravatar.cc/150?u=${p.athlete_id}`} className="w-6 h-6 rounded-full" />
-                                            <span className="font-bold text-slate-900">{p.athlete?.name}</span>
+                            {sortedAthletes.map((athlete, idx) => (
+                                <tr key={athlete.id} className={cn("hover:bg-slate-50 transition-colors", idx === 0 && sortedAthletes.length > 1 && "bg-amber-50/30")}>
+                                    <td className="px-6 py-4 border-r sticky left-0 bg-white z-10">
+                                        <div className="flex items-center gap-3">
+                                            {idx === 0 && sortedAthletes.length > 1 && <Trophy size={14} className="text-amber-500 shrink-0" />}
+                                            <div className="relative">
+                                                <img src={athlete.photo || `https://i.pravatar.cc/150?u=${athlete.id}`} className="w-8 h-8 rounded-full border border-slate-100" />
+                                                {idx === 0 && sortedAthletes.length > 1 && (
+                                                    <span className="absolute -top-1 -right-1 bg-amber-500 text-white text-[8px] px-1 rounded-full font-black">1st</span>
+                                                )}
+                                            </div>
+                                            <span className="font-bold text-slate-900 whitespace-nowrap">{athlete.name}</span>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4">
-                                        <div className="font-bold text-slate-700">{p.session_name}</div>
-                                        <div className="text-xs text-slate-400 flex items-center gap-1">
-                                            {p.coach?.name && <><User size={10} /> {p.coach.name}</>}
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <span className="px-2 py-1 rounded-lg font-black text-xs bg-emerald-50 text-emerald-700 border border-emerald-100">
-                                            {p.result}
-                                        </span>
-                                    </td>
-                                    {isAdminEdit && (
-                                        <td className="px-6 py-4">
-                                            <button className="text-blue-600 hover:underline font-bold text-xs uppercase">Edit</button>
-                                        </td>
-                                    )}
+                                    {uniqueDates.map(date => {
+                                        const result = athlete.results[date];
+                                        const isBest = result && parseTimeToSeconds(result) === athlete.bestTime && athlete.bestTime !== Infinity;
+                                        return (
+                                            <td key={date} className="px-4 py-4 text-center">
+                                                {result ? (
+                                                    <span className={cn(
+                                                        "px-2 py-1 rounded text-xs font-black tracking-tight",
+                                                        isBest ? "bg-emerald-500 text-white shadow-sm" : "bg-emerald-50 text-emerald-700 border border-emerald-100"
+                                                    )}>
+                                                        {result}
+                                                    </span>
+                                                ) : (
+                                                    <span className="text-slate-200">-</span>
+                                                )}
+                                            </td>
+                                        );
+                                    })}
                                 </tr>
                             ))}
-                            {performances.length === 0 && (
+                            {sortedAthletes.length === 0 && (
                                 <tr>
-                                    <td colSpan={isAdminEdit ? 5 : 4} className="px-6 py-12 text-center text-slate-400 italic">No performance records found for the selected filters.</td>
+                                    <td colSpan={uniqueDates.length + 1} className="px-6 py-12 text-center text-slate-400 italic">No performance records found for the selected filters.</td>
                                 </tr>
                             )}
                         </tbody>
                     </table>
                 )}
+            </div>
+
+            <div className="flex items-center gap-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2">
+                <div className="flex items-center gap-1.5">
+                    <div className="w-3 h-3 bg-emerald-500 rounded" /> Fastest Time
+                </div>
+                <div className="flex items-center gap-1.5">
+                    <div className="w-3 h-3 bg-amber-50 rounded" /> Overall Leader
+                </div>
             </div>
             {isAdminEdit && (
                 <button className="w-full py-3 border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 font-bold text-sm hover:border-blue-500 hover:text-blue-500 transition-all">
