@@ -941,7 +941,7 @@ const UserProfile = ({ userType, onManagePayments, athletes = [], coaches = [] }
                 </h3>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div className="space-y-6">
-                        <AttendanceManager userType="athlete" athleteId={1} athletes={athletes} coaches={coaches} />
+                        <AttendanceManager userType="athlete" athleteId={athletes[0]?.id} athletes={athletes} coaches={coaches} />
                         <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
                             <h3 className="font-bold flex items-center gap-2 mb-4">
                                 <Timer size={18} className="text-amber-500" /> Next Session
@@ -963,7 +963,7 @@ const UserProfile = ({ userType, onManagePayments, athletes = [], coaches = [] }
                         </div>
                     </div>
                     <div>
-                        <PerformanceHistory userType="athlete" athleteId={1} athletes={athletes} coaches={coaches} />
+                        <PerformanceHistory userType="athlete" athleteId={athletes[0]?.id} athletes={athletes} coaches={coaches} />
                     </div>
                 </div>
             </div>

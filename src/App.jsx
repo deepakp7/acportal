@@ -112,69 +112,43 @@ const App = () => {
 
     return (
         <div className="font-sans">
-            <AnimatePresence mode="wait">
-                {view === 'landing' && (
-                    <motion.div
-                        key="landing"
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        transition={{ duration: 0.3 }}
-                    >
-                        <LandingPage onSelect={setView} />
-                    </motion.div>
-                )}
+            {view === 'landing' && <LandingPage onSelect={setView} />}
 
-                {view === 'register' && (
-                    <motion.div
-                        key="register"
-                        initial={{ opacity: 0, x: 100 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -100 }}
-                        className="relative"
+            {view === 'register' && (
+                <div className="relative">
+                    <button
+                        onClick={handleBackToLanding}
+                        className="absolute top-6 left-6 z-[100] px-4 py-2 bg-slate-900 text-white rounded-xl flex items-center gap-2 text-sm font-bold shadow-xl hover:bg-slate-800"
                     >
-                        <button
-                            onClick={handleBackToLanding}
-                            className="absolute top-6 left-6 z-[100] px-4 py-2 bg-slate-900 text-white rounded-xl flex items-center gap-2 text-sm font-bold shadow-xl hover:bg-slate-800"
-                        >
-                            <ArrowRight className="rotate-180" size={16} /> Close Form
-                        </button>
-                        <MembershipForm />
-                    </motion.div>
-                )}
+                        <ArrowRight className="rotate-180" size={16} /> Close Form
+                    </button>
+                    <MembershipForm />
+                </div>
+            )}
 
-                {view === 'member' && (
-                    <motion.div
-                        key="member"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="relative"
+            {view === 'member' && (
+                <div className="relative">
+                    <button
+                        onClick={handleBackToLanding}
+                        className="absolute bottom-6 right-6 z-[100] px-4 py-2 bg-slate-900 text-white rounded-xl flex items-center gap-2 text-sm font-bold shadow-xl hover:bg-slate-800"
                     >
-                        <button
-                            onClick={handleBackToLanding}
-                            className="absolute bottom-6 right-6 z-[100] px-4 py-2 bg-slate-900 text-white rounded-xl flex items-center gap-2 text-sm font-bold shadow-xl hover:bg-slate-800"
-                        >
-                            <ArrowRight className="rotate-180" size={16} /> Back to Hub
-                        </button>
-                        <MembershipPortal userType="juniors" />
-                    </motion.div>
-                )}
+                        <ArrowRight className="rotate-180" size={16} /> Back to Hub
+                    </button>
+                    <MembershipPortal userType="juniors" />
+                </div>
+            )}
 
-                {view === 'admin' && (
-                    <motion.div
-                        key="admin"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="relative"
+            {view === 'admin' && (
+                <div className="relative">
+                    <button
+                        onClick={handleBackToLanding}
+                        className="absolute bottom-6 right-6 z-[100] px-4 py-2 bg-emerald-600 text-white rounded-xl flex items-center gap-2 text-sm font-bold shadow-xl hover:bg-emerald-700"
                     >
-                        <button
-                            onClick={handleBackToLanding}
-                            className="absolute bottom-6 right-6 z-[100] px-4 py-2 bg-emerald-600 text-white rounded-xl flex items-center gap-2 text-sm font-bold shadow-xl hover:bg-emerald-700"
-                        >
-                            <ArrowRight className="rotate-180" size={16} /> Back to Hub
-                        </button>
-                        <MembershipPortal userType="management" />
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                        <ArrowRight className="rotate-180" size={16} /> Back to Hub
+                    </button>
+                    <MembershipPortal userType="management" />
+                </div>
+            )}
         </div>
     );
 };
