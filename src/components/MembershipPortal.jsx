@@ -263,7 +263,7 @@ const parseTimeToSeconds = (timeStr) => {
     return parseFloat(cleanTime) || Infinity;
 };
 
-const PerformanceHistory = ({ userType, athleteId = null }) => {
+const PerformanceHistory = ({ userType, athleteId = null, athletes = [], coaches = [] }) => {
     const [filterVenue, setFilterVenue] = useState('All');
     const [filterDate, setFilterDate] = useState('All');
     const [performances, setPerformances] = useState([]);
@@ -289,11 +289,16 @@ const PerformanceHistory = ({ userType, athleteId = null }) => {
         loadPerformances();
     }, [filterDate, filterVenue, athleteId]);
 
-    // Matrix Transformation Logic
+    // Matrix Transformation Logic (Only used when filterDate === 'All')
     const uniqueDates = Array.from(new Set(performances.map(p => p.date))).sort((a, b) => new Date(b) - new Date(a));
 
     const athleteRows = performances.reduce((acc, p) => {
-        const aId = p.athlete_id;
+        const aId = String(p.athlete_id);
+        const seconds = parseTimeToSeconds(p.result);
+
+        // In matrix view, we only want columns that have actual timings to avoid clutter
+        if (seconds === Infinity && filterDate === 'All') return acc;
+
         if (!acc[aId]) {
             acc[aId] = {
                 id: aId,
@@ -304,13 +309,12 @@ const PerformanceHistory = ({ userType, athleteId = null }) => {
             };
         }
         acc[aId].results[p.date] = p.result;
-        const seconds = parseTimeToSeconds(p.result);
         if (seconds < acc[aId].bestTime) acc[aId].bestTime = seconds;
         return acc;
     }, {});
 
-    // Sort athletes: fastest (lowest bestTime) first
     const sortedAthletes = Object.values(athleteRows).sort((a, b) => a.bestTime - b.bestTime);
+    const isListView = filterDate !== 'All';
 
     return (
         <div className="space-y-4">
@@ -353,17 +357,65 @@ const PerformanceHistory = ({ userType, athleteId = null }) => {
 
             <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-x-auto">
                 {loading ? (
-                    <div className="p-12 text-center text-slate-400 font-bold uppercase tracking-widest text-xs">Loading Matrix...</div>
+                    <div className="p-12 text-center text-slate-400 font-bold uppercase tracking-widest text-xs">Loading Analytics...</div>
+                ) : isListView ? (
+                    <table className="w-full text-left text-sm">
+                        <thead className="bg-slate-50 border-b border-slate-200">
+                            <tr>
+                                <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Athlete</th>
+                                <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Venue / Session</th>
+                                <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Result / Note</th>
+                                {isAdminEdit && <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Actions</th>}
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                            {performances.sort((a, b) => parseTimeToSeconds(a.result) - parseTimeToSeconds(b.result)).map((p, idx) => (
+                                <tr key={p.id} className={cn("hover:bg-slate-50 transition-colors", idx === 0 && performances.length > 1 && "bg-amber-50/30")}>
+                                    <td className="px-6 py-4">
+                                        <div className="flex items-center gap-2">
+                                            {idx === 0 && performances.length > 1 && <Trophy size={14} className="text-amber-500" />}
+                                            <img src={p.athlete?.photo_url || `https://i.pravatar.cc/150?u=${p.athlete_id}`} className="w-6 h-6 rounded-full" />
+                                            <span className="font-bold text-slate-900">{p.athlete?.name}</span>
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <div className="font-bold text-slate-700">{p.session_name}</div>
+                                        <div className="text-xs text-slate-400 flex items-center gap-1">
+                                            {p.coach?.name && <><User size={10} /> {p.coach.name}</>}
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <span className={cn(
+                                            "px-2 py-1 rounded-lg font-black text-xs",
+                                            parseTimeToSeconds(p.result) !== Infinity ? "bg-emerald-50 text-emerald-700 border border-emerald-100" : "bg-slate-100 text-slate-600"
+                                        )}>
+                                            {p.result}
+                                        </span>
+                                    </td>
+                                    {isAdminEdit && (
+                                        <td className="px-6 py-4">
+                                            <button className="text-blue-600 hover:underline font-bold text-xs uppercase">Edit</button>
+                                        </td>
+                                    )}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 ) : (
                     <table className="w-full text-left text-sm border-collapse">
                         <thead className="bg-slate-50 border-b border-slate-200">
                             <tr>
                                 <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px] border-r sticky left-0 bg-slate-50 z-10 w-48">Athlete</th>
-                                {uniqueDates.map(date => (
-                                    <th key={date} className="px-4 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px] text-center min-w-[100px]">
-                                        {new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
-                                    </th>
-                                ))}
+                                {uniqueDates.map(date => {
+                                    // Skip columns that consist entirely of non-timing notes if looking at "All"
+                                    const hasTimings = sortedAthletes.some(a => parseTimeToSeconds(a.results[date]) !== Infinity);
+                                    if (!hasTimings && filterDate === 'All') return null;
+                                    return (
+                                        <th key={date} className="px-4 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px] text-center min-w-[100px]">
+                                            {new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                                        </th>
+                                    );
+                                })}
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
@@ -382,6 +434,9 @@ const PerformanceHistory = ({ userType, athleteId = null }) => {
                                         </div>
                                     </td>
                                     {uniqueDates.map(date => {
+                                        const hasTimings = sortedAthletes.some(a => parseTimeToSeconds(a.results[date]) !== Infinity);
+                                        if (!hasTimings && filterDate === 'All') return null;
+
                                         const result = athlete.results[date];
                                         const isBest = result && parseTimeToSeconds(result) === athlete.bestTime && athlete.bestTime !== Infinity;
                                         return (
@@ -401,24 +456,25 @@ const PerformanceHistory = ({ userType, athleteId = null }) => {
                                     })}
                                 </tr>
                             ))}
-                            {sortedAthletes.length === 0 && (
-                                <tr>
-                                    <td colSpan={uniqueDates.length + 1} className="px-6 py-12 text-center text-slate-400 italic">No performance records found for the selected filters.</td>
-                                </tr>
-                            )}
                         </tbody>
                     </table>
                 )}
+
+                {!loading && (isListView ? performances : sortedAthletes).length === 0 && (
+                    <div className="px-6 py-12 text-center text-slate-400 italic">No performance records found for the selected filters.</div>
+                )}
             </div>
 
-            <div className="flex items-center gap-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2">
-                <div className="flex items-center gap-1.5">
-                    <div className="w-3 h-3 bg-emerald-500 rounded" /> Fastest Time
+            {!isListView && (
+                <div className="flex items-center gap-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2">
+                    <div className="flex items-center gap-1.5">
+                        <div className="w-3 h-3 bg-emerald-500 rounded" /> Fastest Time
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                        <div className="w-3 h-3 bg-amber-50 rounded" /> Overall Leader
+                    </div>
                 </div>
-                <div className="flex items-center gap-1.5">
-                    <div className="w-3 h-3 bg-amber-50 rounded" /> Overall Leader
-                </div>
-            </div>
+            )}
             {isAdminEdit && (
                 <button className="w-full py-3 border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 font-bold text-sm hover:border-blue-500 hover:text-blue-500 transition-all">
                     + Add New Record
@@ -428,49 +484,24 @@ const PerformanceHistory = ({ userType, athleteId = null }) => {
     );
 };
 
-const AttendanceManager = ({ userType, athleteId = null }) => {
+const AttendanceManager = ({ userType, athleteId = null, athletes = [], coaches = [] }) => {
     const [selectedCoachId, setSelectedCoachId] = useState('All');
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
-    const [athletes, setAthletes] = useState([]);
     const [attendanceRows, setAttendanceRows] = useState([]);
-    const [coaches, setCoaches] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
 
     React.useEffect(() => {
-        const loadInitialData = async () => {
-            try {
-                const [athleteData, coachData] = await Promise.all([
-                    athleteService.getAll(),
-                    coachService.getAll()
-                ]);
-                setAthletes(athleteData || []);
-                setCoaches(coachData || MOCK_COACHES);
-            } catch (err) {
-                console.error('Failed to load attendance data:', err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        loadInitialData();
-    }, []);
-
-    React.useEffect(() => {
         const loadAttendance = async () => {
-            if (loading || athletes.length === 0) return;
+            if (athletes.length === 0) return;
             try {
-                console.log(`Fetching attendance for ${selectedDate}, coach: ${selectedCoachId}`);
                 const data = await attendanceService.getForDateRange(selectedDate, selectedDate, selectedCoachId);
-                console.log('Attendance data received:', data);
-
-                // No manual join needed anymore as the service returns joined data
                 setAttendanceRows(data || []);
             } catch (err) {
                 console.error('Failed to load attendance rows:', err);
             }
         };
         loadAttendance();
-    }, [selectedDate, selectedCoachId, loading, athletes]);
+    }, [selectedDate, selectedCoachId, athletes]);
 
     // Filter athletes relevant to the selected coach
     const visibleAthletes = athletes.filter(a => {
@@ -590,7 +621,7 @@ const AttendanceManager = ({ userType, athleteId = null }) => {
                                     <tr key={athlete.id} className="hover:bg-slate-50 transition-colors">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
-                                                <img src={athlete.photo || `https://i.pravatar.cc/150?u=${athlete.id}`} className="w-8 h-8 rounded-full border border-slate-100" />
+                                                <img src={athlete.photo_url || athlete.photo || `https://i.pravatar.cc/150?u=${athlete.id}`} className="w-8 h-8 rounded-full border border-slate-100" />
                                                 <span className="font-bold text-slate-900">{athlete.name}</span>
                                             </div>
                                         </td>
@@ -629,7 +660,13 @@ const AttendanceManager = ({ userType, athleteId = null }) => {
                                                 value={record?.result || ''}
                                                 onChange={(e) => {
                                                     const val = e.target.value;
-                                                    setAttendanceRows(attendanceRows.map(r => r.athlete_id === athlete.id ? { ...r, result: val } : r));
+                                                    const aId = athlete.id;
+                                                    const existing = attendanceRows.find(r => String(r.athlete_id) === String(aId));
+                                                    if (existing) {
+                                                        setAttendanceRows(attendanceRows.map(r => String(r.athlete_id) === String(aId) ? { ...r, result: val } : r));
+                                                    } else {
+                                                        setAttendanceRows([...attendanceRows, { athlete_id: aId, result: val, date: selectedDate, coach_id: selectedCoachId === 'All' ? null : selectedCoachId }]);
+                                                    }
                                                 }}
                                                 disabled={!!athleteId}
                                                 className="bg-transparent text-xs font-bold text-slate-700 outline-none w-full border-b border-transparent focus:border-slate-200"
@@ -653,92 +690,57 @@ const AttendanceManager = ({ userType, athleteId = null }) => {
     );
 };
 
-const MemberDashboard = ({ currentView }) => {
+const MemberDashboard = ({ currentView, athletes = [], coaches = [], onUpdateAthlete }) => {
     const [filterState, setFilterState] = useState('All');
     const [filterType, setFilterType] = useState('All');
-    const [members, setMembers] = useState([]);
-    const [coaches, setCoaches] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [showStateDropdown, setShowStateDropdown] = useState(null);
     const [showCoachDropdown, setShowCoachDropdown] = useState(null);
 
-    React.useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const [athleteData, coachData] = await Promise.all([
-                    athleteService.getAll(),
-                    coachService.getAll()
-                ]);
-
-                setCoaches(coachData && coachData.length > 0 ? coachData : MOCK_COACHES);
-
-                if (athleteData && athleteData.length > 0) {
-                    setMembers(athleteData);
-                } else {
-                    setMembers(MOCK_MEMBERS.map(m => ({ ...m, trackFeesPaid: m.paid })));
-                }
-            } catch (err) {
-                console.error('Failed to fetch from Supabase:', err);
-                setMembers(MOCK_MEMBERS.map(m => ({ ...m, trackFeesPaid: m.paid })));
-                setCoaches(MOCK_COACHES);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchData();
-    }, []);
-
-    const filteredMembers = members
+    const filteredMembers = athletes
         .filter(m => filterState === 'All' || m.state === filterState)
         .filter(m => filterType === 'All' || m.type === filterType);
 
     const handleStateChange = async (id, newState) => {
-        setMembers(members.map(m => m.id === id ? { ...m, state: newState } : m));
         try {
             await athleteService.update(id, { state: newState });
+            if (onUpdateAthlete) onUpdateAthlete(id, { state: newState });
         } catch (err) {
-            console.warn('DB Update failed (using local state):', err);
+            console.warn('DB Update failed:', err);
         }
         setShowStateDropdown(null);
     };
 
     const handleCoachChange = async (id, newCoachId) => {
-        // Find coach details locally to update UI immediately
-        const selectedCoach = coaches.find(c => c.id === newCoachId);
-        setMembers(members.map(m => m.id === id ? {
-            ...m,
-            coach_id: newCoachId,
-            coachId: newCoachId, // fallback for mock
-            coach: selectedCoach,
-            teamName: selectedCoach?.team_name || selectedCoach?.teamName
-        } : m));
-
         try {
             await athleteService.update(id, { coach_id: newCoachId });
-            const updatedAthlete = await athleteService.getById(id);
-            setMembers(members => members.map(m => m.id === id ? { ...m, ...updatedAthlete } : m));
+            if (onUpdateAthlete) {
+                const selectedCoach = coaches.find(c => String(c.id) === String(newCoachId));
+                onUpdateAthlete(id, {
+                    coach_id: newCoachId,
+                    coach: selectedCoach
+                });
+            }
         } catch (err) {
-            console.warn('Coach DB update failed (using local state):', err);
+            console.warn('Coach DB update failed:', err);
         }
         setShowCoachDropdown(null);
     };
 
     const toggleTrackFees = async (id) => {
-        const member = members.find(m => m.id === id);
-        const newValue = !member.trackFeesPaid;
-        setMembers(members.map(m => m.id === id ? { ...m, trackFeesPaid: newValue } : m));
-
+        const member = athletes.find(m => m.id === id);
+        const newValue = !member.track_fees_paid && !member.trackFeesPaid;
         try {
             await athleteService.update(id, { track_fees_paid: newValue });
+            if (onUpdateAthlete) onUpdateAthlete(id, { trackFeesPaid: newValue, track_fees_paid: newValue });
         } catch (err) {
-            console.warn('Track fees DB update failed (using local state):', err);
+            console.warn('Track fees DB update failed:', err);
         }
     };
 
     if (currentView === 'news') return <ClubNewsSection />;
     if (currentView === 'training') return <TrainingManager />;
-    if (currentView === 'performances') return <PerformanceHistory userType="management" />;
-    if (currentView === 'attendance') return <AttendanceManager userType="management" />;
+    if (currentView === 'performances') return <PerformanceHistory userType="management" athletes={athletes} coaches={coaches} />;
+    if (currentView === 'attendance') return <AttendanceManager userType="management" athletes={athletes} coaches={coaches} />;
 
     return (
         <div className="space-y-4">
@@ -892,7 +894,7 @@ const MemberDashboard = ({ currentView }) => {
                         <p className="text-emerald-600 text-xs">Total athletes with paid fees</p>
                     </div>
                     <div className="text-2xl font-black text-emerald-500">
-                        {members.filter(m => m.trackFeesPaid).length} / {members.length}
+                        {athletes.filter(m => m.trackFeesPaid || m.track_fees_paid).length} / {athletes.length}
                     </div>
                 </div>
             </div>
@@ -913,7 +915,7 @@ const WorkflowStepper = ({ steps, currentStep }) => (
     </div>
 );
 
-const UserProfile = ({ userType, onManagePayments }) => {
+const UserProfile = ({ userType, onManagePayments, athletes = [], coaches = [] }) => {
     const [currentStep, setCurrentStep] = useState(1);
     const steps = userType === 'juniors' ? WORKFLOWS.juniors : WORKFLOWS.seniors;
 
@@ -935,7 +937,7 @@ const UserProfile = ({ userType, onManagePayments }) => {
                 </h3>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div className="space-y-6">
-                        <AttendanceManager userType="athlete" athleteId={1} />
+                        <AttendanceManager userType="athlete" athleteId={1} athletes={athletes} coaches={coaches} />
                         <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
                             <h3 className="font-bold flex items-center gap-2 mb-4">
                                 <Timer size={18} className="text-amber-500" /> Next Session
@@ -957,7 +959,7 @@ const UserProfile = ({ userType, onManagePayments }) => {
                         </div>
                     </div>
                     <div>
-                        <PerformanceHistory userType="athlete" athleteId={1} />
+                        <PerformanceHistory userType="athlete" athleteId={1} athletes={athletes} coaches={coaches} />
                     </div>
                 </div>
             </div>
@@ -969,14 +971,43 @@ export default function MembershipPortal({ userType = 'juniors' }) {
     const [currentView, setCurrentView] = useState('dashboard');
     const [showPaymentSetup, setShowPaymentSetup] = useState(false);
     const [dbStatus, setDbStatus] = useState({ checked: false, connected: false, error: null });
+    const [athletes, setAthletes] = useState([]);
+    const [coaches, setCoaches] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const fetchData = async () => {
+        try {
+            const [athleteData, coachData] = await Promise.all([
+                athleteService.getAll(),
+                coachService.getAll()
+            ]);
+            setCoaches(coachData && coachData.length > 0 ? coachData : MOCK_COACHES);
+            if (athleteData && athleteData.length > 0) {
+                setAthletes(athleteData.map(a => ({ ...a, trackFeesPaid: a.track_fees_paid })));
+            } else {
+                setAthletes(MOCK_MEMBERS.map(m => ({ ...m, trackFeesPaid: m.paid })));
+            }
+        } catch (err) {
+            console.error('Failed to fetch from Supabase:', err);
+            setAthletes(MOCK_MEMBERS.map(m => ({ ...m, trackFeesPaid: m.paid })));
+            setCoaches(MOCK_COACHES);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     React.useEffect(() => {
         const verifyConnection = async () => {
             const status = await checkConnection();
             setDbStatus({ checked: true, ...status });
+            if (status.connected) await fetchData();
         };
         verifyConnection();
     }, []);
+
+    const handleUpdateAthleteLocal = (id, updates) => {
+        setAthletes(prev => prev.map(a => String(a.id) === String(id) ? { ...a, ...updates } : a));
+    };
 
     if (showPaymentSetup) {
         return (
@@ -1034,10 +1065,12 @@ export default function MembershipPortal({ userType = 'juniors' }) {
             </nav>
 
             <main className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-                {userType === 'management' ? (
-                    <MemberDashboard currentView={currentView} />
+                {loading ? (
+                    <div className="p-12 text-center text-slate-400 font-bold uppercase tracking-widest text-xs">Syncing with Club Database...</div>
+                ) : userType === 'management' ? (
+                    <MemberDashboard currentView={currentView} athletes={athletes} coaches={coaches} onUpdateAthlete={handleUpdateAthleteLocal} />
                 ) : (
-                    currentView === 'dashboard' ? <UserProfile userType={userType} onManagePayments={() => setShowPaymentSetup(true)} /> :
+                    currentView === 'dashboard' ? <UserProfile userType={userType} onManagePayments={() => setShowPaymentSetup(true)} athletes={athletes} coaches={coaches} /> :
                         currentView === 'news' ? <ClubNewsSection /> :
                             <TrainingManager />
                 )}
