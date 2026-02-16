@@ -30,6 +30,7 @@ import PaymentPortal from './PaymentPortal';
 import { athleteService } from '../services/athleteService';
 import { coachService } from '../services/coachService';
 import { attendanceService } from '../services/attendanceService';
+import { checkConnection } from '../lib/supabase';
 
 function cn(...inputs) {
     return twMerge(clsx(inputs));
@@ -385,13 +386,8 @@ const AttendanceManager = ({ userType, athleteId = null }) => {
                 const data = await attendanceService.getForDateRange(selectedDate, selectedDate, selectedCoachId);
                 console.log('Attendance data received:', data);
 
-                // Manual join: attach athlete details to each attendance row
-                const joinedData = (data || []).map(row => ({
-                    ...row,
-                    athlete: athletes.find(a => String(a.id) === String(row.athlete_id))
-                }));
-
-                setAttendanceRows(joinedData);
+                // No manual join needed anymore as the service returns joined data
+                setAttendanceRows(data || []);
             } catch (err) {
                 console.error('Failed to load attendance rows:', err);
             }
@@ -895,6 +891,15 @@ const UserProfile = ({ userType, onManagePayments }) => {
 export default function MembershipPortal({ userType = 'juniors' }) {
     const [currentView, setCurrentView] = useState('dashboard');
     const [showPaymentSetup, setShowPaymentSetup] = useState(false);
+    const [dbStatus, setDbStatus] = useState({ checked: false, connected: false, error: null });
+
+    React.useEffect(() => {
+        const verifyConnection = async () => {
+            const status = await checkConnection();
+            setDbStatus({ checked: true, ...status });
+        };
+        verifyConnection();
+    }, []);
 
     if (showPaymentSetup) {
         return (
@@ -934,7 +939,20 @@ export default function MembershipPortal({ userType = 'juniors' }) {
                             )}
                         </div>
                     </div>
-                    <div className="text-[10px] font-bold uppercase p-1.5 bg-slate-800 rounded border border-slate-700 tracking-widest">{userType} View</div>
+                    <div className="flex items-center gap-3">
+                        {dbStatus.checked && (
+                            <div className={cn(
+                                "flex items-center gap-1.5 px-2 py-1 rounded text-[10px] font-black uppercase tracking-wider border",
+                                dbStatus.connected
+                                    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                                    : "bg-red-500/10 text-red-400 border-red-500/20"
+                            )}>
+                                <div className={cn("w-1.5 h-1.5 rounded-full", dbStatus.connected ? "bg-emerald-500 animate-pulse" : "bg-red-500")} />
+                                {dbStatus.connected ? "DB Connected" : "DB Offline"}
+                            </div>
+                        )}
+                        <div className="text-[10px] font-bold uppercase p-1.5 bg-slate-800 rounded border border-slate-700 tracking-widest">{userType} View</div>
+                    </div>
                 </div>
             </nav>
 

@@ -8,3 +8,13 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '')
+
+export const checkConnection = async () => {
+    try {
+        const { data, error } = await supabase.from('coaches').select('id').limit(1)
+        if (error) throw error
+        return { connected: true, error: null }
+    } catch (err) {
+        return { connected: false, error: err.message }
+    }
+}

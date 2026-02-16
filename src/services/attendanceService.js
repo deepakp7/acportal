@@ -4,7 +4,7 @@ export const attendanceService = {
     async getForDateRange(startDate, endDate, coachId = null) {
         let query = supabase
             .from('attendance')
-            .select('*')
+            .select('*, athlete:athletes(*), coach:coaches(*)')
             .gte('date', startDate)
             .lte('date', endDate)
 
