@@ -300,10 +300,11 @@ const PerformanceHistory = ({ userType, athleteId = null, athletes = [], coaches
         if (seconds === Infinity && filterDate === 'All') return acc;
 
         if (!acc[aId]) {
+            const athlete = athletes.find(a => String(a.id) === aId);
             acc[aId] = {
                 id: aId,
-                name: p.athlete?.name || 'Unknown',
-                photo: p.athlete?.photo_url,
+                name: athlete?.name || 'Unknown',
+                photo: athlete?.photo_url,
                 results: {},
                 bestTime: Infinity
             };
@@ -369,36 +370,40 @@ const PerformanceHistory = ({ userType, athleteId = null, athletes = [], coaches
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
-                            {performances.sort((a, b) => parseTimeToSeconds(a.result) - parseTimeToSeconds(b.result)).map((p, idx) => (
-                                <tr key={p.id} className={cn("hover:bg-slate-50 transition-colors", idx === 0 && performances.length > 1 && "bg-amber-50/30")}>
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center gap-2">
-                                            {idx === 0 && performances.length > 1 && <Trophy size={14} className="text-amber-500" />}
-                                            <img src={p.athlete?.photo_url || `https://i.pravatar.cc/150?u=${p.athlete_id}`} className="w-6 h-6 rounded-full" />
-                                            <span className="font-bold text-slate-900">{p.athlete?.name}</span>
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className="font-bold text-slate-700">{p.session_name}</div>
-                                        <div className="text-xs text-slate-400 flex items-center gap-1">
-                                            {p.coach?.name && <><User size={10} /> {p.coach.name}</>}
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <span className={cn(
-                                            "px-2 py-1 rounded-lg font-black text-xs",
-                                            parseTimeToSeconds(p.result) !== Infinity ? "bg-emerald-50 text-emerald-700 border border-emerald-100" : "bg-slate-100 text-slate-600"
-                                        )}>
-                                            {p.result}
-                                        </span>
-                                    </td>
-                                    {isAdminEdit && (
+                            {performances.sort((a, b) => parseTimeToSeconds(a.result) - parseTimeToSeconds(b.result)).map((p, idx) => {
+                                const athlete = athletes.find(a => String(a.id) === String(p.athlete_id));
+                                const coach = coaches.find(c => String(c.id) === String(p.coach_id));
+                                return (
+                                    <tr key={p.id} className={cn("hover:bg-slate-50 transition-colors", idx === 0 && performances.length > 1 && "bg-amber-50/30")}>
                                         <td className="px-6 py-4">
-                                            <button className="text-blue-600 hover:underline font-bold text-xs uppercase">Edit</button>
+                                            <div className="flex items-center gap-2">
+                                                {idx === 0 && performances.length > 1 && <Trophy size={14} className="text-amber-500" />}
+                                                <img src={athlete?.photo_url || `https://i.pravatar.cc/150?u=${p.athlete_id}`} className="w-6 h-6 rounded-full" />
+                                                <span className="font-bold text-slate-900">{athlete?.name || 'Unknown'}</span>
+                                            </div>
                                         </td>
-                                    )}
-                                </tr>
-                            ))}
+                                        <td className="px-6 py-4">
+                                            <div className="font-bold text-slate-700">{p.session_name}</div>
+                                            <div className="text-xs text-slate-400 flex items-center gap-1">
+                                                {coach?.name && <><User size={10} /> {coach.name}</>}
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <span className={cn(
+                                                "px-2 py-1 rounded-lg font-black text-xs",
+                                                parseTimeToSeconds(p.result) !== Infinity ? "bg-emerald-50 text-emerald-700 border border-emerald-100" : "bg-slate-100 text-slate-600"
+                                            )}>
+                                                {p.result}
+                                            </span>
+                                        </td>
+                                        {isAdminEdit && (
+                                            <td className="px-6 py-4">
+                                                <button className="text-blue-600 hover:underline font-bold text-xs uppercase">Edit</button>
+                                            </td>
+                                        )}
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </table>
                 ) : (
@@ -981,9 +986,21 @@ export default function MembershipPortal({ userType = 'juniors' }) {
                 athleteService.getAll(),
                 coachService.getAll()
             ]);
-            setCoaches(coachData && coachData.length > 0 ? coachData : MOCK_COACHES);
+
+            const finalCoaches = coachData && coachData.length > 0 ? coachData : MOCK_COACHES;
+            setCoaches(finalCoaches);
+
             if (athleteData && athleteData.length > 0) {
-                setAthletes(athleteData.map(a => ({ ...a, trackFeesPaid: a.track_fees_paid })));
+                // Manual Hydration: Attach coach object to athlete
+                const hydratedAthletes = athleteData.map(a => {
+                    const coach = finalCoaches.find(c => String(c.id) === String(a.coach_id));
+                    return {
+                        ...a,
+                        coach,
+                        trackFeesPaid: a.track_fees_paid
+                    };
+                });
+                setAthletes(hydratedAthletes);
             } else {
                 setAthletes(MOCK_MEMBERS.map(m => ({ ...m, trackFeesPaid: m.paid })));
             }
