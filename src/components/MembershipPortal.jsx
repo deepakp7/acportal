@@ -555,7 +555,6 @@ const AttendanceManager = ({ userType, athleteId = null, athletes = [], coaches 
         }
     };
 
-    if (loading) return <div className="p-8 text-center text-slate-500 font-bold">Loading Attendance...</div>;
 
     return (
         <div className="space-y-4">
