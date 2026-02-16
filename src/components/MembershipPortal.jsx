@@ -279,7 +279,10 @@ const PerformanceHistory = ({ userType, athleteId = null, athletes = [], coaches
                     venue: filterVenue,
                     athleteId
                 });
-                setPerformances(data || []);
+
+                // Filter: Only keep results that are valid timings
+                const timingData = (data || []).filter(p => parseTimeToSeconds(p.result) !== Infinity);
+                setPerformances(timingData);
             } catch (err) {
                 console.error('Failed to load performances:', err);
             } finally {
@@ -978,6 +981,7 @@ export default function MembershipPortal({ userType = 'juniors' }) {
     const [athletes, setAthletes] = useState([]);
     const [coaches, setCoaches] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [showAnalyticsDropdown, setShowAnalyticsDropdown] = useState(false);
 
     const fetchData = async () => {
         try {
@@ -1058,7 +1062,27 @@ export default function MembershipPortal({ userType = 'juniors' }) {
                             {userType === 'management' && (
                                 <>
                                     <button onClick={() => setCurrentView('attendance')} className={cn("px-3 py-1.5 rounded text-sm font-bold", currentView === 'attendance' ? "bg-blue-500/20 text-blue-400" : "text-slate-400 hover:text-white")}>Attendance</button>
-                                    <button onClick={() => setCurrentView('performances')} className={cn("px-3 py-1.5 rounded text-sm font-bold", currentView === 'performances' ? "bg-amber-500/20 text-amber-400" : "text-slate-400 hover:text-white")}>Analytics</button>
+                                    <div className="relative">
+                                        <button
+                                            onClick={() => setShowAnalyticsDropdown(!showAnalyticsDropdown)}
+                                            className={cn("flex items-center gap-1 px-3 py-1.5 rounded text-sm font-bold", currentView === 'performances' ? "bg-amber-500/20 text-amber-400" : "text-slate-400 hover:text-white")}
+                                        >
+                                            Analytics <ChevronDown size={14} />
+                                        </button>
+                                        {showAnalyticsDropdown && (
+                                            <div className="absolute left-0 mt-2 w-48 bg-[#1e293b] border border-slate-700 rounded-xl shadow-2xl z-[100] overflow-hidden">
+                                                <button
+                                                    onClick={() => {
+                                                        setCurrentView('performances');
+                                                        setShowAnalyticsDropdown(false);
+                                                    }}
+                                                    className="w-full text-left px-4 py-2.5 text-xs font-bold text-slate-300 hover:bg-slate-800 transition-colors"
+                                                >
+                                                    Club Performance History
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
                                 </>
                             )}
                         </div>
