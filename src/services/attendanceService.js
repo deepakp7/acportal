@@ -37,6 +37,29 @@ export const attendanceService = {
         return data
     },
 
+    async getPerformances(filters = {}) {
+        const { date, venue, athleteId } = filters
+        let query = supabase
+            .from('attendance')
+            .select('*, athlete:athletes(*), coach:coaches(*)')
+            .not('result', 'is', null)
+            .neq('result', '')
+
+        if (date && date !== 'All') {
+            query = query.eq('date', date)
+        }
+        if (venue && venue !== 'All') {
+            query = query.eq('session_name', venue)
+        }
+        if (athleteId) {
+            query = query.eq('athlete_id', athleteId)
+        }
+
+        const { data, error } = await query.order('date', { ascending: false })
+        if (error) throw error
+        return data
+    },
+
     async deleteAttendance(athleteId, date) {
         const { error } = await supabase
             .from('attendance')

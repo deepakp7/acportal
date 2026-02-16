@@ -254,15 +254,31 @@ const TrainingManager = () => {
 
 const PerformanceHistory = ({ userType, athleteId = null }) => {
     const [filterVenue, setFilterVenue] = useState('All');
-    const [filterAthlete, setFilterAthlete] = useState('All');
+    const [filterDate, setFilterDate] = useState('All');
+    const [performances, setPerformances] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [isAdminEdit, setIsAdminEdit] = useState(false);
 
-    const athletes = Array.from(new Set(PERFORMANCE_HISTORY.map(p => p.athlete)));
+    React.useEffect(() => {
+        const loadPerformances = async () => {
+            setLoading(true);
+            try {
+                const data = await attendanceService.getPerformances({
+                    date: filterDate,
+                    venue: filterVenue,
+                    athleteId
+                });
+                setPerformances(data || []);
+            } catch (err) {
+                console.error('Failed to load performances:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadPerformances();
+    }, [filterDate, filterVenue, athleteId]);
 
-    const filteredPerformances = PERFORMANCE_HISTORY
-        .filter(p => athleteId ? p.athleteId === athleteId : true)
-        .filter(p => filterVenue === 'All' || p.venue === filterVenue)
-        .filter(p => filterAthlete === 'All' || p.athlete === filterAthlete);
+    const athletesList = Array.from(new Set(performances.map(p => p.athlete?.name).filter(Boolean)));
 
     return (
         <div className="space-y-4">
@@ -283,64 +299,76 @@ const PerformanceHistory = ({ userType, athleteId = null }) => {
 
             <div className="flex flex-wrap gap-2 items-center bg-white rounded-xl p-3 shadow-sm border border-slate-100">
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded-lg">
+                    <Calendar size={14} className="text-slate-400" />
+                    <input
+                        type="date"
+                        value={filterDate === 'All' ? '' : filterDate}
+                        onChange={e => setFilterDate(e.target.value || 'All')}
+                        className="text-xs bg-transparent font-bold outline-none"
+                    />
+                    {filterDate !== 'All' && (
+                        <button onClick={() => setFilterDate('All')} className="text-[10px] text-slate-400 hover:text-slate-600 font-bold ml-1">Clear</button>
+                    )}
+                </div>
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded-lg">
                     <MapPin size={14} className="text-slate-400" />
                     <select value={filterVenue} onChange={e => setFilterVenue(e.target.value)} className="text-xs bg-transparent font-bold outline-none">
                         <option value="All">All Venues</option>
                         {VENUES.map(v => <option key={v} value={v}>{v}</option>)}
                     </select>
                 </div>
-                {!athleteId && (
-                    <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded-lg">
-                        <User size={14} className="text-slate-400" />
-                        <select value={filterAthlete} onChange={e => setFilterAthlete(e.target.value)} className="text-xs bg-transparent font-bold outline-none">
-                            <option value="All">All Athletes</option>
-                            {athletes.map(a => <option key={a} value={a}>{a}</option>)}
-                        </select>
-                    </div>
-                )}
             </div>
 
             <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <table className="w-full text-left text-sm">
-                    <thead className="bg-slate-50 border-b border-slate-200">
-                        <tr>
-                            <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Date</th>
-                            <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Athlete</th>
-                            <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Venue / Event</th>
-                            <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Result</th>
-                            <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Avg</th>
-                            {isAdminEdit && <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Actions</th>}
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100">
-                        {filteredPerformances.map(p => (
-                            <tr key={p.id} className="hover:bg-slate-50 transition-colors">
-                                <td className="px-6 py-4 text-slate-500 font-medium">{p.date}</td>
-                                <td className="px-6 py-4 font-bold text-slate-900">{p.athlete}</td>
-                                <td className="px-6 py-4">
-                                    <div className="font-bold text-slate-700">{p.event}</div>
-                                    <div className="text-xs text-slate-400 flex items-center gap-1">
-                                        <MapPin size={10} /> {p.venue}
-                                    </div>
-                                </td>
-                                <td className="px-6 py-4">
-                                    <span className={cn(
-                                        "px-2 py-1 rounded-lg font-black text-xs",
-                                        p.isPB ? "bg-amber-100 text-amber-700" : "bg-emerald-50 text-emerald-700"
-                                    )}>
-                                        {p.time} {p.isPB && '🏆'}
-                                    </span>
-                                </td>
-                                <td className="px-6 py-4 text-slate-400 text-xs font-bold italic">{p.sessionAvg || '-'}</td>
-                                {isAdminEdit && (
-                                    <td className="px-6 py-4">
-                                        <button className="text-blue-600 hover:underline font-bold text-xs uppercase">Edit</button>
-                                    </td>
-                                )}
+                {loading ? (
+                    <div className="p-12 text-center text-slate-400 font-bold uppercase tracking-widest text-xs">Loading Performances...</div>
+                ) : (
+                    <table className="w-full text-left text-sm">
+                        <thead className="bg-slate-50 border-b border-slate-200">
+                            <tr>
+                                <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Date</th>
+                                <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Athlete</th>
+                                <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Venue / Session</th>
+                                <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Result</th>
+                                {isAdminEdit && <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Actions</th>}
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                            {performances.map(p => (
+                                <tr key={p.id} className="hover:bg-slate-50 transition-colors">
+                                    <td className="px-6 py-4 text-slate-500 font-medium">{p.date}</td>
+                                    <td className="px-6 py-4">
+                                        <div className="flex items-center gap-2">
+                                            <img src={p.athlete?.photo_url || `https://i.pravatar.cc/150?u=${p.athlete_id}`} className="w-6 h-6 rounded-full" />
+                                            <span className="font-bold text-slate-900">{p.athlete?.name}</span>
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <div className="font-bold text-slate-700">{p.session_name}</div>
+                                        <div className="text-xs text-slate-400 flex items-center gap-1">
+                                            {p.coach?.name && <><User size={10} /> {p.coach.name}</>}
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <span className="px-2 py-1 rounded-lg font-black text-xs bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                            {p.result}
+                                        </span>
+                                    </td>
+                                    {isAdminEdit && (
+                                        <td className="px-6 py-4">
+                                            <button className="text-blue-600 hover:underline font-bold text-xs uppercase">Edit</button>
+                                        </td>
+                                    )}
+                                </tr>
+                            ))}
+                            {performances.length === 0 && (
+                                <tr>
+                                    <td colSpan={isAdminEdit ? 5 : 4} className="px-6 py-12 text-center text-slate-400 italic">No performance records found for the selected filters.</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                )}
             </div>
             {isAdminEdit && (
                 <button className="w-full py-3 border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 font-bold text-sm hover:border-blue-500 hover:text-blue-500 transition-all">
