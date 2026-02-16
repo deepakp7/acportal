@@ -57,13 +57,13 @@ const MOCK_COACHES = [
 ];
 
 const MOCK_MEMBERS = [
-    { id: 1, name: "Alice Johnson", type: "juniors", state: "Awaiting Trials", email: "alice@example.com", photo: "https://i.pravatar.cc/150?u=1", hacId: "HAC-9921", eaId: "EA-88219", paid: false, coachId: 'C1' },
-    { id: 2, name: "Bob Smith", type: "juniors", state: "Trial Passed", email: "bob@example.com", photo: "https://i.pravatar.cc/150?u=2", hacId: "HAC-9922", eaId: "EA-88220", paid: false, coachId: 'C2' },
-    { id: 3, name: "Charlie Brown", type: "juniors", state: "In DT Academy", email: "charlie@example.com", photo: "https://i.pravatar.cc/150?u=3", hacId: "HAC-9923", eaId: "EA-88221", paid: true, coachId: 'C2' },
-    { id: 4, name: "Diana Prince", type: "seniors", state: "Invitation Process", email: "diana@example.com", photo: "https://i.pravatar.cc/150?u=4", hacId: "HAC-1102", eaId: "EA-11002", paid: false, coachId: 'C1' },
-    { id: 5, name: "Evan Wright", type: "seniors", state: "Membership Form Completed", email: "evan@example.com", photo: "https://i.pravatar.cc/150?u=5", hacId: "HAC-1103", eaId: "EA-11003", paid: true, coachId: 'C2' },
-    { id: 6, name: "Fiona Gallagher", type: "juniors", state: "Membership Form Completed", email: "fiona@example.com", photo: "https://i.pravatar.cc/150?u=6", hacId: "HAC-9924", eaId: "EA-88222", paid: true, coachId: 'C1' },
-    { id: 7, name: "George Bailey", type: "seniors", state: "Confirmation", email: "george@example.com", photo: "https://i.pravatar.cc/150?u=7", hacId: "HAC-1104", eaId: "EA-11004", paid: false, coachId: 'C3' },
+    { id: 'm1', name: "Alice Johnson", type: "juniors", state: "Awaiting Trials", email: "alice@example.com", photo: "https://i.pravatar.cc/150?u=1", hacId: "HAC-9921", eaId: "EA-88219", paid: false, coach_id: 'C1' },
+    { id: 'm2', name: "Bob Smith", type: "juniors", state: "Trial Passed", email: "bob@example.com", photo: "https://i.pravatar.cc/150?u=2", hacId: "HAC-9922", eaId: "EA-88220", paid: false, coach_id: 'C2' },
+    { id: 'm3', name: "Charlie Brown", type: "juniors", state: "In DT Academy", email: "charlie@example.com", photo: "https://i.pravatar.cc/150?u=3", hacId: "HAC-9923", eaId: "EA-88221", paid: true, coach_id: 'C2' },
+    { id: 'm4', name: "Diana Prince", type: "seniors", state: "Invitation Process", email: "diana@example.com", photo: "https://i.pravatar.cc/150?u=4", hacId: "HAC-1102", eaId: "EA-11002", paid: false, coach_id: 'C1' },
+    { id: 'm5', name: "Evan Wright", type: "seniors", state: "Membership Form Completed", email: "evan@example.com", photo: "https://i.pravatar.cc/150?u=5", hacId: "HAC-1103", eaId: "EA-11003", paid: true, coach_id: 'C2' },
+    { id: 'm6', name: "Fiona Gallagher", type: "juniors", state: "Membership Form Completed", email: "fiona@example.com", photo: "https://i.pravatar.cc/150?u=6", hacId: "HAC-9924", eaId: "EA-88222", paid: true, coach_id: 'C1' },
+    { id: 'm7', name: "George Bailey", type: "seniors", state: "Confirmation", email: "george@example.com", photo: "https://i.pravatar.cc/150?u=7", hacId: "HAC-1104", eaId: "EA-11004", paid: false, coach_id: 'C3' },
 ];
 
 const CLUB_NEWS = [
@@ -862,13 +862,13 @@ const MemberDashboard = ({ currentView, athletes = [], coaches = [], onUpdateAth
                                         {showStateDropdown === m.id && (
                                             <div className="absolute right-6 mt-1 w-56 bg-white shadow-xl border rounded-xl z-50 overflow-hidden">
                                                 <div className="px-4 py-2 bg-slate-50 border-b text-[10px] font-bold text-slate-400 uppercase">Change Status</div>
-                                                {WORKFLOWS[m.type].map(s => (
+                                                {(WORKFLOWS[m.type] || []).map(st => (
                                                     <button
-                                                        key={s}
-                                                        onClick={() => handleStateChange(m.id, s)}
+                                                        key={st}
+                                                        onClick={() => handleStateChange(m.id, st)}
                                                         className="w-full text-left px-4 py-2 text-xs hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
                                                     >
-                                                        {s}
+                                                        {st}
                                                     </button>
                                                 ))}
                                             </div>
@@ -941,7 +941,7 @@ const UserProfile = ({ userType, onManagePayments, athletes = [], coaches = [] }
                 </h3>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div className="space-y-6">
-                        <AttendanceManager userType="athlete" athleteId={athletes[0]?.id} athletes={athletes} coaches={coaches} />
+                        <AttendanceManager userType="athlete" athleteId={athletes[0]?.id && String(athletes[0].id).length > 5 ? athletes[0].id : null} athletes={athletes} coaches={coaches} />
                         <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
                             <h3 className="font-bold flex items-center gap-2 mb-4">
                                 <Timer size={18} className="text-amber-500" /> Next Session
@@ -963,7 +963,7 @@ const UserProfile = ({ userType, onManagePayments, athletes = [], coaches = [] }
                         </div>
                     </div>
                     <div>
-                        <PerformanceHistory userType="athlete" athleteId={athletes[0]?.id} athletes={athletes} coaches={coaches} />
+                        <PerformanceHistory userType="athlete" athleteId={athletes[0]?.id && String(athletes[0].id).length > 5 ? athletes[0].id : null} athletes={athletes} coaches={coaches} />
                     </div>
                 </div>
             </div>
