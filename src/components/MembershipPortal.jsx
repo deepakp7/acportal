@@ -254,6 +254,9 @@ const TrainingManager = () => {
 // Helper to parse time strings (e.g., "3:13", "12.45s") into seconds for comparison
 const parseTimeToSeconds = (timeStr) => {
     if (!timeStr || timeStr === '-') return Infinity;
+    // Strict check: If it contains any letters, it's a note, not a timing
+    if (/[a-zA-Z]/.test(timeStr)) return Infinity;
+
     const cleanTime = String(timeStr).replace(/[^\d:.]/g, '');
     if (cleanTime.includes(':')) {
         const parts = cleanTime.split(':');
