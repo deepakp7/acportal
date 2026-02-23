@@ -707,11 +707,25 @@ const AttendanceManager = ({ userType, athleteId = null, athletes = [], coaches 
 };
 
 const MemberDashboard = ({ currentView, athletes = [], coaches = [], onUpdateAthlete }) => {
-    const [filterState, setFilterState] = useState('All');
-    const [filterType, setFilterType] = useState('All');
-    const [showStateDropdown, setShowStateDropdown] = useState(null);
-    const [showCoachDropdown, setShowCoachDropdown] = useState(null);
     const [selectedAthleteProfile, setSelectedAthleteProfile] = useState(null);
+    const [filterType, setFilterType] = useState('All');
+    const [filterState, setFilterState] = useState('All');
+    const [showCoachDropdown, setShowCoachDropdown] = useState(null);
+    const [showStateDropdown, setShowStateDropdown] = useState(null);
+
+    const handleAddMember = () => {
+        setSelectedAthleteProfile({
+            name: '',
+            email: '',
+            type: 'juniors',
+            state: 'Waitlist',
+            parent_contacts: [],
+            notes: '',
+            dob: '',
+            ea_id: '',
+            isNew: true
+        });
+    };
 
     const filteredMembers = athletes
         .filter(m => filterState === 'All' || m.state === filterState)
@@ -789,6 +803,12 @@ const MemberDashboard = ({ currentView, athletes = [], coaches = [], onUpdateAth
                             <option value="Membership Form Completed">Fully Registered</option>
                         </select>
                     </div>
+                    <button
+                        onClick={handleAddMember}
+                        className="flex items-center gap-2 bg-emerald-600 text-white px-4 py-1.5 rounded-xl border border-emerald-500 shadow-sm hover:bg-emerald-700 transition-all font-bold text-xs"
+                    >
+                        <Plus size={14} /> Add Member
+                    </button>
                 </div>
             </div>
 
@@ -951,6 +971,7 @@ const AthleteProfileModal = ({ athlete, onClose, onUpdate, coaches }) => {
 
     React.useEffect(() => {
         const loadPayments = async () => {
+            if (!athlete.id || athlete.isNew) return;
             try {
                 const data = await athleteService.getTrackPayments(athlete.id);
                 setPayments(data || []);
@@ -958,34 +979,49 @@ const AthleteProfileModal = ({ athlete, onClose, onUpdate, coaches }) => {
                 console.error('Failed to load track payments:', err);
             }
         };
-        if (athlete.id) loadPayments();
-    }, [athlete.id]);
+        loadPayments();
+    }, [athlete.id, athlete.isNew]);
 
     const handleSave = async () => {
         // Prevent saving mock data
-        if (athlete.id && String(athlete.id).startsWith('m')) {
+        if (athlete.id && String(athlete.id).startsWith('m') && !athlete.isNew) {
             alert('Notice: Changes to mock members cannot be saved to the database. Please ensure you are connected to Supabase and working with real records.');
+            return;
+        }
+
+        if (!editData.name || !editData.email) {
+            alert('Name and Email are required.');
             return;
         }
 
         setSaving(true);
         try {
-            const updates = {
+            const data = {
                 name: editData.name,
                 email: editData.email,
+                type: editData.type,
+                state: editData.state,
                 dob: editData.dob || null,
                 ea_id: editData.ea_id || null,
                 notes: editData.notes,
                 parent_contacts: editData.parent_contacts || [],
-                state: editData.state,
                 coach_id: editData.coach_id || null
             };
-            await athleteService.update(athlete.id, updates);
-            onUpdate(athlete.id, updates);
-            alert('Profile updated successfully!');
+
+            let savedResult;
+            if (athlete.isNew) {
+                savedResult = await athleteService.create(data);
+                alert('Member created successfully!');
+            } else {
+                savedResult = await athleteService.update(athlete.id, data);
+                alert('Profile updated successfully!');
+            }
+
+            onUpdate(savedResult.id, savedResult);
+            if (athlete.isNew) onClose();
         } catch (err) {
-            console.error('Failed to update athlete:', err);
-            alert(`Failed to update profile: ${err.message || 'Check connection'}`);
+            console.error('Failed to save athlete:', err);
+            alert(`Failed to save: ${err.message || 'Check connection'}`);
         } finally {
             setSaving(false);
         }
@@ -1040,8 +1076,10 @@ const AthleteProfileModal = ({ athlete, onClose, onUpdate, coaches }) => {
                     <div className="flex items-center gap-4">
                         <img src={athlete.photo_url || athlete.photo || `https://i.pravatar.cc/150?u=${athlete.id}`} className="w-12 h-12 rounded-full border-2 border-emerald-500" alt="" />
                         <div>
-                            <h2 className="text-xl font-black tracking-tight">{athlete.name}</h2>
-                            <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">{athlete.type} · {athlete.state}</p>
+                            <h2 className="text-xl font-black tracking-tight">{athlete.isNew ? 'New Member' : athlete.name}</h2>
+                            {!athlete.isNew && (
+                                <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">{athlete.type} · {athlete.state}</p>
+                            )}
                         </div>
                     </div>
                     <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full transition-colors">
@@ -1077,6 +1115,24 @@ const AthleteProfileModal = ({ athlete, onClose, onUpdate, coaches }) => {
                                     <div>
                                         <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest block mb-1">EA Number</label>
                                         <input type="text" value={editData.ea_id} onChange={e => setEditData({ ...editData, ea_id: e.target.value })} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold outline-none focus:border-emerald-500 transition-colors" />
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest block mb-1">Type</label>
+                                        <select value={editData.type} onChange={e => setEditData({ ...editData, type: e.target.value })} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold outline-none focus:border-emerald-500 transition-colors">
+                                            <option value="juniors">Juniors</option>
+                                            <option value="seniors">Seniors</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest block mb-1">Status</label>
+                                        <select value={editData.state} onChange={e => setEditData({ ...editData, state: e.target.value })} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold outline-none focus:border-emerald-500 transition-colors">
+                                            {(WORKFLOWS[editData.type] || []).map(st => (
+                                                <option key={st} value={st}>{st}</option>
+                                            ))}
+                                            {!WORKFLOWS[editData.type] && <option value="Waitlist">Waitlist</option>}
+                                        </select>
                                     </div>
                                 </div>
                                 <div>
@@ -1321,7 +1377,14 @@ export default function MembershipPortal({ userType = 'juniors' }) {
     }, []);
 
     const handleUpdateAthleteLocal = (id, updates) => {
-        setAthletes(prev => prev.map(a => String(a.id) === String(id) ? { ...a, ...updates } : a));
+        setAthletes(prev => {
+            const exists = prev.some(a => String(a.id) === String(id));
+            if (exists) {
+                return prev.map(a => String(a.id) === String(id) ? { ...a, ...updates } : a);
+            } else {
+                return [...prev, { id, ...updates }];
+            }
+        });
     };
 
     if (showPaymentSetup) {
