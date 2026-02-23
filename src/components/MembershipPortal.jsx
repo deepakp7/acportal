@@ -962,24 +962,30 @@ const AthleteProfileModal = ({ athlete, onClose, onUpdate, coaches }) => {
     }, [athlete.id]);
 
     const handleSave = async () => {
+        // Prevent saving mock data
+        if (athlete.id && String(athlete.id).startsWith('m')) {
+            alert('Notice: Changes to mock members cannot be saved to the database. Please ensure you are connected to Supabase and working with real records.');
+            return;
+        }
+
         setSaving(true);
         try {
             const updates = {
                 name: editData.name,
                 email: editData.email,
-                dob: editData.dob,
-                ea_id: editData.ea_id,
+                dob: editData.dob || null,
+                ea_id: editData.ea_id || null,
                 notes: editData.notes,
-                parent_contacts: editData.parent_contacts,
+                parent_contacts: editData.parent_contacts || [],
                 state: editData.state,
-                coach_id: editData.coach_id
+                coach_id: editData.coach_id || null
             };
             await athleteService.update(athlete.id, updates);
             onUpdate(athlete.id, updates);
             alert('Profile updated successfully!');
         } catch (err) {
             console.error('Failed to update athlete:', err);
-            alert('Failed to update profile.');
+            alert(`Failed to update profile: ${err.message || 'Check connection'}`);
         } finally {
             setSaving(false);
         }
