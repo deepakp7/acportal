@@ -27,6 +27,9 @@ CREATE TABLE IF NOT EXISTS athletes (
     coach_id TEXT REFERENCES coaches(id) ON DELETE SET NULL,
     track_fees_paid BOOLEAN DEFAULT false,
     membership_paid BOOLEAN DEFAULT false,
+    dob DATE,
+    notes TEXT,
+    parent_contacts JSONB DEFAULT '[]'::jsonb,
     metadata JSONB DEFAULT '{}'::jsonb
 );
 
@@ -48,10 +51,24 @@ CREATE TABLE IF NOT EXISTS attendance (
     UNIQUE(athlete_id, date) -- Prevent duplicate attendance for same athlete on same day
 );
 
+-- Track Payments table for monthly tracking
+CREATE TABLE IF NOT EXISTS track_payments (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    athlete_id UUID REFERENCES athletes(id) ON DELETE CASCADE,
+    month INTEGER NOT NULL CHECK (month >= 1 AND month <= 12),
+    year INTEGER NOT NULL,
+    paid BOOLEAN DEFAULT true,
+    amount DECIMAL(10,2),
+    notes TEXT,
+    UNIQUE(athlete_id, month, year)
+);
+
 -- Index for faster lookups
 CREATE INDEX IF NOT EXISTS idx_attendance_date ON attendance(date);
 CREATE INDEX IF NOT EXISTS idx_attendance_coach_id ON attendance(coach_id);
 CREATE INDEX IF NOT EXISTS idx_attendance_athlete_id ON attendance(athlete_id);
+CREATE INDEX IF NOT EXISTS idx_track_payments_athlete_id ON track_payments(athlete_id);
 
 -- Enable Row Level Security (optional but recommended)
 -- ...

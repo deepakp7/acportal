@@ -45,5 +45,33 @@ export const athleteService = {
             .delete()
             .eq('id', id)
         if (error) throw error
+    },
+
+    async getTrackPayments(athleteId) {
+        const { data, error } = await supabase
+            .from('track_payments')
+            .select('*')
+            .eq('athlete_id', athleteId)
+            .order('year', { ascending: false })
+            .order('month', { ascending: false })
+        if (error) throw error
+        return data
+    },
+
+    async updateTrackPayment(athleteId, month, year, paid, notes = '') {
+        const { data, error } = await supabase
+            .from('track_payments')
+            .upsert({
+                athlete_id: athleteId,
+                month,
+                year,
+                paid,
+                notes
+            }, {
+                onConflict: 'athlete_id,month,year'
+            })
+            .select()
+        if (error) throw error
+        return data[0]
     }
 }

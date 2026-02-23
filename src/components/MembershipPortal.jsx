@@ -22,7 +22,13 @@ import {
     X,
     Trophy,
     TrendingUp,
-    Award
+    Award,
+    StickyNote,
+    Mail,
+    Phone,
+    Save,
+    Plus,
+    Trash2
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -705,6 +711,7 @@ const MemberDashboard = ({ currentView, athletes = [], coaches = [], onUpdateAth
     const [filterType, setFilterType] = useState('All');
     const [showStateDropdown, setShowStateDropdown] = useState(null);
     const [showCoachDropdown, setShowCoachDropdown] = useState(null);
+    const [selectedAthleteProfile, setSelectedAthleteProfile] = useState(null);
 
     const filteredMembers = athletes
         .filter(m => filterState === 'All' || m.state === filterState)
@@ -879,6 +886,12 @@ const MemberDashboard = ({ currentView, athletes = [], coaches = [], onUpdateAth
                                                 ))}
                                             </div>
                                         )}
+                                        <button
+                                            onClick={() => setSelectedAthleteProfile(m)}
+                                            className="ml-4 text-blue-600 font-bold text-xs uppercase hover:underline"
+                                        >
+                                            Profile
+                                        </button>
                                     </td>
                                 </tr>
                             ))}
@@ -908,6 +921,279 @@ const MemberDashboard = ({ currentView, athletes = [], coaches = [], onUpdateAth
                     </div>
                 </div>
             </div>
+
+            {selectedAthleteProfile && (
+                <AthleteProfileModal
+                    athlete={selectedAthleteProfile}
+                    coaches={coaches}
+                    onClose={() => setSelectedAthleteProfile(null)}
+                    onUpdate={(id, updates) => {
+                        onUpdateAthlete(id, updates);
+                        setSelectedAthleteProfile(prev => ({ ...prev, ...updates }));
+                    }}
+                />
+            )}
+        </div>
+    );
+};
+
+const AthleteProfileModal = ({ athlete, onClose, onUpdate, coaches }) => {
+    const [editData, setEditData] = useState({
+        ...athlete,
+        parent_contacts: athlete.parent_contacts || [],
+        notes: athlete.notes || '',
+        dob: athlete.dob || '',
+        ea_id: athlete.ea_id || athlete.eaId || ''
+    });
+    const [saving, setSaving] = useState(false);
+    const [tab, setTab] = useState('general'); // 'general', 'contacts', 'fees'
+    const [payments, setPayments] = useState([]);
+
+    React.useEffect(() => {
+        const loadPayments = async () => {
+            try {
+                const data = await athleteService.getTrackPayments(athlete.id);
+                setPayments(data || []);
+            } catch (err) {
+                console.error('Failed to load track payments:', err);
+            }
+        };
+        if (athlete.id) loadPayments();
+    }, [athlete.id]);
+
+    const handleSave = async () => {
+        setSaving(true);
+        try {
+            const updates = {
+                name: editData.name,
+                email: editData.email,
+                dob: editData.dob,
+                ea_id: editData.ea_id,
+                notes: editData.notes,
+                parent_contacts: editData.parent_contacts,
+                state: editData.state,
+                coach_id: editData.coach_id
+            };
+            await athleteService.update(athlete.id, updates);
+            onUpdate(athlete.id, updates);
+            alert('Profile updated successfully!');
+        } catch (err) {
+            console.error('Failed to update athlete:', err);
+            alert('Failed to update profile.');
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const handleAddContact = () => {
+        setEditData({
+            ...editData,
+            parent_contacts: [...editData.parent_contacts, { name: '', email: '', phone: '', relation: '' }]
+        });
+    };
+
+    const handleUpdateContact = (idx, field, val) => {
+        const newContacts = [...editData.parent_contacts];
+        newContacts[idx] = { ...newContacts[idx], [field]: val };
+        setEditData({ ...editData, parent_contacts: newContacts });
+    };
+
+    const handleRemoveContact = (idx) => {
+        const newContacts = editData.parent_contacts.filter((_, i) => i !== idx);
+        setEditData({ ...editData, parent_contacts: newContacts });
+    };
+
+    const handleTogglePayment = async (month, year) => {
+        const existing = payments.find(p => p.month === month && p.year === year);
+        const newPaid = existing ? !existing.paid : true;
+        try {
+            await athleteService.updateTrackPayment(athlete.id, month, year, newPaid);
+            const updated = await athleteService.getTrackPayments(athlete.id);
+            setPayments(updated);
+        } catch (err) {
+            console.error('Failed to update payment:', err);
+        }
+    };
+
+    const months = [
+        { id: 1, name: 'Jan' }, { id: 2, name: 'Feb' }, { id: 3, name: 'Mar' },
+        { id: 4, name: 'Apr' }, { id: 5, name: 'May' }, { id: 6, name: 'Jun' },
+        { id: 7, name: 'Jul' }, { id: 8, name: 'Aug' }, { id: 9, name: 'Sep' },
+        { id: 10, name: 'Oct' }, { id: 11, name: 'Nov' }, { id: 12, name: 'Dec' }
+    ];
+    const currentYear = new Date().getFullYear();
+
+    return (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                className="bg-white w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+            >
+                <div className="p-6 bg-slate-900 text-white flex justify-between items-center shrink-0">
+                    <div className="flex items-center gap-4">
+                        <img src={athlete.photo_url || athlete.photo || `https://i.pravatar.cc/150?u=${athlete.id}`} className="w-12 h-12 rounded-full border-2 border-emerald-500" alt="" />
+                        <div>
+                            <h2 className="text-xl font-black tracking-tight">{athlete.name}</h2>
+                            <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">{athlete.type} · {athlete.state}</p>
+                        </div>
+                    </div>
+                    <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+                        <X size={24} />
+                    </button>
+                </div>
+
+                <div className="flex border-b border-slate-100 shrink-0">
+                    <button onClick={() => setTab('general')} className={cn("px-6 py-4 text-sm font-bold border-b-2 transition-colors", tab === 'general' ? "border-emerald-500 text-emerald-600" : "border-transparent text-slate-400 hover:text-slate-600")}>General Info</button>
+                    {athlete.type === 'juniors' && (
+                        <button onClick={() => setTab('contacts')} className={cn("px-6 py-4 text-sm font-bold border-b-2 transition-colors", tab === 'contacts' ? "border-emerald-500 text-emerald-600" : "border-transparent text-slate-400 hover:text-slate-600")}>Parent Contacts</button>
+                    )}
+                    <button onClick={() => setTab('fees')} className={cn("px-6 py-4 text-sm font-bold border-b-2 transition-colors", tab === 'fees' ? "border-emerald-500 text-emerald-600" : "border-transparent text-slate-400 hover:text-slate-600")}>Track Fees</button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto p-8">
+                    {tab === 'general' && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest block mb-1">Full Name</label>
+                                    <input type="text" value={editData.name} onChange={e => setEditData({ ...editData, name: e.target.value })} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold outline-none focus:border-emerald-500 transition-colors" />
+                                </div>
+                                <div>
+                                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest block mb-1">Email Address</label>
+                                    <input type="email" value={editData.email} onChange={e => setEditData({ ...editData, email: e.target.value })} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold outline-none focus:border-emerald-500 transition-colors" />
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest block mb-1">DOB</label>
+                                        <input type="date" value={editData.dob} onChange={e => setEditData({ ...editData, dob: e.target.value })} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold outline-none focus:border-emerald-500 transition-colors" />
+                                    </div>
+                                    <div>
+                                        <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest block mb-1">EA Number</label>
+                                        <input type="text" value={editData.ea_id} onChange={e => setEditData({ ...editData, ea_id: e.target.value })} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold outline-none focus:border-emerald-500 transition-colors" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest block mb-1">Assigned Coach</label>
+                                    <select value={editData.coach_id} onChange={e => setEditData({ ...editData, coach_id: e.target.value })} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold outline-none focus:border-emerald-500 transition-colors">
+                                        <option value="">Unassigned</option>
+                                        {coaches.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest block mb-1 flex items-center gap-2">
+                                        <StickyNote size={12} /> Notes / Medical Information
+                                    </label>
+                                    <textarea
+                                        value={editData.notes}
+                                        onChange={e => setEditData({ ...editData, notes: e.target.value })}
+                                        rows={8}
+                                        placeholder="Add any free-text notes, medical conditions, or special requirements..."
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm font-medium outline-none focus:border-emerald-500 transition-colors resize-none"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {tab === 'contacts' && (
+                        <div className="space-y-6">
+                            <div className="flex justify-between items-center">
+                                <h3 className="font-bold text-slate-900">Parent / Guardian Contacts</h3>
+                                <button onClick={handleAddContact} className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-emerald-600 hover:text-emerald-700">
+                                    <Plus size={14} /> Add Contact
+                                </button>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {editData.parent_contacts.map((contact, idx) => (
+                                    <div key={idx} className="p-6 bg-slate-50 rounded-2xl border border-slate-100 relative group">
+                                        <button onClick={() => handleRemoveContact(idx)} className="absolute top-4 right-4 text-slate-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100">
+                                            <Trash2 size={16} />
+                                        </button>
+                                        <div className="space-y-4">
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div>
+                                                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest block mb-1">Name</label>
+                                                    <input type="text" value={contact.name} onChange={e => handleUpdateContact(idx, 'name', e.target.value)} className="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-bold outline-none focus:border-emerald-500" />
+                                                </div>
+                                                <div>
+                                                    <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest block mb-1">Relation</label>
+                                                    <input type="text" value={contact.relation} onChange={e => handleUpdateContact(idx, 'relation', e.target.value)} placeholder="e.g. Mother" className="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-bold outline-none focus:border-emerald-500" />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest block mb-1">Email</label>
+                                                <div className="relative">
+                                                    <Mail size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                                                    <input type="email" value={contact.email} onChange={e => handleUpdateContact(idx, 'email', e.target.value)} className="w-full bg-white border border-slate-200 rounded-lg pl-9 pr-3 py-1.5 text-xs font-bold outline-none focus:border-emerald-500" />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest block mb-1">Phone</label>
+                                                <div className="relative">
+                                                    <Phone size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                                                    <input type="tel" value={contact.phone} onChange={e => handleUpdateContact(idx, 'phone', e.target.value)} className="w-full bg-white border border-slate-200 rounded-lg pl-9 pr-3 py-1.5 text-xs font-bold outline-none focus:border-emerald-500" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                                {editData.parent_contacts.length === 0 && (
+                                    <div className="col-span-full py-12 text-center text-slate-400 font-medium italic border-2 border-dashed border-slate-100 rounded-3xl">
+                                        No rescue contacts listed. Add parents or guardians for emergency contact.
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {tab === 'fees' && (
+                        <div className="space-y-6">
+                            <div className="flex justify-between items-center">
+                                <h3 className="font-bold text-slate-900">Track Fee History ({currentYear})</h3>
+                                <div className="text-[10px] font-black uppercase text-emerald-600 bg-emerald-50 px-2 py-1 rounded">Monthly Reconciliation</div>
+                            </div>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                                {months.map(m => {
+                                    const payment = payments.find(p => p.month === m.id && p.year === currentYear);
+                                    const isPaid = payment?.paid;
+                                    return (
+                                        <button
+                                            key={m.id}
+                                            onClick={() => handleTogglePayment(m.id, currentYear)}
+                                            className={cn(
+                                                "p-4 rounded-2xl border-2 transition-all text-center",
+                                                isPaid
+                                                    ? "bg-emerald-50 border-emerald-200 text-emerald-700"
+                                                    : "bg-white border-slate-100 text-slate-400 hover:border-slate-200"
+                                            )}
+                                        >
+                                            <div className="text-[10px] font-black uppercase tracking-widest mb-1">{m.name}</div>
+                                            <div className="flex justify-center">
+                                                {isPaid ? <CheckCircle2 size={24} /> : <Clock size={24} />}
+                                            </div>
+                                            <div className="text-[9px] font-bold mt-2 uppercase">{isPaid ? 'Paid' : 'Due'}</div>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                <div className="p-6 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 shrink-0">
+                    <button onClick={onClose} className="px-6 py-2.5 text-sm font-bold text-slate-400 hover:text-slate-600 transition-colors">Cancel</button>
+                    <button
+                        onClick={handleSave}
+                        disabled={saving}
+                        className="bg-emerald-600 text-white px-8 py-2.5 rounded-xl text-sm font-black uppercase tracking-widest shadow-lg shadow-emerald-200 hover:bg-emerald-700 disabled:opacity-50 flex items-center gap-2"
+                    >
+                        {saving ? 'Saving...' : <><Save size={18} /> Save Profile</>}
+                    </button>
+                </div>
+            </motion.div>
         </div>
     );
 };
