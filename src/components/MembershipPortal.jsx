@@ -1462,7 +1462,7 @@ const WorkflowStepper = ({ steps, currentStep }) => (
     </div>
 );
 
-const UserProfile = ({ userType, onManagePayments, athletes = [], coaches = [] }) => {
+const UserProfile = ({ userType, onManagePayments, athletes = [], coaches = [], currentView }) => {
     const [currentStep, setCurrentStep] = useState(1);
     const steps = userType === 'juniors' ? WORKFLOWS.juniors : WORKFLOWS.seniors;
 
@@ -1664,7 +1664,7 @@ export default function MembershipPortal({ userType = 'juniors' }) {
                 ) : userType === 'management' ? (
                     <MemberDashboard currentView={currentView} athletes={athletes} coaches={coaches} onUpdateAthlete={handleUpdateAthleteLocal} />
                 ) : (
-                    currentView === 'dashboard' ? <UserProfile userType={userType} onManagePayments={() => setShowPaymentSetup(true)} athletes={athletes} coaches={coaches} /> :
+                    currentView === 'dashboard' ? <UserProfile userType={userType} onManagePayments={() => setShowPaymentSetup(true)} athletes={athletes} coaches={coaches} currentView={currentView} /> :
                         currentView === 'news' ? <ClubNewsSection /> :
                             <TrainingManager />
                 )}
