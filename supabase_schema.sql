@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS meet_registrations (
     created_at TIMESTAMPTZ DEFAULT now(),
     athlete_id UUID REFERENCES athletes(id) ON DELETE CASCADE,
     meet_id UUID REFERENCES meets(id) ON DELETE CASCADE,
-    events JSONB DEFAULT '[]'::jsonb -- Events the athlete is interested in
+    events JSONB DEFAULT '[]'::jsonb, -- Events the athlete is interested in
     notes TEXT,
     UNIQUE(athlete_id, meet_id)
 );
