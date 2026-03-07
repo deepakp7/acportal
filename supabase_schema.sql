@@ -70,5 +70,36 @@ CREATE INDEX IF NOT EXISTS idx_attendance_coach_id ON attendance(coach_id);
 CREATE INDEX IF NOT EXISTS idx_attendance_athlete_id ON attendance(athlete_id);
 CREATE INDEX IF NOT EXISTS idx_track_payments_athlete_id ON track_payments(athlete_id);
 
+-- Meets table
+CREATE TABLE IF NOT EXISTS meets (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    name TEXT NOT NULL,
+    date DATE NOT NULL,
+    location TEXT,
+    description TEXT,
+    events JSONB DEFAULT '[]'::jsonb -- List of available events for this meet
+);
+
+-- Meet Registrations
+CREATE TABLE IF NOT EXISTS meet_registrations (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    athlete_id UUID REFERENCES athletes(id) ON DELETE CASCADE,
+    meet_id UUID REFERENCES meets(id) ON DELETE CASCADE,
+    events JSONB DEFAULT '[]'::jsonb -- Events the athlete is interested in
+    notes TEXT,
+    UNIQUE(athlete_id, meet_id)
+);
+
+-- Indexes for Meet Registrations
+CREATE INDEX IF NOT EXISTS idx_meet_registrations_meet_id ON meet_registrations(meet_id);
+CREATE INDEX IF NOT EXISTS idx_meet_registrations_athlete_id ON meet_registrations(athlete_id);
+
+-- Insert initial sample meet
+INSERT INTO meets (name, date, location, description, events) VALUES
+('Middlesex County Championships', '2026-05-15', 'Lee Valley Athletics Centre', 'Annual county championships for all age groups.', '["100m", "200m", "400m", "800m", "1500m", "Long Jump", "High Jump", "Shot Put"]')
+ON CONFLICT DO NOTHING;
+
 -- Enable Row Level Security (optional but recommended)
 -- ...

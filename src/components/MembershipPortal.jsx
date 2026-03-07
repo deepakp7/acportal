@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
     CreditCard,
@@ -36,6 +36,7 @@ import PaymentPortal from './PaymentPortal';
 import { athleteService } from '../services/athleteService';
 import { coachService } from '../services/coachService';
 import { attendanceService } from '../services/attendanceService';
+import { meetService } from '../services/meetService';
 import { checkConnection } from '../lib/supabase';
 
 function cn(...inputs) {
@@ -706,6 +707,193 @@ const AttendanceManager = ({ userType, athleteId = null, athletes = [], coaches 
     );
 };
 
+const MeetRegistration = ({ athleteId }) => {
+    const [meets, setMeets] = useState([]);
+    const [registrations, setRegistrations] = useState({});
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const loadMeets = async () => {
+            try {
+                const data = await meetService.getAllMeets();
+                setMeets(data);
+            } catch (err) {
+                console.error('Failed to load meets:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadMeets();
+    }, []);
+
+    const handleEventToggle = async (meetId, event) => {
+        const currentEvents = registrations[meetId] || [];
+        const newEvents = currentEvents.includes(event)
+            ? currentEvents.filter(e => e !== event)
+            : [...currentEvents, event];
+
+        try {
+            await meetService.registerForMeet(athleteId, meetId, newEvents);
+            setRegistrations({ ...registrations, [meetId]: newEvents });
+            alert('Selection updated!');
+        } catch (err) {
+            console.error('Failed to update registration:', err);
+        }
+    };
+
+    if (loading) return <div className="p-6 text-center text-xs font-bold text-slate-400">Loading Meets...</div>;
+
+    return (
+        <div className="space-y-6">
+            <h3 className="text-xl font-bold flex items-center gap-2">
+                <Trophy size={24} className="text-amber-500" />
+                Upcoming Athletics Meets
+            </h3>
+            <div className="grid grid-cols-1 gap-4">
+                {meets.map(meet => (
+                    <div key={meet.id} className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                        <div className="flex justify-between items-start mb-4">
+                            <div>
+                                <h4 className="text-lg font-bold text-slate-900">{meet.name}</h4>
+                                <p className="text-sm text-slate-500">{meet.date} · {meet.location}</p>
+                            </div>
+                            <span className="bg-amber-100 text-amber-700 text-[10px] font-black uppercase px-2 py-1 rounded">Interest Registration</span>
+                        </div>
+                        <p className="text-xs text-slate-600 mb-4">{meet.description}</p>
+                        <div className="space-y-3">
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Select Events</p>
+                            <div className="flex flex-wrap gap-2">
+                                {(meet.events || []).map(event => (
+                                    <button
+                                        key={event}
+                                        onClick={() => handleEventToggle(meet.id, event)}
+                                        className={cn(
+                                            "px-3 py-1.5 rounded-lg text-xs font-bold border transition-all",
+                                            (registrations[meet.id] || []).includes(event)
+                                                ? "bg-emerald-500 border-emerald-500 text-white shadow-lg shadow-emerald-200"
+                                                : "bg-white border-slate-200 text-slate-600 hover:border-slate-300"
+                                        )}
+                                    >
+                                        {event}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+const MeetReports = () => {
+    const [meets, setMeets] = useState([]);
+    const [selectedMeet, setSelectedMeet] = useState(null);
+    const [registrations, setRegistrations] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const loadMeets = async () => {
+            try {
+                const data = await meetService.getAllMeets();
+                setMeets(data);
+                if (data.length > 0) setSelectedMeet(data[0]);
+            } catch (err) {
+                console.error('Failed to load meets:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadMeets();
+    }, []);
+
+    useEffect(() => {
+        if (!selectedMeet) return;
+        const loadRegistrations = async () => {
+            try {
+                const data = await meetService.getMeetRegistrations(selectedMeet.id);
+                setRegistrations(data);
+            } catch (err) {
+                console.error('Failed to load registrations:', err);
+            }
+        };
+        loadRegistrations();
+    }, [selectedMeet]);
+
+    if (loading) return <div className="p-6 text-center text-xs font-bold text-slate-400">Loading Report...</div>;
+
+    return (
+        <div className="space-y-6">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <h2 className="text-xl font-bold text-slate-900">Meet Registration Reports</h2>
+                <select
+                    value={selectedMeet?.id}
+                    onChange={(e) => setSelectedMeet(meets.find(m => m.id === e.target.value))}
+                    className="bg-white border border-slate-200 px-4 py-2 rounded-xl text-sm font-bold shadow-sm outline-none focus:ring-2 focus:ring-emerald-500"
+                >
+                    {meets.map(m => <option key={m.id} value={m.id}>{m.name}</option>)}
+                </select>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div className="p-4 bg-slate-50 border-b flex justify-between items-center">
+                    <div className="text-xs font-black text-slate-500 uppercase tracking-widest">Athlete Interest List</div>
+                    <div className="text-[10px] font-black text-emerald-600 bg-emerald-50 px-2 py-1 rounded">Total: {registrations.length}</div>
+                </div>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left text-sm">
+                        <thead className="bg-slate-50 border-b border-slate-200">
+                            <tr>
+                                <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Athlete</th>
+                                <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Type</th>
+                                <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Events</th>
+                                <th className="px-6 py-4 font-bold text-slate-500 uppercase tracking-widest text-[10px]">Registration Date</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                            {registrations.map(reg => (
+                                <tr key={reg.id} className="hover:bg-slate-50 transition-colors">
+                                    <td className="px-6 py-4">
+                                        <div>
+                                            <p className="font-bold text-slate-900">{reg.athlete?.name}</p>
+                                            <p className="text-xs text-slate-500">{reg.athlete?.email}</p>
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <span className={cn(
+                                            "px-1.5 py-0.5 rounded text-[9px] font-black uppercase",
+                                            reg.athlete?.type === 'juniors' ? "bg-purple-100 text-purple-700" : "bg-blue-100 text-blue-700"
+                                        )}>
+                                            {reg.athlete?.type}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <div className="flex flex-wrap gap-1">
+                                            {(reg.events || []).map(ev => (
+                                                <span key={ev} className="bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded text-[9px] font-bold">{ev}</span>
+                                            ))}
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4 text-xs font-medium text-slate-500">
+                                        {new Date(reg.created_at).toLocaleDateString()}
+                                    </td>
+                                </tr>
+                            ))}
+                            {registrations.length === 0 && (
+                                <tr>
+                                    <td colSpan="4" className="px-6 py-12 text-center text-slate-400 font-medium italic">
+                                        No interest registrations yet for this meet.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const MemberDashboard = ({ currentView, athletes = [], coaches = [], onUpdateAthlete }) => {
     const [selectedAthleteProfile, setSelectedAthleteProfile] = useState(null);
     const [filterType, setFilterType] = useState('All');
@@ -772,6 +960,7 @@ const MemberDashboard = ({ currentView, athletes = [], coaches = [], onUpdateAth
     if (currentView === 'training') return <TrainingManager />;
     if (currentView === 'performances') return <PerformanceHistory userType="management" athletes={athletes} coaches={coaches} />;
     if (currentView === 'attendance') return <AttendanceManager userType="management" athletes={athletes} coaches={coaches} />;
+    if (currentView === 'meets') return <MeetReports />;
 
     return (
         <div className="space-y-4">
@@ -1320,6 +1509,12 @@ const UserProfile = ({ userType, onManagePayments, athletes = [], coaches = [] }
                         <PerformanceHistory userType="athlete" athleteId={athletes[0]?.id && String(athletes[0].id).length > 5 ? athletes[0].id : null} athletes={athletes} coaches={coaches} />
                     </div>
                 </div>
+
+                {currentView === 'dashboard' && (
+                    <div className="mt-8">
+                        <MeetRegistration athleteId={athletes[0]?.id} />
+                    </div>
+                )}
             </div>
         </div>
     );
@@ -1420,6 +1615,7 @@ export default function MembershipPortal({ userType = 'juniors' }) {
                             {userType === 'management' && (
                                 <>
                                     <button onClick={() => setCurrentView('attendance')} className={cn("px-3 py-1.5 rounded text-sm font-bold", currentView === 'attendance' ? "bg-blue-500/20 text-blue-400" : "text-slate-400 hover:text-white")}>Attendance</button>
+                                    <button onClick={() => setCurrentView('meets')} className={cn("px-3 py-1.5 rounded text-sm font-bold", currentView === 'meets' ? "bg-amber-500/20 text-amber-400" : "text-slate-400 hover:text-white")}>Meet Reports</button>
                                     <div className="relative">
                                         <button
                                             onClick={() => setShowAnalyticsDropdown(!showAnalyticsDropdown)}
