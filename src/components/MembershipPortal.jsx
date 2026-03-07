@@ -28,7 +28,12 @@ import {
     Phone,
     Save,
     Plus,
-    Trash2
+    Trash2,
+    Heart,
+    MessageCircle,
+    Share2,
+    Image as ImageIcon,
+    FileText
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -37,6 +42,7 @@ import { athleteService } from '../services/athleteService';
 import { coachService } from '../services/coachService';
 import { attendanceService } from '../services/attendanceService';
 import { meetService } from '../services/meetService';
+import { socialService } from '../services/socialService';
 import { checkConnection } from '../lib/supabase';
 
 function cn(...inputs) {
@@ -894,6 +900,233 @@ const MeetReports = () => {
     );
 };
 
+const SocialPost = ({ post, onLike, onComment, currentMemberId }) => {
+    const [showComments, setShowComments] = useState(false);
+    const [newComment, setNewComment] = useState('');
+
+    return (
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+            <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                    <img
+                        src={post.author?.photo_url || `https://i.pravatar.cc/150?u=${post.author_id}`}
+                        className="w-10 h-10 rounded-full border border-slate-100"
+                        alt=""
+                    />
+                    <div>
+                        <p className="font-bold text-slate-900">{post.author?.name || 'HAC Admin'}</p>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+                            {new Date(post.created_at).toLocaleDateString()}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div className="p-6">
+                {post.title && <h4 className="text-lg font-black text-slate-900 mb-2">{post.title}</h4>}
+                <p className="text-slate-600 text-sm leading-relaxed mb-4">{post.content}</p>
+
+                {post.media_url && post.media_type === 'image' && (
+                    <img src={post.media_url} className="w-full rounded-xl mb-4 object-cover max-h-96" alt="" />
+                )}
+
+                {post.media_type === 'document' && (
+                    <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                            <div className="bg-blue-100 text-blue-600 p-2 rounded-lg">
+                                <FileText size={20} />
+                            </div>
+                            <div>
+                                <p className="text-sm font-bold text-slate-900">{post.title || 'Document'}</p>
+                                <p className="text-[10px] text-slate-400 font-bold">PDF / 2.4 MB</p>
+                            </div>
+                        </div>
+                        <button className="text-xs font-black text-blue-600 uppercase tracking-widest hover:underline">Download</button>
+                    </div>
+                )}
+            </div>
+
+            <div className="px-6 py-4 bg-slate-50/50 border-t border-slate-100 flex items-center gap-6">
+                <button
+                    onClick={() => onLike(post.id)}
+                    className="flex items-center gap-2 text-slate-500 hover:text-rose-500 transition-colors"
+                >
+                    <Heart size={18} />
+                    <span className="text-xs font-bold">{post.likeCount}</span>
+                </button>
+                <button
+                    onClick={() => setShowComments(!showComments)}
+                    className="flex items-center gap-2 text-slate-500 hover:text-blue-500 transition-colors"
+                >
+                    <MessageCircle size={18} />
+                    <span className="text-xs font-bold">{post.commentCount}</span>
+                </button>
+                <button className="flex items-center gap-2 text-slate-500 hover:text-emerald-500 transition-colors">
+                    <Share2 size={18} />
+                </button>
+            </div>
+
+            {showComments && (
+                <div className="p-6 bg-slate-50 border-t border-slate-100 space-y-4">
+                    <div className="space-y-3">
+                        {(post.comments || []).map(comment => (
+                            <div key={comment.id} className="flex gap-3">
+                                <img src={comment.athlete?.photo_url || `https://i.pravatar.cc/150?u=${comment.athlete_id}`} className="w-8 h-8 rounded-full" alt="" />
+                                <div className="bg-white p-3 rounded-2xl rounded-tl-none border border-slate-200 shadow-sm flex-1">
+                                    <p className="text-[10px] font-black text-slate-900 mb-1">{comment.athlete?.name}</p>
+                                    <p className="text-xs text-slate-600 font-medium">{comment.content}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="flex gap-3">
+                        <input
+                            type="text"
+                            placeholder="Add a comment..."
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                            onKeyPress={(e) => {
+                                if (e.key === 'Enter') {
+                                    onComment(post.id, newComment);
+                                    setNewComment('');
+                                }
+                            }}
+                            className="flex-1 bg-white border border-slate-200 rounded-xl px-4 py-2 text-xs font-bold outline-none focus:border-emerald-500"
+                        />
+                        <button
+                            onClick={() => {
+                                onComment(post.id, newComment);
+                                setNewComment('');
+                            }}
+                            className="bg-emerald-600 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest"
+                        >
+                            Post
+                        </button>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+const ClubSocial = ({ currentMemberId }) => {
+    const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [showPostCreator, setShowPostCreator] = useState(false);
+    const [content, setContent] = useState('');
+
+    const loadPosts = async () => {
+        try {
+            const data = await socialService.getPosts();
+            setPosts(data);
+        } catch (err) {
+            console.error('Failed to load posts:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadPosts();
+    }, []);
+
+    const handleLike = async (postId) => {
+        try {
+            await socialService.toggleLike(postId, currentMemberId);
+            loadPosts(); // Reload to get fresh counts
+        } catch (err) {
+            console.error('Like failed:', err);
+        }
+    };
+
+    const handleComment = async (postId, text) => {
+        if (!text.trim()) return;
+        try {
+            await socialService.addComment(postId, currentMemberId, text);
+            loadPosts();
+        } catch (err) {
+            console.error('Comment failed:', err);
+        }
+    };
+
+    const handleCreatePost = async () => {
+        if (!content.trim()) return;
+        try {
+            await socialService.createPost(content);
+            setContent('');
+            setShowPostCreator(false);
+            loadPosts();
+        } catch (err) {
+            console.error('Create post failed:', err);
+        }
+    };
+
+    if (loading) return <div className="p-12 text-center text-xs font-bold text-slate-400">Loading Feed...</div>;
+
+    return (
+        <div className="max-w-2xl mx-auto space-y-6">
+            <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
+                <div className="flex items-center gap-4">
+                    <img src={`https://i.pravatar.cc/150?u=${currentMemberId}`} className="w-10 h-10 rounded-full" alt="" />
+                    <button
+                        onClick={() => setShowPostCreator(true)}
+                        className="flex-1 bg-slate-50 text-slate-400 text-sm font-bold h-10 rounded-xl px-4 text-left border border-slate-100 hover:bg-slate-100 transition-colors"
+                    >
+                        Share an update, photo, or result...
+                    </button>
+                </div>
+                <div className="flex items-center gap-4 mt-4 pt-4 border-t border-slate-50">
+                    <button className="flex items-center gap-2 text-slate-500 hover:text-emerald-600 transition-colors text-xs font-bold">
+                        <ImageIcon size={16} /> Photo
+                    </button>
+                    <button className="flex items-center gap-2 text-slate-500 hover:text-emerald-600 transition-colors text-xs font-bold">
+                        <FileText size={16} /> Document
+                    </button>
+                </div>
+            </div>
+
+            {showPostCreator && (
+                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+                    <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden">
+                        <div className="p-6 border-b border-slate-100 flex justify-between items-center">
+                            <h3 className="text-lg font-black text-slate-900">Create Post</h3>
+                            <button onClick={() => setShowPostCreator(false)}><X size={24} className="text-slate-400 hover:text-slate-600" /></button>
+                        </div>
+                        <div className="p-6 space-y-4">
+                            <textarea
+                                value={content}
+                                onChange={(e) => setContent(e.target.value)}
+                                placeholder="What's happening at the club?"
+                                className="w-full h-40 bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-medium outline-none focus:border-emerald-500 resize-none"
+                            />
+                            <div className="flex justify-end">
+                                <button
+                                    onClick={handleCreatePost}
+                                    className="bg-emerald-600 text-white px-8 py-3 rounded-xl text-sm font-black uppercase tracking-widest shadow-lg shadow-emerald-200"
+                                >
+                                    Share Post
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <div className="space-y-4">
+                {posts.map(post => (
+                    <SocialPost
+                        key={post.id}
+                        post={post}
+                        currentMemberId={currentMemberId}
+                        onLike={handleLike}
+                        onComment={handleComment}
+                    />
+                ))}
+            </div>
+        </div>
+    );
+};
+
 const MemberDashboard = ({ currentView, athletes = [], coaches = [], onUpdateAthlete }) => {
     const [selectedAthleteProfile, setSelectedAthleteProfile] = useState(null);
     const [filterType, setFilterType] = useState('All');
@@ -1610,11 +1843,13 @@ export default function MembershipPortal({ userType = 'juniors' }) {
                         <div className="font-black text-xl tracking-tighter italic">HAC<span className="text-emerald-500">Portal</span></div>
                         <div className="flex gap-2">
                             <button onClick={() => setCurrentView('dashboard')} className={cn("px-3 py-1.5 rounded text-sm font-bold", currentView === 'dashboard' ? "bg-emerald-500/20 text-emerald-400" : "text-slate-400 hover:text-white")}>Dashboard</button>
+                            <button onClick={() => setCurrentView('community')} className={cn("px-3 py-1.5 rounded text-sm font-bold", currentView === 'community' ? "bg-emerald-500/20 text-emerald-400" : "text-slate-400 hover:text-white")}>Community</button>
                             <button onClick={() => setCurrentView('news')} className={cn("px-3 py-1.5 rounded text-sm font-bold", currentView === 'news' ? "bg-emerald-500/20 text-emerald-400" : "text-slate-400 hover:text-white")}>News</button>
                             <button onClick={() => setCurrentView('training')} className={cn("px-3 py-1.5 rounded text-sm font-bold", currentView === 'training' ? "bg-emerald-500/20 text-emerald-400" : "text-slate-400 hover:text-white")}>Training</button>
                             {userType === 'management' && (
                                 <>
                                     <button onClick={() => setCurrentView('attendance')} className={cn("px-3 py-1.5 rounded text-sm font-bold", currentView === 'attendance' ? "bg-blue-500/20 text-blue-400" : "text-slate-400 hover:text-white")}>Attendance</button>
+                                    <button onClick={() => setCurrentView('community')} className={cn("px-3 py-1.5 rounded text-sm font-bold", currentView === 'community' ? "bg-emerald-500/20 text-emerald-400" : "text-slate-400 hover:text-white")}>Community</button>
                                     <button onClick={() => setCurrentView('meets')} className={cn("px-3 py-1.5 rounded text-sm font-bold", currentView === 'meets' ? "bg-amber-500/20 text-amber-400" : "text-slate-400 hover:text-white")}>Meet Reports</button>
                                     <div className="relative">
                                         <button
@@ -1665,8 +1900,9 @@ export default function MembershipPortal({ userType = 'juniors' }) {
                     <MemberDashboard currentView={currentView} athletes={athletes} coaches={coaches} onUpdateAthlete={handleUpdateAthleteLocal} />
                 ) : (
                     currentView === 'dashboard' ? <UserProfile userType={userType} onManagePayments={() => setShowPaymentSetup(true)} athletes={athletes} coaches={coaches} currentView={currentView} /> :
-                        currentView === 'news' ? <ClubNewsSection /> :
-                            <TrainingManager />
+                        currentView === 'community' ? <ClubSocial currentMemberId={athletes[0]?.id} /> :
+                            currentView === 'news' ? <ClubNewsSection /> :
+                                <TrainingManager />
                 )}
             </main>
         </div>

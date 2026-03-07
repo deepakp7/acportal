@@ -101,5 +101,39 @@ INSERT INTO meets (name, date, location, description, events) VALUES
 ('Middlesex County Championships', '2026-05-15', 'Lee Valley Athletics Centre', 'Annual county championships for all age groups.', '["100m", "200m", "400m", "800m", "1500m", "Long Jump", "High Jump", "Shot Put"]')
 ON CONFLICT DO NOTHING;
 
--- Enable Row Level Security (optional but recommended)
--- ...
+-- Social Media Feature
+CREATE TABLE IF NOT EXISTS club_posts (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    author_id UUID REFERENCES athletes(id) ON DELETE CASCADE,
+    content TEXT NOT NULL,
+    media_url TEXT,
+    media_type TEXT CHECK (media_type IN ('image', 'document')),
+    title TEXT -- For documents or special announcements
+);
+
+CREATE TABLE IF NOT EXISTS club_likes (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    post_id UUID REFERENCES club_posts(id) ON DELETE CASCADE,
+    athlete_id UUID REFERENCES athletes(id) ON DELETE CASCADE,
+    UNIQUE(post_id, athlete_id)
+);
+
+CREATE TABLE IF NOT EXISTS club_comments (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    post_id UUID REFERENCES club_posts(id) ON DELETE CASCADE,
+    athlete_id UUID REFERENCES athletes(id) ON DELETE CASCADE,
+    content TEXT NOT NULL
+);
+
+-- Indexes for Social
+CREATE INDEX IF NOT EXISTS idx_club_posts_author ON club_posts(author_id);
+CREATE INDEX IF NOT EXISTS idx_club_likes_post ON club_likes(post_id);
+CREATE INDEX IF NOT EXISTS idx_club_comments_post ON club_comments(post_id);
+
+-- Sample Social Post
+INSERT INTO club_posts (content, title, media_type) VALUES
+('Excited to see everyone at the Middlesex County Championships this May! Check out the registration details in the portal.', 'Upcoming Championships', 'image')
+ON CONFLICT DO NOTHING;
