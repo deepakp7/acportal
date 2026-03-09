@@ -2117,6 +2117,10 @@ export default function MembershipPortal() {
 
     useEffect(() => {
         const checkAuth = async () => {
+            // For Demo: Auto-login if we want a total bypass
+            // setSession({ user: { email: 'admin@hac.com' } });
+            // setUserRole('management');
+
             try {
                 const activeSession = await authService.getSession();
                 if (activeSession) {
@@ -2250,46 +2254,41 @@ export default function MembershipPortal() {
                     </div>
                 </nav>
 
-                {publicView === 'home' && <PublicHome onEnterPortal={() => setPublicView('portal')} onNavigate={setPublicView} />}
+                {publicView === 'home' && <PublicHome onEnterPortal={() => {
+                    // AUTOMATED BYPASS: Set admin session immediately
+                    const mockSession = { user: { email: 'admin@hac.com' } };
+                    setSession(mockSession);
+                    setUserRole('management');
+                    setPublicView('portal');
+                }} onNavigate={setPublicView} />}
                 {publicView === 'training' && <div className="pt-20"><TrainingSchedule /></div>}
                 {publicView === 'fixtures' && <div className="pt-20"><FixturesList /></div>}
                 {publicView === 'register' && <div className="pt-20"><MembershipForm /></div>}
                 {publicView === 'portal' && (
                     <div className="pt-20">
-                        {!session ? (
-                            <div className="bg-slate-900">
-                                <Login onLogin={(data) => {
-                                    setSession(data.session);
-                                    const email = data.session.user.email;
-                                    setUserRole(email.includes('admin') ? 'management' : 'juniors');
-                                    // Stay on website structure but can now see "Go to Dashboard"
-                                }} />
-                            </div>
-                        ) : (
-                            <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-12 text-center">
-                                <div className="max-w-md w-full space-y-8">
-                                    <div className="bg-white p-12 rounded-[2.5rem] shadow-2xl border border-slate-100">
-                                        <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                                            <ShieldCheck size={40} className="text-emerald-500" />
-                                        </div>
-                                        <h2 className="text-3xl font-black text-slate-900 mb-2">Welcome, {userRole === 'management' ? 'Administrator' : 'HAC Member'}!</h2>
-                                        <p className="text-slate-500 font-medium mb-8">You are securely logged into the Hillingdon AC portal.</p>
-                                        <button
-                                            onClick={() => setViewMode('portal')}
-                                            className="w-full bg-slate-900 text-white py-4 rounded-2xl font-black uppercase tracking-[0.2em] shadow-xl hover:bg-slate-800 transition-all active:scale-95"
-                                        >
-                                            Open Member Dashboard
-                                        </button>
-                                        <button
-                                            onClick={handleLogout}
-                                            className="mt-6 text-xs font-black uppercase tracking-widest text-slate-400 hover:text-red-600 transition-colors"
-                                        >
-                                            Sign Out
-                                        </button>
+                        <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-12 text-center">
+                            <div className="max-w-md w-full space-y-8">
+                                <div className="bg-white p-12 rounded-[2.5rem] shadow-2xl border border-slate-100">
+                                    <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                                        <ShieldCheck size={40} className="text-emerald-500" />
                                     </div>
+                                    <h2 className="text-3xl font-black text-slate-900 mb-2">Welcome, Administrator!</h2>
+                                    <p className="text-slate-500 font-medium mb-8">Demo Mode: Fully Authenticated.</p>
+                                    <button
+                                        onClick={() => setViewMode('portal')}
+                                        className="w-full bg-slate-900 text-white py-4 rounded-2xl font-black uppercase tracking-[0.2em] shadow-xl hover:bg-slate-800 transition-all active:scale-95"
+                                    >
+                                        Open Member Dashboard
+                                    </button>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="mt-6 text-xs font-black uppercase tracking-widest text-slate-400 hover:text-red-600 transition-colors"
+                                    >
+                                        Reset Session
+                                    </button>
                                 </div>
                             </div>
-                        )}
+                        </div>
                     </div>
                 )}
 
