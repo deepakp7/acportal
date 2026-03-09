@@ -7,6 +7,7 @@ import {
     ChevronRight,
     ChevronDown,
     ShieldCheck,
+    Home,
     Bell,
     Search,
     Filter,
