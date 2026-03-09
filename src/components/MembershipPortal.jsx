@@ -38,6 +38,7 @@ import {
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import PaymentPortal from './PaymentPortal';
+import MembershipForm from './MembershipForm';
 import { athleteService } from '../services/athleteService';
 import { coachService } from '../services/coachService';
 import { attendanceService } from '../services/attendanceService';
@@ -1706,14 +1707,17 @@ const PublicHero = ({ onEnterPortal }) => (
                     TRAIN. COMPETE. SUCCEED. Join London's most inclusive athletics community with roots tracing back to 1877.
                 </p>
                 <div className="flex gap-4">
-                    <button className="bg-white text-red-600 px-8 py-4 rounded-xl font-black uppercase tracking-wider shadow-xl hover:scale-105 transition-transform">
+                    <button
+                        onClick={() => onNavigate('register')}
+                        className="bg-white text-red-600 px-8 py-4 rounded-xl font-black uppercase tracking-wider shadow-xl hover:scale-105 transition-transform"
+                    >
                         Join Our Club
                     </button>
                     <button
                         onClick={onEnterPortal}
                         className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl font-black uppercase tracking-wider hover:bg-white/10 transition-colors"
                     >
-                        Member Portal
+                        Member Login
                     </button>
                 </div>
             </motion.div>
@@ -1888,7 +1892,10 @@ const PublicHome = ({ onEnterPortal, onNavigate }) => (
                     Experience London's premier athletics club. We offer a 4-week free trial for all new members - come run with us!
                 </p>
                 <div className="flex justify-center gap-6">
-                    <button className="bg-white text-red-600 px-12 py-5 rounded-2xl font-black uppercase tracking-[0.2em] shadow-2xl shadow-red-900/40 hover:scale-105 transition-transform">
+                    <button
+                        onClick={() => onNavigate('register')}
+                        className="bg-white text-red-600 px-12 py-5 rounded-2xl font-black uppercase tracking-[0.2em] shadow-2xl shadow-red-900/40 hover:scale-105 transition-transform"
+                    >
                         Start Your Trial
                     </button>
                     <button
@@ -1938,25 +1945,8 @@ const Login = ({ onLogin }) => {
         setLoading(true);
         setError(null);
 
-        // Auto-complete demo accounts for speed
-        let loginIdentifier = email.trim().toLowerCase();
-        if (loginIdentifier === 'admin') loginIdentifier = 'admin@hac.com';
-        if (loginIdentifier === 'member') loginIdentifier = 'member@hac.com';
-
-        // Emergency Demo Bypass
-        if (loginIdentifier === 'admin@hac.com' && password === 'adminadmin') {
-            const mockSession = { user: { email: 'admin@hac.com' } };
-            onLogin({ session: mockSession });
-            return;
-        }
-        if (loginIdentifier === 'member@hac.com' && password === 'membermember') {
-            const mockSession = { user: { email: 'member@hac.com' } };
-            onLogin({ session: mockSession });
-            return;
-        }
-
         try {
-            const data = await authService.signIn(loginIdentifier, password);
+            const data = await authService.signIn(email, password);
             onLogin(data);
         } catch (err) {
             setError(err.message || 'Invalid login credentials');
@@ -1987,13 +1977,13 @@ const Login = ({ onLogin }) => {
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-1.5">
-                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-2">Access Username</label>
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-2">Club Email</label>
                         <input
-                            type="text"
+                            type="email"
                             required
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder="e.g. admin or member"
+                            placeholder="your.email@example.com"
                             className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3 text-white font-medium outline-none focus:border-emerald-500 transition-colors"
                         />
                     </div>
@@ -2186,15 +2176,6 @@ export default function MembershipPortal() {
 
     useEffect(() => {
         const verifyConnection = async () => {
-            // For demo accounts, we want immediate loading
-            const isDemo = session?.user?.email?.includes('@hac.com');
-
-            if (isDemo) {
-                setDbStatus({ checked: true, connected: true, error: null });
-                await fetchData();
-                return;
-            }
-
             const status = await checkConnection();
             setDbStatus({ checked: true, ...status });
 
@@ -2257,12 +2238,6 @@ export default function MembershipPortal() {
                             >
                                 Fixtures
                             </button>
-                            <button
-                                onClick={() => setPublicView('portal')}
-                                className={cn("text-sm font-black uppercase tracking-widest transition-colors", publicView === 'portal' ? "text-red-600" : "text-slate-500 hover:text-red-600")}
-                            >
-                                Member Portal
-                            </button>
                             {session && (
                                 <button
                                     onClick={() => setViewMode('portal')}
@@ -2278,6 +2253,7 @@ export default function MembershipPortal() {
                 {publicView === 'home' && <PublicHome onEnterPortal={() => setPublicView('portal')} onNavigate={setPublicView} />}
                 {publicView === 'training' && <div className="pt-20"><TrainingSchedule /></div>}
                 {publicView === 'fixtures' && <div className="pt-20"><FixturesList /></div>}
+                {publicView === 'register' && <div className="pt-20"><MembershipForm /></div>}
                 {publicView === 'portal' && (
                     <div className="pt-20">
                         {!session ? (
