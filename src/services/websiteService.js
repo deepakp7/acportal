@@ -23,8 +23,8 @@ export const websiteService = {
         const { data, error } = await supabase
             .from('training_sessions')
             .select('*')
-            .where('target_group', 'eq', group)
-            .where('is_active', 'eq', true)
+            .eq('target_group', group)
+            .eq('is_active', true)
             .order('day', { ascending: true });
         if (error) throw error;
         return data;
