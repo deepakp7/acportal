@@ -337,7 +337,14 @@ const PerformanceHistory = ({ userType, athleteId = null, athletes = [], coaches
         return acc;
     }, {});
 
-    const sortedAthletes = Object.values(athleteRows).sort((a, b) => a.bestTime - b.bestTime);
+    // Client-side guard: if viewing as a specific athlete, only show their data
+    const filteredAthletes = athleteId
+        ? Object.values(athleteRows).filter(a => String(a.id) === String(athleteId))
+        : Object.values(athleteRows);
+    const sortedAthletes = filteredAthletes.sort((a, b) => a.bestTime - b.bestTime);
+    const filteredPerformances = athleteId
+        ? performances.filter(p => String(p.athlete_id) === String(athleteId))
+        : performances;
     const isListView = filterDate !== 'All';
 
     return (
@@ -393,14 +400,14 @@ const PerformanceHistory = ({ userType, athleteId = null, athletes = [], coaches
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
-                            {performances.sort((a, b) => parseTimeToSeconds(a.result) - parseTimeToSeconds(b.result)).map((p, idx) => {
+                            {filteredPerformances.sort((a, b) => parseTimeToSeconds(a.result) - parseTimeToSeconds(b.result)).map((p, idx) => {
                                 const athlete = athletes.find(a => String(a.id) === String(p.athlete_id));
                                 const coach = coaches.find(c => String(c.id) === String(p.coach_id));
                                 return (
-                                    <tr key={p.id} className={cn("hover:bg-slate-50 transition-colors", idx === 0 && performances.length > 1 && "bg-amber-50/30")}>
+                                    <tr key={p.id} className={cn("hover:bg-slate-50 transition-colors", idx === 0 && filteredPerformances.length > 1 && "bg-amber-50/30")}>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-2">
-                                                {idx === 0 && performances.length > 1 && <Trophy size={14} className="text-amber-500" />}
+                                                {idx === 0 && filteredPerformances.length > 1 && <Trophy size={14} className="text-amber-500" />}
                                                 <img src={athlete?.photo_url || `https://i.pravatar.cc/150?u=${p.athlete_id}`} className="w-6 h-6 rounded-full" />
                                                 <span className="font-bold text-slate-900">{athlete?.name || 'Unknown'}</span>
                                             </div>
