@@ -1943,7 +1943,17 @@ const Login = ({ onLogin }) => {
         if (loginIdentifier === 'admin') loginIdentifier = 'admin@hac.com';
         if (loginIdentifier === 'member') loginIdentifier = 'member@hac.com';
 
-        console.log('Attempting login with mapped ID:', loginIdentifier);
+        // Emergency Demo Bypass
+        if (loginIdentifier === 'admin@hac.com' && password === 'adminadmin') {
+            const mockSession = { user: { email: 'admin@hac.com' } };
+            onLogin({ session: mockSession });
+            return;
+        }
+        if (loginIdentifier === 'member@hac.com' && password === 'membermember') {
+            const mockSession = { user: { email: 'member@hac.com' } };
+            onLogin({ session: mockSession });
+            return;
+        }
 
         try {
             const data = await authService.signIn(loginIdentifier, password);
