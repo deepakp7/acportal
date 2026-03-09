@@ -1937,8 +1937,14 @@ const Login = ({ onLogin }) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
+
+        // Auto-complete demo accounts for speed
+        let loginIdentifier = email;
+        if (loginIdentifier.toLowerCase() === 'admin') loginIdentifier = 'admin@hac.com';
+        if (loginIdentifier.toLowerCase() === 'member') loginIdentifier = 'member@hac.com';
+
         try {
-            const data = await authService.signIn(email, password);
+            const data = await authService.signIn(loginIdentifier, password);
             onLogin(data);
         } catch (err) {
             setError(err.message || 'Invalid login credentials');
