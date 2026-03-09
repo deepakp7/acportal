@@ -1193,8 +1193,8 @@ const MemberDashboard = ({ currentView, athletes = [], coaches = [], onUpdateAth
 
     if (currentView === 'news') return <ClubNewsSection />;
     if (currentView === 'training') return <TrainingManager />;
-    if (currentView === 'performances') return <PerformanceHistory userType="management" athletes={athletes} coaches={coaches} />;
-    if (currentView === 'attendance') return <AttendanceManager userType="management" athletes={athletes} coaches={coaches} />;
+    if (currentView === 'performances') return <PerformanceHistory userType={userRole} athletes={athletes} coaches={coaches} />;
+    if (currentView === 'attendance') return <AttendanceManager userType={userRole} athletes={athletes} coaches={coaches} />;
     if (currentView === 'meets') return <MeetReports />;
 
     return (
@@ -2372,7 +2372,7 @@ export default function MembershipPortal() {
                             <button onClick={() => setCurrentView('community')} className={cn("px-3 py-1.5 rounded text-sm font-bold", currentView === 'community' ? "bg-emerald-500/20 text-emerald-400" : "text-slate-400 hover:text-white")}>Community</button>
                             <button onClick={() => setCurrentView('news')} className={cn("px-3 py-1.5 rounded text-sm font-bold", currentView === 'news' ? "bg-emerald-500/20 text-emerald-400" : "text-slate-400 hover:text-white")}>News</button>
                             <button onClick={() => setCurrentView('training')} className={cn("px-3 py-1.5 rounded text-sm font-bold", currentView === 'training' ? "bg-emerald-500/20 text-emerald-400" : "text-slate-400 hover:text-white")}>Training</button>
-                            {userType === 'management' && (
+                            {userRole === 'management' && (
                                 <>
                                     <button onClick={() => setCurrentView('attendance')} className={cn("px-3 py-1.5 rounded text-sm font-bold", currentView === 'attendance' ? "bg-blue-500/20 text-blue-400" : "text-slate-400 hover:text-white")}>Attendance</button>
                                     <button onClick={() => setCurrentView('community')} className={cn("px-3 py-1.5 rounded text-sm font-bold", currentView === 'community' ? "bg-emerald-500/20 text-emerald-400" : "text-slate-400 hover:text-white")}>Community</button>
