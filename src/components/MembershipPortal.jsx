@@ -44,6 +44,7 @@ import { attendanceService } from '../services/attendanceService';
 import { meetService } from '../services/meetService';
 import { socialService } from '../services/socialService';
 import { authService } from '../services/authService';
+import { websiteService } from '../services/websiteService';
 import { checkConnection } from '../lib/supabase';
 
 function cn(...inputs) {
@@ -1683,6 +1684,249 @@ const AthleteProfileModal = ({ athlete, onClose, onUpdate, coaches }) => {
     );
 };
 
+const PublicHero = ({ onEnterPortal }) => (
+    <div className="relative h-[85vh] w-full overflow-hidden">
+        <img
+            src="https://images.unsplash.com/photo-1530541930197-ff16ac911884?q=80&w=2070&auto=format&fit=crop"
+            className="absolute inset-0 w-full h-full object-cover"
+            alt="HAC Athletes"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-red-600/90 to-transparent" />
+        <div className="relative max-w-7xl mx-auto px-6 h-full flex flex-col justify-center">
+            <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="max-w-2xl text-white"
+            >
+                <h1 className="text-7xl font-black tracking-tighter mb-4 leading-none">
+                    HILLINGDON <br />
+                    <span className="text-white/80">ATHLETIC CLUB</span>
+                </h1>
+                <p className="text-xl font-medium mb-8 text-white/90 leading-relaxed shadow-sm">
+                    TRAIN. COMPETE. SUCCEED. Join London's most inclusive athletics community with roots tracing back to 1877.
+                </p>
+                <div className="flex gap-4">
+                    <button className="bg-white text-red-600 px-8 py-4 rounded-xl font-black uppercase tracking-wider shadow-xl hover:scale-105 transition-transform">
+                        Join Our Club
+                    </button>
+                    <button
+                        onClick={onEnterPortal}
+                        className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl font-black uppercase tracking-wider hover:bg-white/10 transition-colors"
+                    >
+                        Member Portal
+                    </button>
+                </div>
+            </motion.div>
+        </div>
+    </div>
+);
+
+const TrainingSchedule = () => {
+    const [group, setGroup] = useState('Adults');
+    const [sessions, setSessions] = useState([]);
+
+    useEffect(() => {
+        const load = async () => {
+            try {
+                // For demo, if DB is empty we use mock
+                const data = await websiteService.getTrainingSessions(group);
+                setSessions(data.length > 0 ? data : [
+                    { day: 'Mon', session_type: 'Intervals', time: '18:30-20:00', venue: 'Ruislip' },
+                    { day: 'Wed', session_type: 'Track', time: '18:30-20:00', venue: 'Uxbridge' }
+                ]);
+            } catch (err) {
+                setSessions([]);
+            }
+        };
+        load();
+    }, [group]);
+
+    return (
+        <section className="py-24 bg-white">
+            <div className="max-w-7xl mx-auto px-6">
+                <div className="flex justify-between items-end mb-12">
+                    <div>
+                        <h2 className="text-4xl font-black tracking-tight text-slate-900 mb-2">TRAINING SCHEDULES</h2>
+                        <p className="text-slate-500 font-bold uppercase tracking-widest text-sm">Join us for a session</p>
+                    </div>
+                    <div className="flex bg-slate-100 p-1.5 rounded-xl">
+                        {['Adults', 'Juniors'].map(t => (
+                            <button
+                                key={t}
+                                onClick={() => setGroup(t)}
+                                className={cn(
+                                    "px-6 py-2 rounded-lg font-black text-xs uppercase tracking-widest transition-all",
+                                    group === t ? "bg-red-600 text-white shadow-lg" : "text-slate-500"
+                                )}
+                            >
+                                {t}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="overflow-hidden rounded-3xl border border-slate-200 shadow-sm">
+                    <table className="w-full text-left">
+                        <thead className="bg-slate-50 border-b border-slate-200">
+                            <tr>
+                                <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Day</th>
+                                <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Session Type</th>
+                                <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Time</th>
+                                <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Venue</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                            {sessions.map((s, idx) => (
+                                <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
+                                    <td className="px-6 py-4 font-bold text-slate-900">{s.day}</td>
+                                    <td className="px-6 py-4">
+                                        <span className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-bold">{s.session_type}</span>
+                                    </td>
+                                    <td className="px-6 py-4 text-slate-500 font-medium">{s.time}</td>
+                                    <td className="px-6 py-4 text-slate-900 font-bold">{s.venue}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+const PublicNewsGrid = () => (
+    <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+            <h2 className="text-4xl font-black tracking-tight text-slate-900 mb-12 uppercase italic">Latest Race Reports</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {[
+                    { title: "Middlesex Track Champs Success", date: "Feb 2026", img: "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?q=80&w=2070" },
+                    { title: "Summer 10K Series - Race 2", date: "Jan 2026", img: "https://images.unsplash.com/photo-1452626012306-97297611f0f6?q=80&w=2072" },
+                    { title: "Junior National Championships", date: "Dec 2025", img: "https://images.unsplash.com/photo-1461896704690-4f488e79154b?q=80&w=2070" }
+                ].map((news, idx) => (
+                    <motion.div
+                        key={idx}
+                        whileHover={{ y: -10 }}
+                        className="group cursor-pointer"
+                    >
+                        <div className="relative h-64 rounded-3xl overflow-hidden mb-6 shadow-lg">
+                            <img src={news.img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="" />
+                            <div className="absolute top-4 left-4 bg-red-600 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">{idx + 1}</div>
+                        </div>
+                        <h3 className="text-xl font-black text-slate-900 mb-2 group-hover:text-red-600 transition-colors uppercase">{news.title}</h3>
+                        <div className="flex justify-between items-center">
+                            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">{news.date}</span>
+                            <span className="text-xs font-black text-red-600 uppercase tracking-widest flex items-center gap-1 group-hover:gap-2 transition-all">Read More <ChevronRight size={14} /></span>
+                        </div>
+                    </motion.div>
+                ))}
+            </div>
+        </div>
+    </section>
+);
+
+const FixturesList = () => {
+    const [fixtures, setFixtures] = useState([]);
+
+    useEffect(() => {
+        const load = async () => {
+            try {
+                const data = await websiteService.getFixtures();
+                setFixtures(data.length > 0 ? data : [
+                    { name: 'Middlesex County Champs', date: '2026-05-15', location: 'Lee Valley', category: 'Track & Field' },
+                    { name: 'London 10K', date: '2026-07-10', location: 'Central London', category: 'Road' }
+                ]);
+            } catch (err) {
+                setFixtures([]);
+            }
+        };
+        load();
+    }, []);
+
+    return (
+        <section className="py-24 bg-slate-50 min-h-screen">
+            <div className="max-w-7xl mx-auto px-6">
+                <h2 className="text-5xl font-black mb-12 tracking-tighter italic text-slate-900">UPCOMING FIXTURES</h2>
+                <div className="grid grid-cols-1 gap-4">
+                    {fixtures.map((f, idx) => (
+                        <div key={idx} className="bg-white p-6 rounded-2xl border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-6 hover:border-red-600 transition-colors group">
+                            <div className="flex items-center gap-6">
+                                <div className="text-center min-w-[80px]">
+                                    <p className="text-2xl font-black text-red-600 leading-none">{new Date(f.date).getDate()}</p>
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{new Date(f.date).toLocaleString('default', { month: 'short' })}</p>
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-bold text-slate-900">{f.name}</h3>
+                                    <p className="text-sm text-slate-500 font-medium">{f.location}</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <span className="bg-slate-100 text-slate-600 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest">
+                                    {f.category}
+                                </span>
+                                <button className="p-2 rounded-full border border-slate-200 text-slate-400 group-hover:text-red-600 group-hover:border-red-600 transition-all">
+                                    <ExternalLink size={18} />
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+    );
+};
+
+const PublicHome = ({ onEnterPortal, onNavigate }) => (
+    <div className="bg-slate-50 min-h-screen pt-20">
+        <PublicHero onEnterPortal={onEnterPortal} />
+        <TrainingSchedule />
+        <PublicNewsGrid />
+        <section className="py-24 bg-red-600 text-white">
+            <div className="max-w-7xl mx-auto px-6 text-center">
+                <h2 className="text-5xl font-black mb-8 tracking-tighter italic">READY TO JOIN THE TEAM?</h2>
+                <p className="text-xl text-white/90 mb-12 max-w-2xl mx-auto font-medium">
+                    Experience London's premier athletics club. We offer a 4-week free trial for all new members - come run with us!
+                </p>
+                <div className="flex justify-center gap-6">
+                    <button className="bg-white text-red-600 px-12 py-5 rounded-2xl font-black uppercase tracking-[0.2em] shadow-2xl shadow-red-900/40 hover:scale-105 transition-transform">
+                        Start Your Trial
+                    </button>
+                    <button
+                        onClick={() => onNavigate('fixtures')}
+                        className="bg-transparent border-2 border-white px-12 py-5 rounded-2xl font-black uppercase tracking-[0.2em] hover:bg-white/10 transition-colors"
+                    >
+                        View Fixtures
+                    </button>
+                </div>
+            </div>
+        </section>
+        <footer className="bg-slate-950 py-20 text-white">
+            <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 text-left">
+                <div className="col-span-1 md:col-span-2">
+                    <h2 className="text-3xl font-black tracking-tighter mb-6 underline decoration-red-600 underline-offset-8">HAC<span className="text-red-600">PORTAL</span></h2>
+                    <p className="text-slate-400 font-medium leading-relaxed max-w-sm">
+                        Providing track, field, road and cross-country competition for all ages and abilities since 1877. Inclusive, welcoming, and historic.
+                    </p>
+                </div>
+                <div>
+                    <h4 className="font-black text-xs uppercase tracking-[0.2em] mb-6 text-red-500">Navigation</h4>
+                    <ul className="space-y-4 text-sm font-bold text-slate-300">
+                        <li className="hover:text-white cursor-pointer transition-colors" onClick={() => onNavigate('home')}>Home</li>
+                        <li className="hover:text-white cursor-pointer transition-colors" onClick={() => onNavigate('training')}>Training Schedules</li>
+                        <li className="hover:text-white cursor-pointer transition-colors" onClick={() => onNavigate('fixtures')}>Club Fixtures</li>
+                        <li className="hover:text-white cursor-pointer transition-colors">Records</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 className="font-black text-xs uppercase tracking-[0.2em] mb-6 text-red-500">Contact</h4>
+                    <p className="text-sm font-bold text-slate-300">Hillingdon Athletics Club</p>
+                    <p className="text-sm text-slate-500 font-medium">Uxbridge & Ruislip, London</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+);
+
 const Login = ({ onLogin }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -1851,6 +2095,8 @@ const UserProfile = ({ userType, onManagePayments, athletes = [], coaches = [], 
 };
 
 export default function MembershipPortal() {
+    const [viewMode, setViewMode] = useState('public'); // 'public' or 'portal'
+    const [publicView, setPublicView] = useState('home'); // 'home', 'training', 'fixtures'
     const [session, setSession] = useState(null);
     const [userRole, setUserRole] = useState(null);
     const [currentView, setCurrentView] = useState('dashboard');
@@ -1944,13 +2190,71 @@ export default function MembershipPortal() {
         await authService.signOut();
         setSession(null);
         setUserRole(null);
+        setViewMode('public');
     };
+
+    if (viewMode === 'public' && !session) {
+        return (
+            <div>
+                <nav className="fixed top-0 w-full z-[100] bg-white/80 backdrop-blur-md border-b border-slate-200">
+                    <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                            <h1 className="text-2xl font-black tracking-tighter">HAC<span className="text-red-600">PORTAL</span></h1>
+                        </div>
+                        <div className="hidden md:flex items-center gap-8">
+                            <button
+                                onClick={() => setPublicView('home')}
+                                className={cn("text-sm font-black uppercase tracking-widest transition-colors", publicView === 'home' ? "text-red-600" : "text-slate-500 hover:text-red-600")}
+                            >
+                                Home
+                            </button>
+                            <button
+                                onClick={() => setPublicView('training')}
+                                className={cn("text-sm font-black uppercase tracking-widest transition-colors", publicView === 'training' ? "text-red-600" : "text-slate-500 hover:text-red-600")}
+                            >
+                                Training
+                            </button>
+                            <button
+                                onClick={() => setPublicView('fixtures')}
+                                className={cn("text-sm font-black uppercase tracking-widest transition-colors", publicView === 'fixtures' ? "text-red-600" : "text-slate-500 hover:text-red-600")}
+                            >
+                                Fixtures
+                            </button>
+                            <button
+                                onClick={() => setViewMode('portal')}
+                                className="bg-slate-900 text-white px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest"
+                            >
+                                Member Login
+                            </button>
+                        </div>
+                    </div>
+                </nav>
+
+                {publicView === 'home' && <PublicHome onEnterPortal={() => setViewMode('portal')} onNavigate={setPublicView} />}
+                {publicView === 'training' && <div className="pt-20"><TrainingSchedule /></div>}
+                {publicView === 'fixtures' && <div className="pt-20"><FixturesList /></div>}
+
+                {publicView !== 'home' && (
+                    <footer className="bg-slate-950 py-12 text-white border-t border-white/5">
+                        <div className="max-w-7xl mx-auto px-6 flex justify-between items-center text-left">
+                            <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">© 2026 Hillingdon Athletic Club</p>
+                            <div className="flex gap-6">
+                                <button onClick={() => setPublicView('home')} className="text-slate-400 hover:text-white transition-colors text-[10px] font-black uppercase tracking-widest">Home</button>
+                                <button onClick={() => setViewMode('portal')} className="text-slate-400 hover:text-white transition-colors text-[10px] font-black uppercase tracking-widest">Portal</button>
+                            </div>
+                        </div>
+                    </footer>
+                )}
+            </div>
+        );
+    }
 
     if (!session) {
         return <Login onLogin={(data) => {
             setSession(data.session);
             const email = data.session.user.email;
             setUserRole(email.includes('admin') ? 'management' : 'juniors');
+            setViewMode('portal');
         }} />;
     }
 

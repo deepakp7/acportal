@@ -137,3 +137,45 @@ CREATE INDEX IF NOT EXISTS idx_club_comments_post ON club_comments(post_id);
 INSERT INTO club_posts (content, title, media_type) VALUES
 ('Excited to see everyone at the Middlesex County Championships this May! Check out the registration details in the portal.', 'Upcoming Championships', 'image')
 ON CONFLICT DO NOTHING;
+-- Public Website Module
+CREATE TABLE IF NOT EXISTS club_fixtures (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    name TEXT NOT NULL,
+    date DATE NOT NULL,
+    location TEXT,
+    category TEXT CHECK (category IN ('Track & Field', 'Cross Country', 'Road', 'Trail')),
+    link TEXT -- External results or info link
+);
+
+CREATE TABLE IF NOT EXISTS club_records (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    event TEXT NOT NULL,
+    athlete_name TEXT NOT NULL,
+    record_value TEXT NOT NULL, -- e.g. "10.45s" or "7.45m"
+    category TEXT NOT NULL, -- e.g. "Senior Men", "U15 Girls"
+    date_achieved DATE
+);
+
+CREATE TABLE IF NOT EXISTS training_sessions (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    day TEXT NOT NULL,
+    session_type TEXT NOT NULL,
+    time TEXT NOT NULL,
+    venue TEXT NOT NULL,
+    target_group TEXT CHECK (target_group IN ('Adults', 'Juniors')),
+    is_active BOOLEAN DEFAULT true
+);
+
+-- Index for public data
+CREATE INDEX IF NOT EXISTS idx_fixtures_date ON club_fixtures(date);
+CREATE INDEX IF NOT EXISTS idx_records_event ON club_records(event);
+
+-- Seed some training data
+INSERT INTO training_sessions (day, session_type, time, venue, target_group) VALUES
+('Mon', 'Intervals', '18:30-20:00', 'Hillingdon Stadium', 'Adults'),
+('Wed/Thu', 'Track', '18:30-20:00', 'Hillingdon Stadium', 'Adults'),
+('Tue/Thu', 'Academy Training', '18:00-19:30', 'Hillingdon Stadium', 'Juniors')
+ON CONFLICT DO NOTHING;
