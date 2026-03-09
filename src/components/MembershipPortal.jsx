@@ -1939,9 +1939,11 @@ const Login = ({ onLogin }) => {
         setError(null);
 
         // Auto-complete demo accounts for speed
-        let loginIdentifier = email;
-        if (loginIdentifier.toLowerCase() === 'admin') loginIdentifier = 'admin@hac.com';
-        if (loginIdentifier.toLowerCase() === 'member') loginIdentifier = 'member@hac.com';
+        let loginIdentifier = email.trim().toLowerCase();
+        if (loginIdentifier === 'admin') loginIdentifier = 'admin@hac.com';
+        if (loginIdentifier === 'member') loginIdentifier = 'member@hac.com';
+
+        console.log('Attempting login with mapped ID:', loginIdentifier);
 
         try {
             const data = await authService.signIn(loginIdentifier, password);
