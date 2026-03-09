@@ -2186,9 +2186,23 @@ export default function MembershipPortal() {
 
     useEffect(() => {
         const verifyConnection = async () => {
+            // For demo accounts, we want immediate loading
+            const isDemo = session?.user?.email?.includes('@hac.com');
+
+            if (isDemo) {
+                setDbStatus({ checked: true, connected: true, error: null });
+                await fetchData();
+                return;
+            }
+
             const status = await checkConnection();
             setDbStatus({ checked: true, ...status });
-            if (status.connected && session) await fetchData();
+
+            if (session) {
+                await fetchData();
+            } else {
+                setLoading(false);
+            }
         };
         verifyConnection();
     }, [session, userRole]);
