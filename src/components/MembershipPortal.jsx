@@ -1969,13 +1969,13 @@ const Login = ({ onLogin }) => {
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-1.5">
-                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-2">Club Email</label>
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-2">Access Username</label>
                         <input
-                            type="email"
+                            type="text"
                             required
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder="your@email.com"
+                            placeholder="e.g. admin or member"
                             className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3 text-white font-medium outline-none focus:border-emerald-500 transition-colors"
                         />
                     </div>
