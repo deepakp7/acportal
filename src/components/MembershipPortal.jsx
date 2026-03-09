@@ -2265,13 +2265,7 @@ export default function MembershipPortal() {
                     </div>
                 </nav>
 
-                {publicView === 'home' && <PublicHome onEnterPortal={() => {
-                    // AUTOMATED BYPASS: Set admin session immediately
-                    const mockSession = { user: { email: 'admin@hac.com' } };
-                    setSession(mockSession);
-                    setUserRole('management');
-                    setPublicView('portal');
-                }} onNavigate={setPublicView} />}
+                {publicView === 'home' && <PublicHome onEnterPortal={() => setPublicView('portal')} onNavigate={setPublicView} />}
                 {publicView === 'training' && <div className="pt-20"><TrainingSchedule /></div>}
                 {publicView === 'fixtures' && <div className="pt-20"><FixturesList /></div>}
                 {publicView === 'register' && <div className="pt-20"><MembershipForm /></div>}
@@ -2283,17 +2277,36 @@ export default function MembershipPortal() {
                                     <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6">
                                         <ShieldCheck size={40} className="text-emerald-500" />
                                     </div>
-                                    <h2 className="text-3xl font-black text-slate-900 mb-2">Welcome, Administrator!</h2>
-                                    <p className="text-slate-500 font-medium mb-8">Demo Mode: Fully Authenticated.</p>
-                                    <button
-                                        onClick={() => setViewMode('portal')}
-                                        className="w-full bg-slate-900 text-white py-4 rounded-2xl font-black uppercase tracking-[0.2em] shadow-xl hover:bg-slate-800 transition-all active:scale-95"
-                                    >
-                                        Open Member Dashboard
-                                    </button>
+                                    <h2 className="text-3xl font-black text-slate-900 mb-2">Portal Access</h2>
+                                    <p className="text-slate-500 font-medium mb-8">Choose your demo perspective:</p>
+
+                                    <div className="space-y-4">
+                                        <button
+                                            onClick={() => {
+                                                setSession({ user: { email: 'admin@hac.com' } });
+                                                setUserRole('management');
+                                                setViewMode('portal');
+                                            }}
+                                            className="w-full bg-slate-900 text-white py-4 rounded-2xl font-black uppercase tracking-[0.2em] shadow-xl hover:bg-slate-800 transition-all active:scale-95 flex items-center justify-center gap-3"
+                                        >
+                                            <ShieldCheck size={20} /> Administrator
+                                        </button>
+
+                                        <button
+                                            onClick={() => {
+                                                setSession({ user: { email: 'member@hac.com' } });
+                                                setUserRole('juniors');
+                                                setViewMode('portal');
+                                            }}
+                                            className="w-full bg-white border-2 border-slate-200 text-slate-900 py-4 rounded-2xl font-black uppercase tracking-[0.2em] hover:bg-slate-50 transition-all active:scale-95 flex items-center justify-center gap-3"
+                                        >
+                                            <User size={20} /> HAC Member
+                                        </button>
+                                    </div>
+
                                     <button
                                         onClick={handleLogout}
-                                        className="mt-6 text-xs font-black uppercase tracking-widest text-slate-400 hover:text-red-600 transition-colors"
+                                        className="mt-8 text-xs font-black uppercase tracking-widest text-slate-400 hover:text-red-600 transition-colors"
                                     >
                                         Reset Session
                                     </button>
@@ -2361,7 +2374,6 @@ export default function MembershipPortal() {
                             {userRole === 'management' && (
                                 <>
                                     <button onClick={() => setCurrentView('attendance')} className={cn("px-3 py-1.5 rounded text-sm font-bold", currentView === 'attendance' ? "bg-blue-500/20 text-blue-400" : "text-slate-400 hover:text-white")}>Attendance</button>
-                                    <button onClick={() => setCurrentView('community')} className={cn("px-3 py-1.5 rounded text-sm font-bold", currentView === 'community' ? "bg-emerald-500/20 text-emerald-400" : "text-slate-400 hover:text-white")}>Community</button>
                                     <button onClick={() => setCurrentView('meets')} className={cn("px-3 py-1.5 rounded text-sm font-bold", currentView === 'meets' ? "bg-amber-500/20 text-amber-400" : "text-slate-400 hover:text-white")}>Meet Reports</button>
                                     <div className="relative">
                                         <button
