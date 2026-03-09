@@ -2138,21 +2138,23 @@ export default function MembershipPortal() {
     }, []);
 
     const fetchData = async () => {
+        const isDemo = session?.user?.email?.includes('@hac.com');
+        setLoading(true);
+
         try {
-            // For members, we only fetch their own data
-            // For management, we fetch all
-            let athleteData;
-            if (userRole === 'management') {
-                athleteData = await athleteService.getAll();
-            } else {
-                // Mocking: finding the "member" in the database by email
-                // In production, this would be a filtered query
-                const all = await athleteService.getAll();
-                athleteData = all.filter(a => a.email === session.user.email);
-                if (athleteData.length === 0) athleteData = [MOCK_MEMBERS[0]];
+            let athleteData = null;
+            let coachData = null;
+
+            if (!isDemo) {
+                if (userRole === 'management') {
+                    athleteData = await athleteService.getAll();
+                } else {
+                    const all = await athleteService.getAll();
+                    athleteData = all.filter(a => a.email === session.user.email);
+                }
+                coachData = await coachService.getAll();
             }
 
-            const coachData = await coachService.getAll();
             const finalCoaches = coachData && coachData.length > 0 ? coachData : MOCK_COACHES;
             setCoaches(finalCoaches);
 
@@ -2170,7 +2172,7 @@ export default function MembershipPortal() {
                 setAthletes(MOCK_MEMBERS.map(m => ({ ...m, trackFeesPaid: m.paid })));
             }
         } catch (err) {
-            console.error('Failed to fetch from Supabase:', err);
+            console.warn('Fetch failed, using mock data:', err);
             setAthletes(MOCK_MEMBERS.map(m => ({ ...m, trackFeesPaid: m.paid })));
             setCoaches(MOCK_COACHES);
         } finally {
@@ -2180,6 +2182,14 @@ export default function MembershipPortal() {
 
     useEffect(() => {
         const verifyConnection = async () => {
+            const isDemo = session?.user?.email?.includes('@hac.com');
+
+            if (isDemo) {
+                setDbStatus({ checked: true, connected: true, error: null });
+                await fetchData();
+                return;
+            }
+
             const status = await checkConnection();
             setDbStatus({ checked: true, ...status });
 
