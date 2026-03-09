@@ -2226,18 +2226,64 @@ export default function MembershipPortal() {
                                 Fixtures
                             </button>
                             <button
-                                onClick={() => setViewMode('portal')}
-                                className="bg-red-600 text-white px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-red-700 shadow-lg shadow-red-900/20 transition-all"
+                                onClick={() => setPublicView('portal')}
+                                className={cn("text-sm font-black uppercase tracking-widest transition-colors", publicView === 'portal' ? "text-red-600" : "text-slate-500 hover:text-red-600")}
                             >
-                                {session ? 'Enter Portal' : 'Member Portal'}
+                                Member Portal
                             </button>
+                            {session && (
+                                <button
+                                    onClick={() => setViewMode('portal')}
+                                    className="bg-red-600 text-white px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-red-700 shadow-lg shadow-red-900/20 transition-all"
+                                >
+                                    Go to Dashboard
+                                </button>
+                            )}
                         </div>
                     </div>
                 </nav>
 
-                {publicView === 'home' && <PublicHome onEnterPortal={() => setViewMode('portal')} onNavigate={setPublicView} />}
+                {publicView === 'home' && <PublicHome onEnterPortal={() => setPublicView('portal')} onNavigate={setPublicView} />}
                 {publicView === 'training' && <div className="pt-20"><TrainingSchedule /></div>}
                 {publicView === 'fixtures' && <div className="pt-20"><FixturesList /></div>}
+                {publicView === 'portal' && (
+                    <div className="pt-20">
+                        {!session ? (
+                            <div className="bg-slate-900">
+                                <Login onLogin={(data) => {
+                                    setSession(data.session);
+                                    const email = data.session.user.email;
+                                    setUserRole(email.includes('admin') ? 'management' : 'juniors');
+                                    // Stay on website structure but can now see "Go to Dashboard"
+                                }} />
+                            </div>
+                        ) : (
+                            <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-12 text-center">
+                                <div className="max-w-md w-full space-y-8">
+                                    <div className="bg-white p-12 rounded-[2.5rem] shadow-2xl border border-slate-100">
+                                        <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                                            <ShieldCheck size={40} className="text-emerald-500" />
+                                        </div>
+                                        <h2 className="text-3xl font-black text-slate-900 mb-2">Welcome Back!</h2>
+                                        <p className="text-slate-500 font-medium mb-8">You are securely logged into your HAC account.</p>
+                                        <button
+                                            onClick={() => setViewMode('portal')}
+                                            className="w-full bg-slate-900 text-white py-4 rounded-2xl font-black uppercase tracking-[0.2em] shadow-xl hover:bg-slate-800 transition-all active:scale-95"
+                                        >
+                                            Open Member Dashboard
+                                        </button>
+                                        <button
+                                            onClick={handleLogout}
+                                            className="mt-6 text-xs font-black uppercase tracking-widest text-slate-400 hover:text-red-600 transition-colors"
+                                        >
+                                            Sign Out
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
 
                 {publicView !== 'home' && (
                     <footer className="bg-slate-950 py-12 text-white border-t border-white/5">
