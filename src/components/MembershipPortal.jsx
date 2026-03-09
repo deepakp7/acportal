@@ -618,7 +618,7 @@ const AttendanceManager = ({ userType, athleteId = null, athletes = [], coaches 
                 <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
                     <div>
                         <h3 className="font-black text-slate-900 tracking-tight">
-                            {selectedCoachId === 'All' ? 'Club-wide Session' : `${coaches.find(c => String(c.id) === String(selectedCoachId))?.team_name || 'Team'} Session`}
+                            {athleteId ? 'Personal Training Record' : (selectedCoachId === 'All' ? 'Club-wide Session' : `${coaches.find(c => String(c.id) === String(selectedCoachId))?.team_name || 'Team'} Session`)}
                         </h3>
                         <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">{selectedDate}</p>
                     </div>
@@ -2067,7 +2067,7 @@ const UserProfile = ({ userType, onManagePayments, athletes = [], coaches = [], 
                 </h3>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div className="space-y-6">
-                        <AttendanceManager userType="athlete" athleteId={athletes[0]?.id && String(athletes[0].id).length > 5 ? athletes[0].id : null} athletes={athletes} coaches={coaches} />
+                        <AttendanceManager userType="athlete" athleteId={athletes[0]?.id} athletes={athletes} coaches={coaches} />
                         <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
                             <h3 className="font-bold flex items-center gap-2 mb-4">
                                 <Timer size={18} className="text-amber-500" /> Next Session
@@ -2089,7 +2089,7 @@ const UserProfile = ({ userType, onManagePayments, athletes = [], coaches = [], 
                         </div>
                     </div>
                     <div>
-                        <PerformanceHistory userType="athlete" athleteId={athletes[0]?.id && String(athletes[0].id).length > 5 ? athletes[0].id : null} athletes={athletes} coaches={coaches} />
+                        <PerformanceHistory userType="athlete" athleteId={athletes[0]?.id} athletes={athletes} coaches={coaches} />
                     </div>
                 </div>
 
