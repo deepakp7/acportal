@@ -1903,7 +1903,7 @@ const PublicHome = ({ onEnterPortal, onNavigate }) => (
         <footer className="bg-slate-950 py-20 text-white">
             <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 text-left">
                 <div className="col-span-1 md:col-span-2">
-                    <h2 className="text-3xl font-black tracking-tighter mb-6 underline decoration-red-600 underline-offset-8">HAC<span className="text-red-600">PORTAL</span></h2>
+                    <h2 className="text-3xl font-black tracking-tighter mb-6 uppercase italic">HILLINGDON<span className="text-red-600">AC</span></h2>
                     <p className="text-slate-400 font-medium leading-relaxed max-w-sm">
                         Providing track, field, road and cross-country competition for all ages and abilities since 1877. Inclusive, welcoming, and historic.
                     </p>
@@ -2193,13 +2193,18 @@ export default function MembershipPortal() {
         setViewMode('public');
     };
 
-    if (viewMode === 'public' && !session) {
+    const handleBackToWebsite = () => {
+        setViewMode('public');
+        setPublicView('home');
+    };
+
+    if (viewMode === 'public') {
         return (
             <div>
-                <nav className="fixed top-0 w-full z-[100] bg-white/80 backdrop-blur-md border-b border-slate-200">
+                <nav className="fixed top-0 w-full z-[100] bg-white/80 backdrop-blur-md border-b border-slate-200 shadow-sm">
                     <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
                         <div className="flex items-center gap-2">
-                            <h1 className="text-2xl font-black tracking-tighter">HAC<span className="text-red-600">PORTAL</span></h1>
+                            <h1 className="text-2xl font-black tracking-tighter uppercase italic text-slate-900 leading-none">HILLINGDON<span className="text-red-600">AC</span></h1>
                         </div>
                         <div className="hidden md:flex items-center gap-8">
                             <button
@@ -2222,9 +2227,9 @@ export default function MembershipPortal() {
                             </button>
                             <button
                                 onClick={() => setViewMode('portal')}
-                                className="bg-slate-900 text-white px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest"
+                                className="bg-red-600 text-white px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-red-700 shadow-lg shadow-red-900/20 transition-all"
                             >
-                                Member Login
+                                {session ? 'Enter Portal' : 'Member Portal'}
                             </button>
                         </div>
                     </div>
@@ -2332,6 +2337,12 @@ export default function MembershipPortal() {
                             </div>
                         )}
                         <div className="text-[10px] font-bold uppercase p-1.5 bg-slate-800 rounded border border-slate-700 tracking-widest">{userRole} View</div>
+                        <button
+                            onClick={handleBackToWebsite}
+                            className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors flex items-center gap-1"
+                        >
+                            <Home size={14} /> Website
+                        </button>
                         <button onClick={handleLogout} className="p-1.5 hover:bg-white/10 rounded transition-colors text-slate-400 hover:text-white">
                             <X size={16} />
                         </button>
