@@ -43,6 +43,7 @@ import { coachService } from '../services/coachService';
 import { attendanceService } from '../services/attendanceService';
 import { meetService } from '../services/meetService';
 import { socialService } from '../services/socialService';
+import { authService } from '../services/authService';
 import { checkConnection } from '../lib/supabase';
 
 function cn(...inputs) {
@@ -1682,6 +1683,94 @@ const AthleteProfileModal = ({ athlete, onClose, onUpdate, coaches }) => {
     );
 };
 
+const Login = ({ onLogin }) => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError(null);
+        try {
+            const data = await authService.signIn(email, password);
+            onLogin(data);
+        } catch (err) {
+            setError(err.message || 'Invalid login credentials');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="min-h-screen bg-slate-900 flex items-center justify-center p-6 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500 rounded-full blur-[120px] animate-pulse" />
+                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500 rounded-full blur-[120px] animate-pulse delay-75" />
+            </div>
+
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="w-full max-w-md bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-[2rem] shadow-2xl relative z-10"
+            >
+                <div className="text-center mb-8">
+                    <div className="inline-block p-4 bg-emerald-500/10 rounded-2xl mb-4">
+                        <ShieldCheck size={40} className="text-emerald-400" />
+                    </div>
+                    <h1 className="text-2xl font-black text-white tracking-tight uppercase italic mb-2">HAC<span className="text-emerald-500">Portal</span></h1>
+                    <p className="text-slate-400 text-sm font-bold uppercase tracking-widest">Secure Access Control</p>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-2">Club Email</label>
+                        <input
+                            type="email"
+                            required
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="your@email.com"
+                            className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3 text-white font-medium outline-none focus:border-emerald-500 transition-colors"
+                        />
+                    </div>
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-2">Secret Code</label>
+                        <input
+                            type="password"
+                            required
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="••••••••"
+                            className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3 text-white font-medium outline-none focus:border-emerald-500 transition-colors"
+                        />
+                    </div>
+
+                    {error && (
+                        <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-xs font-bold text-center">
+                            {error}
+                        </div>
+                    )}
+
+                    <button
+                        disabled={loading}
+                        className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-4 rounded-2xl text-sm uppercase tracking-[0.2em] shadow-xl shadow-emerald-900/40 transition-all active:scale-95 disabled:opacity-50"
+                    >
+                        {loading ? 'Authenticating...' : 'Enter Portal'}
+                    </button>
+                </form>
+
+                <div className="mt-8 pt-8 border-t border-white/5 text-center">
+                    <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest leading-relaxed">
+                        Authorized Hillingdon Athletic Club<br />Personnel & Members Only
+                    </p>
+                </div>
+            </motion.div>
+        </div>
+    );
+};
+
 const WorkflowStepper = ({ steps, currentStep }) => (
     <div className="w-full py-6 flex items-center justify-between">
         {steps.map((s, idx) => (
@@ -1696,18 +1785,26 @@ const WorkflowStepper = ({ steps, currentStep }) => (
 );
 
 const UserProfile = ({ userType, onManagePayments, athletes = [], coaches = [], currentView }) => {
-    const [currentStep, setCurrentStep] = useState(1);
-    const steps = userType === 'juniors' ? WORKFLOWS.juniors : WORKFLOWS.seniors;
+    const athlete = athletes[0] || {};
+    const steps = athlete.type === 'seniors' ? WORKFLOWS.seniors : WORKFLOWS.juniors;
+    // Sync current step with the actual athlete state
+    const currentStepIndex = steps.indexOf(athlete.state) !== -1 ? steps.indexOf(athlete.state) : 0;
 
     return (
         <div className="space-y-6">
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
-                <h3 className="text-lg font-bold mb-4">Membership Progress</h3>
-                <WorkflowStepper steps={steps} currentStep={currentStep} />
-                <div className="flex justify-end gap-2 mt-4">
-                    <button onClick={() => setCurrentStep(Math.max(0, currentStep - 1))} className="text-sm font-bold text-slate-400">Back</button>
-                    <button onClick={() => setCurrentStep(Math.min(steps.length - 1, currentStep + 1))} className="bg-emerald-600 text-white px-4 py-1.5 rounded-lg text-sm font-bold">Advance</button>
+                <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-lg font-bold">Membership Progress</h3>
+                    <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 px-2 py-1 rounded uppercase tracking-widest">{athlete.state}</span>
                 </div>
+                <WorkflowStepper steps={steps} currentStep={currentStepIndex} />
+
+                {userType === 'management' && (
+                    <div className="flex justify-end gap-2 mt-4">
+                        <button className="text-sm font-bold text-slate-400">Force Update</button>
+                        <button className="bg-emerald-600 text-white px-4 py-1.5 rounded-lg text-sm font-bold">Advance State</button>
+                    </div>
+                )}
             </div>
 
             <div className="space-y-6">
@@ -1753,7 +1850,9 @@ const UserProfile = ({ userType, onManagePayments, athletes = [], coaches = [], 
     );
 };
 
-export default function MembershipPortal({ userType = 'juniors' }) {
+export default function MembershipPortal() {
+    const [session, setSession] = useState(null);
+    const [userRole, setUserRole] = useState(null);
     const [currentView, setCurrentView] = useState('dashboard');
     const [showPaymentSetup, setShowPaymentSetup] = useState(false);
     const [dbStatus, setDbStatus] = useState({ checked: false, connected: false, error: null });
@@ -1762,18 +1861,44 @@ export default function MembershipPortal({ userType = 'juniors' }) {
     const [loading, setLoading] = useState(true);
     const [showAnalyticsDropdown, setShowAnalyticsDropdown] = useState(false);
 
+    useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                const activeSession = await authService.getSession();
+                if (activeSession) {
+                    setSession(activeSession);
+                    // In real app, user role would come from app_metadata or profiles table
+                    // Mocking based on email for the demo
+                    const email = activeSession.user.email;
+                    setUserRole(email.includes('admin') ? 'management' : 'juniors');
+                }
+            } catch (err) {
+                console.error('Auth check failed:', err);
+            }
+        };
+        checkAuth();
+    }, []);
+
     const fetchData = async () => {
         try {
-            const [athleteData, coachData] = await Promise.all([
-                athleteService.getAll(),
-                coachService.getAll()
-            ]);
+            // For members, we only fetch their own data
+            // For management, we fetch all
+            let athleteData;
+            if (userRole === 'management') {
+                athleteData = await athleteService.getAll();
+            } else {
+                // Mocking: finding the "member" in the database by email
+                // In production, this would be a filtered query
+                const all = await athleteService.getAll();
+                athleteData = all.filter(a => a.email === session.user.email);
+                if (athleteData.length === 0) athleteData = [MOCK_MEMBERS[0]];
+            }
 
+            const coachData = await coachService.getAll();
             const finalCoaches = coachData && coachData.length > 0 ? coachData : MOCK_COACHES;
             setCoaches(finalCoaches);
 
             if (athleteData && athleteData.length > 0) {
-                // Manual Hydration: Attach coach object to athlete
                 const hydratedAthletes = athleteData.map(a => {
                     const coach = finalCoaches.find(c => String(c.id) === String(a.coach_id));
                     return {
@@ -1795,14 +1920,14 @@ export default function MembershipPortal({ userType = 'juniors' }) {
         }
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         const verifyConnection = async () => {
             const status = await checkConnection();
             setDbStatus({ checked: true, ...status });
-            if (status.connected) await fetchData();
+            if (status.connected && session) await fetchData();
         };
         verifyConnection();
-    }, []);
+    }, [session, userRole]);
 
     const handleUpdateAthleteLocal = (id, updates) => {
         setAthletes(prev => {
@@ -1814,6 +1939,20 @@ export default function MembershipPortal({ userType = 'juniors' }) {
             }
         });
     };
+
+    const handleLogout = async () => {
+        await authService.signOut();
+        setSession(null);
+        setUserRole(null);
+    };
+
+    if (!session) {
+        return <Login onLogin={(data) => {
+            setSession(data.session);
+            const email = data.session.user.email;
+            setUserRole(email.includes('admin') ? 'management' : 'juniors');
+        }} />;
+    }
 
     if (showPaymentSetup) {
         return (
@@ -1888,7 +2027,10 @@ export default function MembershipPortal({ userType = 'juniors' }) {
                                 {dbStatus.connected ? "DB Connected" : "DB Offline"}
                             </div>
                         )}
-                        <div className="text-[10px] font-bold uppercase p-1.5 bg-slate-800 rounded border border-slate-700 tracking-widest">{userType} View</div>
+                        <div className="text-[10px] font-bold uppercase p-1.5 bg-slate-800 rounded border border-slate-700 tracking-widest">{userRole} View</div>
+                        <button onClick={handleLogout} className="p-1.5 hover:bg-white/10 rounded transition-colors text-slate-400 hover:text-white">
+                            <X size={16} />
+                        </button>
                     </div>
                 </div>
             </nav>
@@ -1896,10 +2038,10 @@ export default function MembershipPortal({ userType = 'juniors' }) {
             <main className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
                 {loading ? (
                     <div className="p-12 text-center text-slate-400 font-bold uppercase tracking-widest text-xs">Syncing with Club Database...</div>
-                ) : userType === 'management' ? (
+                ) : userRole === 'management' ? (
                     <MemberDashboard currentView={currentView} athletes={athletes} coaches={coaches} onUpdateAthlete={handleUpdateAthleteLocal} />
                 ) : (
-                    currentView === 'dashboard' ? <UserProfile userType={userType} onManagePayments={() => setShowPaymentSetup(true)} athletes={athletes} coaches={coaches} currentView={currentView} /> :
+                    currentView === 'dashboard' ? <UserProfile userType={userRole} onManagePayments={() => setShowPaymentSetup(true)} athletes={athletes} coaches={coaches} currentView={currentView} /> :
                         currentView === 'community' ? <ClubSocial currentMemberId={athletes[0]?.id} /> :
                             currentView === 'news' ? <ClubNewsSection /> :
                                 <TrainingManager />
