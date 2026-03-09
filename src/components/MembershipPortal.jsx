@@ -1129,7 +1129,7 @@ const ClubSocial = ({ currentMemberId }) => {
     );
 };
 
-const MemberDashboard = ({ currentView, athletes = [], coaches = [], onUpdateAthlete }) => {
+const MemberDashboard = ({ currentView, userRole, athletes = [], coaches = [], onUpdateAthlete }) => {
     const [selectedAthleteProfile, setSelectedAthleteProfile] = useState(null);
     const [filterType, setFilterType] = useState('All');
     const [filterState, setFilterState] = useState('All');
@@ -2296,8 +2296,8 @@ export default function MembershipPortal() {
                                         <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6">
                                             <ShieldCheck size={40} className="text-emerald-500" />
                                         </div>
-                                        <h2 className="text-3xl font-black text-slate-900 mb-2">Welcome Back!</h2>
-                                        <p className="text-slate-500 font-medium mb-8">You are securely logged into your HAC account.</p>
+                                        <h2 className="text-3xl font-black text-slate-900 mb-2">Welcome, {userRole === 'management' ? 'Administrator' : 'HAC Member'}!</h2>
+                                        <p className="text-slate-500 font-medium mb-8">You are securely logged into the Hillingdon AC portal.</p>
                                         <button
                                             onClick={() => setViewMode('portal')}
                                             className="w-full bg-slate-900 text-white py-4 rounded-2xl font-black uppercase tracking-[0.2em] shadow-xl hover:bg-slate-800 transition-all active:scale-95"
@@ -2432,7 +2432,7 @@ export default function MembershipPortal() {
                 {loading ? (
                     <div className="p-12 text-center text-slate-400 font-bold uppercase tracking-widest text-xs">Syncing with Club Database...</div>
                 ) : userRole === 'management' ? (
-                    <MemberDashboard currentView={currentView} athletes={athletes} coaches={coaches} onUpdateAthlete={handleUpdateAthleteLocal} />
+                    <MemberDashboard currentView={currentView} userRole={userRole} athletes={athletes} coaches={coaches} onUpdateAthlete={handleUpdateAthleteLocal} />
                 ) : (
                     currentView === 'dashboard' ? <UserProfile userType={userRole} onManagePayments={() => setShowPaymentSetup(true)} athletes={athletes} coaches={coaches} currentView={currentView} /> :
                         currentView === 'community' ? <ClubSocial currentMemberId={athletes[0]?.id} /> :
