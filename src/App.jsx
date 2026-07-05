@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import MembershipPortal from './components/MembershipPortal';
 import MembershipForm from './components/MembershipForm';
+import VetsLeagueInsights from './components/VetsLeagueInsights';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     UserPlus,
@@ -10,7 +11,8 @@ import {
     Zap,
     Users,
     ChevronRight,
-    Star
+    Star,
+    Award
 } from 'lucide-react';
 
 const LandingPage = ({ onSelect }) => {
@@ -25,7 +27,7 @@ const LandingPage = ({ onSelect }) => {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="max-w-4xl w-full text-center relative z-10"
+                className="max-w-6xl w-full text-center relative z-10"
             >
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-xs font-bold uppercase tracking-widest mb-8">
                     <Zap size={14} /> The Future of Membership
@@ -48,41 +50,53 @@ const LandingPage = ({ onSelect }) => {
                     A frictionless, paperless application process and an integrated athlete dashboard for the premier athletic club in North West London.
                 </p>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
                     <button
                         onClick={() => onSelect('register')}
-                        className="group flex flex-col items-center p-8 bg-white/5 border border-white/10 rounded-3xl hover:bg-emerald-500 hover:border-emerald-400 transition-all duration-300 hover:scale-105 hover:shadow-[0_20px_40px_rgba(16,185,129,0.2)]"
+                        className="group flex flex-col items-center p-6 bg-white/5 border border-white/10 rounded-3xl hover:bg-emerald-500 hover:border-emerald-400 transition-all duration-300 hover:scale-105 hover:shadow-[0_20px_40px_rgba(16,185,129,0.2)]"
                     >
-                        <div className="w-16 h-16 bg-emerald-500/20 rounded-2xl flex items-center justify-center mb-6 text-emerald-400 group-hover:bg-white/20 group-hover:text-white transition-colors">
-                            <UserPlus size={32} />
+                        <div className="w-14 h-14 bg-emerald-500/20 rounded-2xl flex items-center justify-center mb-6 text-emerald-400 group-hover:bg-white/20 group-hover:text-white transition-colors">
+                            <UserPlus size={28} />
                         </div>
-                        <h3 className="text-xl font-bold mb-2 group-hover:text-white">Join the Club</h3>
-                        <p className="text-sm text-slate-500 group-hover:text-emerald-50/70">Integrated membership application form.</p>
-                        <ArrowRight className="mt-6 text-emerald-500 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all group-hover:text-white" />
+                        <h3 className="text-lg font-bold mb-2 group-hover:text-white">Join the Club</h3>
+                        <p className="text-xs text-slate-500 group-hover:text-emerald-50/70">Integrated membership application form.</p>
+                        <ArrowRight className="mt-4 text-emerald-500 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all group-hover:text-white" />
                     </button>
 
                     <button
                         onClick={() => onSelect('member')}
-                        className="group flex flex-col items-center p-8 bg-white/5 border border-white/10 rounded-3xl hover:bg-blue-600 hover:border-blue-400 transition-all duration-300 hover:scale-105 hover:shadow-[0_20px_40px_rgba(37,99,235,0.2)]"
+                        className="group flex flex-col items-center p-6 bg-white/5 border border-white/10 rounded-3xl hover:bg-blue-600 hover:border-blue-400 transition-all duration-300 hover:scale-105 hover:shadow-[0_20px_40px_rgba(37,99,235,0.2)]"
                     >
-                        <div className="w-16 h-16 bg-blue-500/20 rounded-2xl flex items-center justify-center mb-6 text-blue-400 group-hover:bg-white/20 group-hover:text-white transition-colors">
-                            <LayoutDashboard size={32} />
+                        <div className="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center mb-6 text-blue-400 group-hover:bg-white/20 group-hover:text-white transition-colors">
+                            <LayoutDashboard size={28} />
                         </div>
-                        <h3 className="text-xl font-bold mb-2 group-hover:text-white">Member Portal</h3>
-                        <p className="text-sm text-slate-500 group-hover:text-blue-50/70">Dashboard for current & new athletes.</p>
-                        <ArrowRight className="mt-6 text-blue-500 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all group-hover:text-white" />
+                        <h3 className="text-lg font-bold mb-2 group-hover:text-white">Member Portal</h3>
+                        <p className="text-xs text-slate-500 group-hover:text-blue-50/70">Dashboard for current & new athletes.</p>
+                        <ArrowRight className="mt-4 text-blue-500 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all group-hover:text-white" />
                     </button>
 
                     <button
                         onClick={() => onSelect('admin')}
-                        className="group flex flex-col items-center p-8 bg-white/5 border border-white/10 rounded-3xl hover:bg-slate-700 hover:border-slate-500 transition-all duration-300 hover:scale-105 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)]"
+                        className="group flex flex-col items-center p-6 bg-white/5 border border-white/10 rounded-3xl hover:bg-purple-600 hover:border-purple-400 transition-all duration-300 hover:scale-105 hover:shadow-[0_20px_40px_rgba(147,51,234,0.2)]"
                     >
-                        <div className="w-16 h-16 bg-slate-500/20 rounded-2xl flex items-center justify-center mb-6 text-slate-400 group-hover:bg-white/20 group-hover:text-white transition-colors">
-                            <ShieldCheck size={32} />
+                        <div className="w-14 h-14 bg-purple-500/20 rounded-2xl flex items-center justify-center mb-6 text-purple-400 group-hover:bg-white/20 group-hover:text-white transition-colors">
+                            <ShieldCheck size={28} />
                         </div>
-                        <h3 className="text-xl font-bold mb-2 group-hover:text-white">Admin Management</h3>
-                        <p className="text-sm text-slate-500 group-hover:text-slate-50/70">End-to-end workflow management.</p>
-                        <ArrowRight className="mt-6 text-slate-500 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all group-hover:text-white" />
+                        <h3 className="text-lg font-bold mb-2 group-hover:text-white">Admin Management</h3>
+                        <p className="text-xs text-slate-500 group-hover:text-purple-50/70">End-to-end workflow management.</p>
+                        <ArrowRight className="mt-4 text-purple-500 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all group-hover:text-white" />
+                    </button>
+
+                    <button
+                        onClick={() => onSelect('vets')}
+                        className="group flex flex-col items-center p-6 bg-white/5 border border-white/10 rounded-3xl hover:bg-indigo-600 hover:border-indigo-400 transition-all duration-300 hover:scale-105 hover:shadow-[0_20px_40px_rgba(79,70,229,0.2)]"
+                    >
+                        <div className="w-14 h-14 bg-indigo-500/20 rounded-2xl flex items-center justify-center mb-6 text-indigo-400 group-hover:bg-white/20 group-hover:text-white transition-colors">
+                            <Award size={28} />
+                        </div>
+                        <h3 className="text-lg font-bold mb-2 group-hover:text-white">Vets League</h3>
+                        <p className="text-xs text-slate-500 group-hover:text-indigo-50/70">Interactive scoring & stats dashboards.</p>
+                        <ArrowRight className="mt-4 text-indigo-500 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all group-hover:text-white" />
                     </button>
                 </div>
 
@@ -149,8 +163,11 @@ const App = () => {
                     <MembershipPortal userType="management" />
                 </div>
             )}
+
+            {view === 'vets' && (
+                <VetsLeagueInsights onClose={handleBackToLanding} />
+            )}
         </div>
     );
 };
-
 export default App;
