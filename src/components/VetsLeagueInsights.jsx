@@ -19,20 +19,7 @@ import {
 
 Chart.register(...registerables);
 
-const RELAY_SQUADS = {
-    Men: {
-        1: ["Clive Wickham", "Steve Thompson", "Deepak Pandiyarajan", "Jeff Shotton"],
-        2: ["Clive Wickham", "Andy Murphy", "Deepak Pandiyarajan", "Dale Henry"],
-        3: ["Steve Thompson", "Andy Murphy", "Paul Cuddihy", "Nigel Ribeiro"],
-        4: ["Steve Thompson", "Andy Murphy", "Deepak Pandiyarajan", "Dale Henry"]
-    },
-    Women: {
-        1: ["Lucy Duncan", "Mel Spencer", "Elise Morse", "Christina Benjamin"],
-        2: ["Lucy Duncan", "Mel Spencer", "Elise Morse", "Katie Saha"],
-        3: ["Lucy Duncan", "Mel Spencer", "Elise Morse", "Eva Artemis"],
-        4: ["Lucy Duncan", "Mel Spencer", "Elise Morse", "Katie Saha"]
-    }
-};
+
 
 const VetsLeagueInsights = ({ onClose }) => {
     const [activeTab, setActiveTab] = useState('overview');
@@ -318,50 +305,17 @@ const VetsLeagueInsights = ({ onClose }) => {
                         name: r.athlete_clean,
                         gender: r.gender,
                         age: r.age_clean || 'Unknown',
-                        individualPoints: 0,
-                        relayPoints: 0,
                         points: 0,
                         meets: new Set(),
                         events: 0
                     };
                 }
                 if (r.type === 'scoring') {
-                    allAthletes[r.athlete_clean].individualPoints += r.points_scored;
+                    allAthletes[r.athlete_clean].points += r.points_scored;
                 }
                 allAthletes[r.athlete_clean].meets.add(r.meet_id);
                 allAthletes[r.athlete_clean].events += 1;
             }
-        });
-
-        // Add relay points pro-rata
-        const squads = RELAY_SQUADS[genderFilter] || {};
-        const relayResults = database.results.filter(r => r.club_clean === 'Hillingdon AC' && r.gender === genderFilter && (r.event_code.startsWith('4x100') || r.event_code.startsWith('4x400') || r.event_name.toLowerCase().includes('relay')));
-        
-        relayResults.forEach(r => {
-            const meetId = r.meet_id;
-            const runners = squads[meetId] || [];
-            const proRata = r.points_scored / 4;
-            runners.forEach(runnerName => {
-                if (!allAthletes[runnerName]) {
-                    allAthletes[runnerName] = {
-                        name: runnerName,
-                        gender: genderFilter,
-                        age: 'Unknown',
-                        individualPoints: 0,
-                        relayPoints: 0,
-                        points: 0,
-                        meets: new Set(),
-                        events: 0
-                    };
-                }
-                allAthletes[runnerName].relayPoints += proRata;
-                allAthletes[runnerName].meets.add(meetId);
-            });
-        });
-
-        // Calculate total points
-        Object.values(allAthletes).forEach(a => {
-            a.points = a.individualPoints + a.relayPoints;
         });
 
         return Object.values(allAthletes).sort((a, b) => b.points - a.points);
@@ -523,11 +477,7 @@ const VetsLeagueInsights = ({ onClose }) => {
             </div>
             <div class="card">
                 <div class="card-header">Men's Standings</div>
-                <div class="table-responsive"><table id="men-standings-table"><thead><tr><th>Rank</th><th>Name</th><th>Age</th><th>Indiv Pts</th><th>Relay Pts</th><th>Total Pts</th><th>Meets</th><th>Avg</th></tr></thead><tbody></tbody></table></div>
-            </div>
-            <div class="card">
-                <div class="card-header">Hillingdon Men Relay Squads & Points Distribution</div>
-                <div class="table-responsive"><table id="men-relay-table"><thead><tr><th>Meet</th><th>Event</th><th>Relay Squad Athletes</th><th>Relay Points</th><th>Points / Athlete</th></tr></thead><tbody></tbody></table></div>
+                <div class="table-responsive"><table id="men-standings-table"><thead><tr><th>Rank</th><th>Name</th><th>Age</th><th>Total Pts</th><th>Meets</th><th>Avg</th></tr></thead><tbody></tbody></table></div>
             </div>
             <div class="grid-2col">
                 <div class="card">
@@ -559,11 +509,7 @@ const VetsLeagueInsights = ({ onClose }) => {
             </div>
             <div class="card">
                 <div class="card-header">Women's Standings</div>
-                <div class="table-responsive"><table id="women-standings-table"><thead><tr><th>Rank</th><th>Name</th><th>Age</th><th>Indiv Pts</th><th>Relay Pts</th><th>Total Pts</th><th>Meets</th><th>Avg</th></tr></thead><tbody></tbody></table></div>
-            </div>
-            <div class="card">
-                <div class="card-header">Hillingdon Women Relay Squads & Points Distribution</div>
-                <div class="table-responsive"><table id="women-relay-table"><thead><tr><th>Meet</th><th>Event</th><th>Relay Squad Athletes</th><th>Relay Points</th><th>Points / Athlete</th></tr></thead><tbody></tbody></table></div>
+                <div class="table-responsive"><table id="women-standings-table"><thead><tr><th>Rank</th><th>Name</th><th>Age</th><th>Total Pts</th><th>Meets</th><th>Avg</th></tr></thead><tbody></tbody></table></div>
             </div>
             <div class="grid-2col">
                 <div class="card">
@@ -778,10 +724,6 @@ const VetsLeagueInsights = ({ onClose }) => {
             populateMissed('men-missed-table', 'Men');
             populateMissed('women-missed-table', 'Women');
 
-            // Relays
-            populateRelays('men-relay-table', 'Men');
-            populateRelays('women-relay-table', 'Women');
-
             // Search setup
             const clubs = new Set();
             DATABASE.results.forEach(r => clubs.add(r.club_clean));
@@ -796,7 +738,7 @@ const VetsLeagueInsights = ({ onClose }) => {
             const body = document.querySelector('#' + id + ' tbody');
             body.innerHTML = '';
             getAthletesSummary(gender).forEach((a, idx) => {
-                body.innerHTML += '<tr><td><strong>' + (idx+1) + '</strong></td><td>' + a.name + '</td><td>' + a.age + '</td><td>' + a.individualPoints.toFixed(1) + '</td><td style="color:var(--accent);">+' + a.relayPoints.toFixed(2) + '</td><td><strong>' + a.points.toFixed(1) + '</strong></td><td>' + a.meets + '</td><td>' + (a.points/Math.max(1,a.meets)).toFixed(1) + '</td></tr>';
+                body.innerHTML += '<tr><td><strong>' + (idx+1) + '</strong></td><td>' + a.name + '</td><td>' + a.age + '</td><td><strong>' + a.points.toFixed(1) + '</strong></td><td>' + a.meets + '</td><td>' + (a.points/Math.max(1,a.meets)).toFixed(1) + '</td></tr>';
             });
         }
 
@@ -826,21 +768,6 @@ const VetsLeagueInsights = ({ onClose }) => {
             list.forEach(e => body.innerHTML += '<tr><td>Meet ' + e.meet_id + '</td><td><code>' + e.event_code + '</code></td><td>' + e.event_name + '</td></tr>');
         }
 
-        function populateRelays(tableId, gender) {
-            const body = document.querySelector('#' + tableId + ' tbody');
-            body.innerHTML = '';
-            const squads = RELAY_SQUADS[gender];
-            for (let meetId = 1; meetId <= 4; meetId++) {
-                const squad = squads[meetId] || [];
-                const relayRow = DATABASE.results.find(r => r.meet_id === meetId && r.gender === gender && r.club_clean === 'Hillingdon AC' && (r.event_code.startsWith('4x100') || r.event_code.startsWith('4x400') || r.event_name.toLowerCase().includes('relay')));
-                const pts = relayRow ? relayRow.points_scored : 0;
-                const eventName = relayRow ? relayRow.event_name : (meetId % 2 === 0 ? "4x100m Relay" : "4x400m Relay");
-                
-                const squadTags = squad.map(runner => '<span style="display:inline-block; margin:2px; padding:2px 8px; border-radius:4px; font-size:11px; background:#1e293b; color:#cbd5e1; border:1px solid #334155;">' + runner + '</span>').join(' ');
-                
-                body.innerHTML += '<tr><td>Meet ' + meetId + '</td><td><strong>' + eventName + '</strong></td><td>' + squadTags + '</td><td><strong>' + pts.toFixed(1) + '</strong></td><td style="color:var(--accent);"><strong>+' + (pts/4).toFixed(2) + '</strong></td></tr>';
-            }
-        }
 
         function filterData() {
             const q = document.getElementById('search-query').value.toLowerCase();
@@ -1054,8 +981,6 @@ const VetsLeagueInsights = ({ onClose }) => {
                                             <th className="p-4 font-semibold">Rank</th>
                                             <th className="p-4 font-semibold">Athlete Name</th>
                                             <th className="p-4 font-semibold">Age Group</th>
-                                            <th className="p-4 font-semibold">Indiv Pts</th>
-                                            <th className="p-4 font-semibold">Relay Pts</th>
                                             <th className="p-4 font-semibold">Total Points</th>
                                             <th className="p-4 font-semibold">Meets Run</th>
                                             <th className="p-4 font-semibold">Avg / Meet</th>
@@ -1067,8 +992,6 @@ const VetsLeagueInsights = ({ onClose }) => {
                                                 <td className="p-4 font-bold text-slate-400">{idx + 1}</td>
                                                 <td className="p-4 text-slate-200 font-medium">{ath.name}</td>
                                                 <td className="p-4"><span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">{ath.age}</span></td>
-                                                <td className="p-4 font-medium text-slate-350">{ath.individualPoints.toFixed(1)}</td>
-                                                <td className="p-4 font-semibold text-indigo-400">+{ath.relayPoints.toFixed(2)}</td>
                                                 <td className="p-4 font-bold text-slate-200">{ath.points.toFixed(1)}</td>
                                                 <td className="p-4 text-slate-400">{ath.meets.size} / 4</td>
                                                 <td className="p-4 text-slate-400">{(ath.points / ath.meets.size).toFixed(1)}</td>
@@ -1139,48 +1062,6 @@ const VetsLeagueInsights = ({ onClose }) => {
                             </div>
                         </div>
 
-                        {/* Relay Squads Table */}
-                        <div className="bg-slate-900/40 backdrop-blur-md border border-slate-800/80 rounded-2xl p-6">
-                            <h3 className="text-lg font-bold text-white mb-4">Hillingdon Men Relay Squads & Points Distribution</h3>
-                            <div className="overflow-x-auto border border-slate-850 rounded-xl">
-                                <table className="w-full border-collapse text-sm text-left">
-                                    <thead>
-                                        <tr className="bg-slate-900 text-slate-400 text-xs border-b border-slate-850">
-                                            <th className="p-4">Meet</th>
-                                            <th className="p-4">Event</th>
-                                            <th className="p-4">Relay Squad Athletes</th>
-                                            <th className="p-4 text-center">Relay Points</th>
-                                            <th className="p-4 text-center">Points / Athlete</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {[1, 2, 3, 4].map(meetId => {
-                                            const squad = RELAY_SQUADS['Men'][meetId] || [];
-                                            const relayRow = database.results.find(r => r.meet_id === meetId && r.gender === 'Men' && r.club_clean === 'Hillingdon AC' && (r.event_code.startsWith('4x100') || r.event_code.startsWith('4x400') || r.event_name.toLowerCase().includes('relay')));
-                                            const pts = relayRow ? relayRow.points_scored : 0;
-                                            const eventName = relayRow ? relayRow.event_name : (meetId % 2 === 0 ? "4x100m Relay" : "4x400m Relay");
-                                            return (
-                                                <tr key={meetId} className="border-b border-slate-850 hover:bg-slate-900/20">
-                                                    <td className="p-4 font-bold text-slate-400">Meet {meetId}</td>
-                                                    <td className="p-4 text-slate-200 font-bold">{eventName}</td>
-                                                    <td className="p-4">
-                                                        <div className="flex flex-wrap gap-2">
-                                                            {squad.map((runner, i) => (
-                                                                <span key={i} className="px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700/50">
-                                                                    {runner}
-                                                                </span>
-                                                            ))}
-                                                        </div>
-                                                    </td>
-                                                    <td className="p-4 text-center font-bold text-slate-200">{pts.toFixed(1)}</td>
-                                                    <td className="p-4 text-center font-semibold text-indigo-400">{(pts / 4).toFixed(2)}</td>
-                                                </tr>
-                                            );
-                                        })}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
 
                         {/* Consolidated HAC Results */}
                         <div className="bg-slate-900/40 backdrop-blur-md border border-slate-800/80 rounded-2xl p-6">
@@ -1241,8 +1122,6 @@ const VetsLeagueInsights = ({ onClose }) => {
                                             <th className="p-4 font-semibold">Rank</th>
                                             <th className="p-4 font-semibold">Athlete Name</th>
                                             <th className="p-4 font-semibold">Age Group</th>
-                                            <th className="p-4 font-semibold">Indiv Pts</th>
-                                            <th className="p-4 font-semibold">Relay Pts</th>
                                             <th className="p-4 font-semibold">Total Points</th>
                                             <th className="p-4 font-semibold">Meets Run</th>
                                             <th className="p-4 font-semibold">Avg / Meet</th>
@@ -1254,8 +1133,6 @@ const VetsLeagueInsights = ({ onClose }) => {
                                                 <td className="p-4 font-bold text-slate-400">{idx + 1}</td>
                                                 <td className="p-4 text-slate-200 font-medium">{ath.name}</td>
                                                 <td className="p-4"><span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-pink-500/10 text-pink-400 border border-pink-500/20">{ath.age}</span></td>
-                                                <td className="p-4 font-medium text-slate-350">{ath.individualPoints.toFixed(1)}</td>
-                                                <td className="p-4 font-semibold text-indigo-400">+{ath.relayPoints.toFixed(2)}</td>
                                                 <td className="p-4 font-bold text-slate-200">{ath.points.toFixed(1)}</td>
                                                 <td className="p-4 text-slate-400">{ath.meets.size} / 4</td>
                                                 <td className="p-4 text-slate-400">{(ath.points / ath.meets.size).toFixed(1)}</td>
@@ -1326,48 +1203,6 @@ const VetsLeagueInsights = ({ onClose }) => {
                             </div>
                         </div>
 
-                        {/* Relay Squads Table */}
-                        <div className="bg-slate-900/40 backdrop-blur-md border border-slate-800/80 rounded-2xl p-6">
-                            <h3 className="text-lg font-bold text-white mb-4">Hillingdon Women Relay Squads & Points Distribution</h3>
-                            <div className="overflow-x-auto border border-slate-850 rounded-xl">
-                                <table className="w-full border-collapse text-sm text-left">
-                                    <thead>
-                                        <tr className="bg-slate-900 text-slate-400 text-xs border-b border-slate-850">
-                                            <th className="p-4">Meet</th>
-                                            <th className="p-4">Event</th>
-                                            <th className="p-4">Relay Squad Athletes</th>
-                                            <th className="p-4 text-center">Relay Points</th>
-                                            <th className="p-4 text-center">Points / Athlete</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {[1, 2, 3, 4].map(meetId => {
-                                            const squad = RELAY_SQUADS['Women'][meetId] || [];
-                                            const relayRow = database.results.find(r => r.meet_id === meetId && r.gender === 'Women' && r.club_clean === 'Hillingdon AC' && (r.event_code.startsWith('4x100') || r.event_code.startsWith('4x400') || r.event_name.toLowerCase().includes('relay')));
-                                            const pts = relayRow ? relayRow.points_scored : 0;
-                                            const eventName = relayRow ? relayRow.event_name : (meetId % 2 === 0 ? "4x100m Relay" : "4x400m Relay");
-                                            return (
-                                                <tr key={meetId} className="border-b border-slate-850 hover:bg-slate-900/20">
-                                                    <td className="p-4 font-bold text-slate-400">Meet {meetId}</td>
-                                                    <td className="p-4 text-slate-200 font-bold">{eventName}</td>
-                                                    <td className="p-4">
-                                                        <div className="flex flex-wrap gap-2">
-                                                            {squad.map((runner, i) => (
-                                                                <span key={i} className="px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700/50">
-                                                                    {runner}
-                                                                </span>
-                                                            ))}
-                                                        </div>
-                                                    </td>
-                                                    <td className="p-4 text-center font-bold text-slate-200">{pts.toFixed(1)}</td>
-                                                    <td className="p-4 text-center font-semibold text-indigo-400">{(pts / 4).toFixed(2)}</td>
-                                                </tr>
-                                            );
-                                        })}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
 
                         {/* Consolidated HAC Results */}
                         <div className="bg-slate-900/40 backdrop-blur-md border border-slate-800/80 rounded-2xl p-6">
