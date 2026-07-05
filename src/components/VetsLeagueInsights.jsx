@@ -297,7 +297,7 @@ const VetsLeagueInsights = ({ onClose }) => {
         const hacResults = database.results.filter(r => r.club_clean === 'Hillingdon AC' && r.gender === genderFilter);
 
         hacResults.forEach(r => {
-            if (r.athlete_clean && r.athlete_clean !== 'Hillingdon Relay') {
+            if (r.athlete_clean && r.athlete_clean !== 'Hillingdon Relay' && r.athlete_clean !== 'Hillingdon') {
                 if (!allAthletes[r.athlete_clean]) {
                     allAthletes[r.athlete_clean] = {
                         name: r.athlete_clean,
@@ -327,7 +327,7 @@ const VetsLeagueInsights = ({ onClose }) => {
 
         hacResults.forEach(r => {
             if (r.type === 'scoring') totalPoints += r.points_scored;
-            if (r.athlete_clean && r.athlete_clean !== 'Hillingdon Relay') athletes.add(r.athlete_clean);
+            if (r.athlete_clean && r.athlete_clean !== 'Hillingdon Relay' && r.athlete_clean !== 'Hillingdon') athletes.add(r.athlete_clean);
         });
 
         return {
@@ -642,7 +642,7 @@ const VetsLeagueInsights = ({ onClose }) => {
         function getAthletesSummary(gender) {
             const list = {};
             DATABASE.results.filter(r => r.club_clean === 'Hillingdon AC' && r.gender === gender).forEach(r => {
-                if (r.athlete_clean && r.athlete_clean !== 'Hillingdon Relay') {
+                if (r.athlete_clean && r.athlete_clean !== 'Hillingdon Relay' && r.athlete_clean !== 'Hillingdon') {
                     if(!list[r.athlete_clean]) list[r.athlete_clean] = { name: r.athlete_clean, age: r.age_clean, points: 0, meets: 0 };
                     if(r.type === 'scoring') list[r.athlete_clean].points += r.points_scored;
                     list[r.athlete_clean].meets++;
@@ -657,7 +657,9 @@ const VetsLeagueInsights = ({ onClose }) => {
             let pts = 0; const aths = new Set();
             hacResults.forEach(r => {
                 if(r.type === 'scoring') pts += r.points_scored;
-                if(r.athlete_clean) aths.add(r.athlete_clean);
+                if(r.athlete_clean && r.athlete_clean !== 'Hillingdon' && r.athlete_clean !== 'Hillingdon Relay') {
+                    aths.add(r.athlete_clean);
+                }
             });
             document.getElementById('kpis-container').innerHTML = \`
                 <div class="kpi-card"><div><h4>Total Points</h4><div class="kpi-value">\${pts.toFixed(1)}</div></div></div>
