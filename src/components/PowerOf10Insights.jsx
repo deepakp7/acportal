@@ -5,6 +5,8 @@ import { Activity, ArrowLeft, X } from 'lucide-react';
 const PowerOf10Insights = ({ onClose }) => {
     const [database, setDatabase] = useState(null);
     const [selectedAthlete, setSelectedAthlete] = useState(null);
+    const [genderFilter, setGenderFilter] = useState('All');
+    const [ageFilter, setAgeFilter] = useState('All');
 
     useEffect(() => {
         setDatabase(fallbackData);
@@ -15,6 +17,9 @@ const PowerOf10Insights = ({ onClose }) => {
         const po10Athletes = {};
         
         database.po10_results.forEach(r => {
+            if (genderFilter !== 'All' && r.gender !== genderFilter) return;
+            if (ageFilter !== 'All' && r.age_category !== ageFilter) return;
+            
             if (!po10Athletes[r.athlete_name]) {
                 po10Athletes[r.athlete_name] = {
                     name: r.athlete_name,
@@ -66,12 +71,37 @@ const PowerOf10Insights = ({ onClose }) => {
                 </div>
 
                 <div className="bg-slate-900/40 backdrop-blur-md border border-slate-800/80 rounded-2xl p-6 space-y-6">
-                    <div className="flex justify-between items-center border-b border-slate-800/80 pb-4">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-800/80 pb-4 gap-4">
                         <div className="flex items-center gap-2">
                             <Activity className="text-purple-400" />
-                            <h3 className="text-lg font-bold text-white">Power of 10 (All Athletes)</h3>
+                            <h3 className="text-lg font-bold text-white">Power of 10 Results</h3>
                         </div>
-                        <div className="text-sm font-bold bg-slate-800/50 px-3 py-1 rounded-lg text-slate-400">Total Athletes: {po10Standings.length}</div>
+                        <div className="flex flex-wrap items-center gap-3">
+                            <select 
+                                value={genderFilter} 
+                                onChange={(e) => setGenderFilter(e.target.value)}
+                                className="bg-slate-800 text-white rounded-lg px-3 py-1.5 text-sm border border-slate-700 outline-none focus:border-purple-500 transition-colors cursor-pointer"
+                            >
+                                <option value="All">All Genders</option>
+                                <option value="Men">Men</option>
+                                <option value="Women">Women</option>
+                            </select>
+                            
+                            <select 
+                                value={ageFilter} 
+                                onChange={(e) => setAgeFilter(e.target.value)}
+                                className="bg-slate-800 text-white rounded-lg px-3 py-1.5 text-sm border border-slate-700 outline-none focus:border-purple-500 transition-colors cursor-pointer"
+                            >
+                                <option value="All">All Ages</option>
+                                {[...new Set(database.po10_results.map(r => r.age_category))].sort().map(age => (
+                                    <option key={age} value={age}>{age}</option>
+                                ))}
+                            </select>
+
+                            <div className="text-sm font-bold bg-slate-800/80 px-3 py-1.5 rounded-lg text-slate-300">
+                                {po10Standings.length} Athletes
+                            </div>
+                        </div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {Object.entries(po10Standings.reduce((acc, a) => {
