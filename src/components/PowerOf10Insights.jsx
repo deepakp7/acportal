@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import fallbackData from '../assets/vets_league_2026.json';
-import { Activity, ArrowLeft } from 'lucide-react';
+import { Activity, ArrowLeft, X } from 'lucide-react';
 
 const PowerOf10Insights = ({ onClose }) => {
     const [database, setDatabase] = useState(null);
+    const [selectedAthlete, setSelectedAthlete] = useState(null);
 
     useEffect(() => {
         setDatabase(fallbackData);
@@ -20,11 +21,13 @@ const PowerOf10Insights = ({ onClose }) => {
                     gender: r.gender,
                     age: r.age_category,
                     performances: 0,
-                    best_events: new Set()
+                    best_events: new Set(),
+                    results: []
                 };
             }
             po10Athletes[r.athlete_name].performances += 1;
             po10Athletes[r.athlete_name].best_events.add(r.event);
+            po10Athletes[r.athlete_name].results.push(r);
         });
 
         return Object.values(po10Athletes).sort((a, b) => b.performances - a.performances);
@@ -83,9 +86,13 @@ const PowerOf10Insights = ({ onClose }) => {
                                 </div>
                                 <ul className="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
                                     {athletes.sort((a, b) => b.performances - a.performances).map((a, i) => (
-                                        <li key={i} className="flex flex-col text-sm border-b border-slate-800/50 pb-2 last:border-0 hover:bg-slate-900/30 p-2 rounded-lg transition-colors">
+                                        <li 
+                                            key={i} 
+                                            onClick={() => setSelectedAthlete(a)}
+                                            className="flex flex-col text-sm border-b border-slate-800/50 pb-2 last:border-0 hover:bg-slate-900/50 p-2 rounded-lg transition-colors cursor-pointer group"
+                                        >
                                             <div className="flex justify-between items-center">
-                                                <span className="text-slate-200 font-bold">{a.name}</span>
+                                                <span className="text-slate-200 font-bold group-hover:text-purple-400 transition-colors">{a.name}</span>
                                                 <span className="font-mono text-purple-400/80 text-xs text-right font-bold bg-purple-900/20 px-2 py-0.5 rounded">
                                                     {a.performances} perf{a.performances !== 1 ? 's' : ''}
                                                 </span>
@@ -101,6 +108,44 @@ const PowerOf10Insights = ({ onClose }) => {
                     </div>
                 </div>
             </div>
+
+            {selectedAthlete && (
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-4" onClick={() => setSelectedAthlete(null)}>
+                    <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col shadow-2xl" onClick={e => e.stopPropagation()}>
+                        <div className="p-6 border-b border-slate-800 flex justify-between items-center bg-slate-900/50">
+                            <div>
+                                <h2 className="text-2xl font-black text-white">{selectedAthlete.name}</h2>
+                                <p className="text-purple-400 font-bold tracking-wide mt-1">{selectedAthlete.age} • {selectedAthlete.gender}</p>
+                            </div>
+                            <button onClick={() => setSelectedAthlete(null)} className="p-2 hover:bg-slate-800 rounded-full text-slate-400 hover:text-white transition-colors">
+                                <X size={24} />
+                            </button>
+                        </div>
+                        <div className="p-6 overflow-y-auto custom-scrollbar">
+                            <table className="w-full text-left text-sm">
+                                <thead>
+                                    <tr className="text-slate-500 border-b border-slate-800">
+                                        <th className="pb-3 font-semibold uppercase tracking-wider text-xs">Event</th>
+                                        <th className="pb-3 font-semibold uppercase tracking-wider text-xs">Performance</th>
+                                        <th className="pb-3 font-semibold uppercase tracking-wider text-xs">Position</th>
+                                        <th className="pb-3 font-semibold uppercase tracking-wider text-xs">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-800/50">
+                                    {selectedAthlete.results.map((res, idx) => (
+                                        <tr key={idx} className="hover:bg-slate-800/20 transition-colors">
+                                            <td className="py-3 font-medium text-slate-300">{res.event}</td>
+                                            <td className="py-3 font-mono text-purple-400 font-bold">{res.performance}</td>
+                                            <td className="py-3 text-slate-400">{res.position === 0 ? '-' : res.position}</td>
+                                            <td className="py-3 text-slate-500">{res.date}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
