@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import MembershipPortal from './components/MembershipPortal';
 import MembershipForm from './components/MembershipForm';
 import VetsLeagueInsights from './components/VetsLeagueInsights';
+import PowerOf10Insights from './components/PowerOf10Insights';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     UserPlus,
@@ -12,7 +13,8 @@ import {
     Users,
     ChevronRight,
     Star,
-    Award
+    Award,
+    Activity
 } from 'lucide-react';
 
 const LandingPage = ({ onSelect }) => {
@@ -50,7 +52,7 @@ const LandingPage = ({ onSelect }) => {
                     A frictionless, paperless application process and an integrated athlete dashboard for the premier athletic club in North West London.
                 </p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-16">
                     <button
                         onClick={() => onSelect('register')}
                         className="group flex flex-col items-center p-6 bg-white/5 border border-white/10 rounded-3xl hover:bg-emerald-500 hover:border-emerald-400 transition-all duration-300 hover:scale-105 hover:shadow-[0_20px_40px_rgba(16,185,129,0.2)]"
@@ -97,6 +99,17 @@ const LandingPage = ({ onSelect }) => {
                         <h3 className="text-lg font-bold mb-2 group-hover:text-white">Vets League</h3>
                         <p className="text-xs text-slate-500 group-hover:text-indigo-50/70">Interactive scoring & stats dashboards.</p>
                         <ArrowRight className="mt-4 text-indigo-500 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all group-hover:text-white" />
+                    </button>
+                    <button
+                        onClick={() => onSelect('po10')}
+                        className="group flex flex-col items-center p-6 bg-white/5 border border-white/10 rounded-3xl hover:bg-rose-600 hover:border-rose-400 transition-all duration-300 hover:scale-105 hover:shadow-[0_20px_40px_rgba(225,29,72,0.2)]"
+                    >
+                        <div className="w-14 h-14 bg-rose-500/20 rounded-2xl flex items-center justify-center mb-6 text-rose-400 group-hover:bg-white/20 group-hover:text-white transition-colors">
+                            <Activity size={28} />
+                        </div>
+                        <h3 className="text-lg font-bold mb-2 group-hover:text-white">Power of 10</h3>
+                        <p className="text-xs text-slate-500 group-hover:text-rose-50/70">Club-wide Performance Analytics.</p>
+                        <ArrowRight className="mt-4 text-rose-500 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all group-hover:text-white" />
                     </button>
                 </div>
 
@@ -166,6 +179,10 @@ const App = () => {
 
             {view === 'vets' && (
                 <VetsLeagueInsights onClose={handleBackToLanding} />
+            )}
+
+            {view === 'po10' && (
+                <PowerOf10Insights onClose={handleBackToLanding} />
             )}
         </div>
     );

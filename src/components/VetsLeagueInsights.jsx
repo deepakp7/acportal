@@ -321,27 +321,6 @@ const VetsLeagueInsights = ({ onClose }) => {
         return Object.values(allAthletes).sort((a, b) => b.points - a.points);
     };
 
-    const getPo10Summary = () => {
-        if (!database || !database.po10_results) return [];
-        const po10Athletes = {};
-        
-        database.po10_results.forEach(r => {
-            if (!po10Athletes[r.athlete_name]) {
-                po10Athletes[r.athlete_name] = {
-                    name: r.athlete_name,
-                    gender: r.gender,
-                    age: r.age_category,
-                    performances: 0,
-                    best_events: new Set()
-                };
-            }
-            po10Athletes[r.athlete_name].performances += 1;
-            po10Athletes[r.athlete_name].best_events.add(r.event);
-        });
-
-        return Object.values(po10Athletes).sort((a, b) => b.performances - a.performances);
-    };
-
     const getKPIs = () => {
         if (!database) return { totalPoints: 0, avgPoints: 0, totalAthletes: 0, missedEvents: 0 };
         const hacResults = database.results.filter(r => r.club_clean === 'Hillingdon AC');
@@ -832,7 +811,6 @@ const VetsLeagueInsights = ({ onClose }) => {
     const kpi = getKPIs();
     const menStandings = getAthletesSummary('Men');
     const womenStandings = getAthletesSummary('Women');
-    const po10Standings = getPo10Summary();
 
     // All stars
     const menAllStars = menStandings.filter(a => a.meets.size === 4);
@@ -883,8 +861,7 @@ const VetsLeagueInsights = ({ onClose }) => {
                         { id: 'overview', label: 'Overview & Verify', icon: LayoutDashboard },
                         { id: 'men', label: "Men's League", icon: User },
                         { id: 'women', label: "Women's League", icon: UserCheck },
-                        { id: 'search', label: 'Combined Search', icon: Search },
-                        { id: 'analytics', label: 'Power of 10', icon: Activity }
+                        { id: 'search', label: 'Combined Search', icon: Search }
                     ].map(tab => {
                         const Icon = tab.icon;
                         return (
@@ -1374,40 +1351,6 @@ const VetsLeagueInsights = ({ onClose }) => {
                                     }
                                 </tbody>
                             </table>
-                        </div>
-                    </div>
-                )}
-                {activeTab === 'analytics' && (
-                    <div className="bg-slate-900/40 backdrop-blur-md border border-slate-800/80 rounded-2xl p-6 space-y-6">
-                        <div className="flex justify-between items-center">
-                            <h3 className="text-lg font-bold text-white">Power of 10 (All Athletes)</h3>
-                            <div className="text-sm text-slate-400">Total Athletes: {po10Standings.length}</div>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {Object.entries(po10Standings.reduce((acc, a) => {
-                                acc[a.age] = acc[a.age] || [];
-                                acc[a.age].push(a);
-                                return acc;
-                            }, {})).sort(([a], [b]) => a.localeCompare(b)).map(([ageGroup, athletes]) => (
-                                <div key={ageGroup} className="bg-slate-950/50 border border-purple-800/50 rounded-xl p-4">
-                                    <h4 className="text-md font-bold text-purple-400 mb-3">{ageGroup}</h4>
-                                    <ul className="space-y-2">
-                                        {athletes.sort((a, b) => b.performances - a.performances).map((a, i) => (
-                                            <li key={i} className="flex flex-col text-sm border-b border-slate-800/50 pb-2 last:border-0">
-                                                <div className="flex justify-between items-center">
-                                                    <span className="text-slate-300 font-medium">{a.name}</span>
-                                                    <span className="font-mono text-purple-400/80 text-xs text-right">
-                                                        {a.performances} perf{a.performances !== 1 ? 's' : ''}
-                                                    </span>
-                                                </div>
-                                                <div className="text-xs text-slate-500 mt-1 truncate">
-                                                    Events: {Array.from(a.best_events).slice(0, 3).join(', ')}{a.best_events.size > 3 ? '...' : ''}
-                                                </div>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            ))}
                         </div>
                     </div>
                 )}
