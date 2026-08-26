@@ -7,6 +7,8 @@ const PowerOf10Insights = ({ onClose }) => {
     const [selectedAthlete, setSelectedAthlete] = useState(null);
     const [genderFilter, setGenderFilter] = useState('All');
     const [ageFilter, setAgeFilter] = useState('All');
+    const [eventFilter, setEventFilter] = useState('All');
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         setDatabase(fallbackData);
@@ -19,6 +21,8 @@ const PowerOf10Insights = ({ onClose }) => {
         database.po10_results.forEach(r => {
             if (genderFilter !== 'All' && r.gender !== genderFilter) return;
             if (ageFilter !== 'All' && r.age_category !== ageFilter) return;
+            if (eventFilter !== 'All' && r.event !== eventFilter) return;
+            if (searchQuery && !r.athlete_name.toLowerCase().includes(searchQuery.toLowerCase())) return;
             
             if (!po10Athletes[r.athlete_name]) {
                 po10Athletes[r.athlete_name] = {
@@ -71,12 +75,20 @@ const PowerOf10Insights = ({ onClose }) => {
                 </div>
 
                 <div className="bg-slate-900/40 backdrop-blur-md border border-slate-800/80 rounded-2xl p-6 space-y-6">
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-800/80 pb-4 gap-4">
+                    <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center border-b border-slate-800/80 pb-4 gap-4">
                         <div className="flex items-center gap-2">
                             <Activity className="text-purple-400" />
-                            <h3 className="text-lg font-bold text-white">Power of 10 Results</h3>
+                            <h3 className="text-lg font-bold text-white whitespace-nowrap">Power of 10 Results</h3>
                         </div>
-                        <div className="flex flex-wrap items-center gap-3">
+                        <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+                            <input 
+                                type="text"
+                                placeholder="Search by name..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="bg-slate-800 text-white rounded-lg px-3 py-1.5 text-sm border border-slate-700 outline-none focus:border-purple-500 transition-colors flex-grow lg:flex-grow-0 lg:w-48 placeholder:text-slate-500"
+                            />
+                            
                             <select 
                                 value={genderFilter} 
                                 onChange={(e) => setGenderFilter(e.target.value)}
@@ -98,7 +110,18 @@ const PowerOf10Insights = ({ onClose }) => {
                                 ))}
                             </select>
 
-                            <div className="text-sm font-bold bg-slate-800/80 px-3 py-1.5 rounded-lg text-slate-300">
+                            <select 
+                                value={eventFilter} 
+                                onChange={(e) => setEventFilter(e.target.value)}
+                                className="bg-slate-800 text-white rounded-lg px-3 py-1.5 text-sm border border-slate-700 outline-none focus:border-purple-500 transition-colors cursor-pointer"
+                            >
+                                <option value="All">All Events</option>
+                                {[...new Set(database.po10_results.map(r => r.event))].sort().map(evt => (
+                                    <option key={evt} value={evt}>{evt}</option>
+                                ))}
+                            </select>
+
+                            <div className="text-sm font-bold bg-slate-800/80 px-3 py-1.5 rounded-lg text-slate-300 ml-auto lg:ml-0">
                                 {po10Standings.length} Athletes
                             </div>
                         </div>
