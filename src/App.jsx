@@ -111,7 +111,7 @@ const LandingPage = ({ onSelect }) => {
                             <Activity size={28} />
                         </div>
                         <h3 className="text-lg font-bold mb-2 group-hover:text-white">Power of 10</h3>
-                        <p className="text-xs text-slate-500 group-hover:text-rose-50/70">Club-wide Performance Analytics.</p>
+                        <p className="text-xs text-slate-500 group-hover:text-rose-50/70">Club Analytics & Junior PB Certificates.</p>
                         <ArrowRight className="mt-4 text-rose-500 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all group-hover:text-white" />
                     </button>
 
