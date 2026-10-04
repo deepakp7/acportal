@@ -19,7 +19,14 @@ import {
     Send,
     HelpCircle,
     UserPlus,
-    Flame
+    Flame,
+    Building2,
+    Plus,
+    Trash2,
+    Download,
+    FileSpreadsheet,
+    Calculator,
+    Layers
 } from 'lucide-react';
 
 const AGE_CATEGORIES = [
@@ -56,10 +63,22 @@ const AVAILABLE_EVENTS = [
     { id: 'weight', name: 'Masters Heavy Weight Throw', icon: '🏋️', note: 'Premier strength showcase for Masters V35+ athletes.', minAge: 35, maxAge: 99 }
 ];
 
-const HacLiGoThrows = ({ onClose, onJoinClub }) => {
-    const [activeTab, setActiveTab] = useState('entry'); // 'entry', 'philosophy', 'matrix', 'schedule'
+const calculateIndividualFee = (category, eventCount) => {
+    if (eventCount === 0) return 0;
+    if (category === 'u5' || category === 'u7') {
+        return 3;
+    }
+    const isJunior = category.startsWith('u');
+    if (isJunior) {
+        return 7 + (eventCount - 1) * 4;
+    }
+    return 9 + (eventCount - 1) * 5;
+};
 
-    // Form State
+const HacLiGoThrows = ({ onClose, onJoinClub }) => {
+    const [activeTab, setActiveTab] = useState('entry'); // 'entry', 'group_entry', 'philosophy', 'matrix', 'schedule'
+
+    // Individual Form State
     const [formData, setFormData] = useState({
         athleteName: '',
         dob: '',
@@ -90,20 +109,83 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
 
     const [submittedData, setSubmittedData] = useState(null);
 
+    // Group Entry State (For Visiting & Local Clubs)
+    const [clubInfo, setClubInfo] = useState({
+        clubName: 'Hillingdon AC',
+        coordinatorName: '',
+        coordinatorEmail: '',
+        coordinatorPhone: '',
+        paymentMethod: 'bacs' // 'bacs', 'card', 'desk'
+    });
+
+    const [groupRoster, setGroupRoster] = useState([
+        {
+            id: 1,
+            athleteName: 'Oliver Thompson',
+            category: 'u15b',
+            gender: 'Male',
+            eaUrn: 'URN-48912',
+            events: { shot: true, discus: true },
+            distances: { shot: '11.45', discus: '28.20' },
+            isBaseDistance: { shot: false, discus: false }
+        },
+        {
+            id: 2,
+            athleteName: 'Maya Sharma',
+            category: 'u5',
+            gender: 'Female',
+            eaUrn: 'Unaffiliated',
+            events: { cricket: true },
+            distances: { cricket: '' },
+            isBaseDistance: { cricket: true }
+        },
+        {
+            id: 3,
+            athleteName: 'David Miller',
+            category: 'v50m',
+            gender: 'Male',
+            eaUrn: 'URN-10294',
+            events: { shot: true, javelin: true },
+            distances: { shot: '12.80', javelin: '34.50' },
+            isBaseDistance: { shot: false, javelin: false }
+        }
+    ]);
+
+    const [groupSubmittedData, setGroupSubmittedData] = useState(null);
+
     const activeCatSpec = AGE_CATEGORIES.find(c => c.id === formData.category) || AGE_CATEGORIES[0];
     const isJunior = formData.category.startsWith('u');
 
-    // Calculate Fees
+    // Individual Fees Calculation
     const selectedEventKeys = Object.keys(formData.selectedEvents).filter(k => formData.selectedEvents[k]);
-    const eventCount = selectedEventKeys.length;
-    let totalFee = 0;
-    if (formData.category === 'u5' || formData.category === 'u7') {
-        totalFee = 3; // flat £3 for mini throwers
-    } else if (isJunior) {
-        totalFee = eventCount > 0 ? 7 + (eventCount - 1) * 4 : 0;
-    } else {
-        totalFee = eventCount > 0 ? 9 + (eventCount - 1) * 5 : 0;
-    }
+    const individualFee = calculateIndividualFee(formData.category, selectedEventKeys.length);
+
+    // Group Consolidated Calculation
+    const groupStats = groupRoster.reduce((acc, athlete) => {
+        const eventsChosen = Object.keys(athlete.events || {}).filter(k => athlete.events[k]);
+        const athleteFee = calculateIndividualFee(athlete.category, eventsChosen.length);
+        
+        let athleteDistancesCount = 0;
+        let baseDistanceCount = 0;
+
+        eventsChosen.forEach(evt => {
+            const dist = athlete.distances?.[evt];
+            const isBase = athlete.isBaseDistance?.[evt];
+            if (isBase || !dist) {
+                baseDistanceCount++;
+            } else {
+                athleteDistancesCount++;
+            }
+        });
+
+        return {
+            totalAthletes: acc.totalAthletes + 1,
+            totalEntries: acc.totalEntries + eventsChosen.length,
+            totalFee: acc.totalFee + athleteFee,
+            distanceSeededCount: acc.distanceSeededCount + athleteDistancesCount,
+            baseDistanceCount: acc.baseDistanceCount + baseDistanceCount
+        };
+    }, { totalAthletes: 0, totalEntries: 0, totalFee: 0, distanceSeededCount: 0, baseDistanceCount: 0 });
 
     const toggleEvent = (eventId) => {
         setFormData(prev => {
@@ -131,7 +213,6 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
     const handleCategoryChange = (catId) => {
         let updatedEvents = { ...formData.selectedEvents };
 
-        // Auto check cricket ball for U5/U7
         if (catId === 'u5' || catId === 'u7') {
             updatedEvents = { cricket: true };
         } else if (updatedEvents.cricket) {
@@ -152,10 +233,115 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
         setSubmittedData({
             ...formData,
             refNumber,
-            totalFee,
+            totalFee: individualFee,
             categoryLabel: activeCatSpec.label,
             selectedEventList: selectedEventKeys
         });
+    };
+
+    // Group Entry Management
+    const addRosterAthlete = () => {
+        const newId = Date.now();
+        setGroupRoster(prev => [
+            ...prev,
+            {
+                id: newId,
+                athleteName: '',
+                category: 'u15b',
+                gender: 'Male',
+                eaUrn: '',
+                events: { shot: true },
+                distances: { shot: '' },
+                isBaseDistance: { shot: true }
+            }
+        ]);
+    };
+
+    const removeRosterAthlete = (id) => {
+        setGroupRoster(prev => prev.filter(a => a.id !== id));
+    };
+
+    const updateRosterAthlete = (id, field, value) => {
+        setGroupRoster(prev => prev.map(a => {
+            if (a.id !== id) return a;
+            return { ...a, [field]: value };
+        }));
+    };
+
+    const toggleRosterEvent = (athleteId, eventId) => {
+        setGroupRoster(prev => prev.map(a => {
+            if (a.id !== athleteId) return a;
+            const currentVal = !!a.events?.[eventId];
+            const updatedEvents = { ...a.events, [eventId]: !currentVal };
+            const updatedDistances = { ...a.distances };
+            const updatedBase = { ...a.isBaseDistance };
+
+            if (currentVal) {
+                delete updatedDistances[eventId];
+                delete updatedBase[eventId];
+            } else {
+                updatedDistances[eventId] = '';
+                updatedBase[eventId] = true;
+            }
+
+            return {
+                ...a,
+                events: updatedEvents,
+                distances: updatedDistances,
+                isBaseDistance: updatedBase
+            };
+        }));
+    };
+
+    const updateRosterDistance = (athleteId, eventId, distanceValue) => {
+        setGroupRoster(prev => prev.map(a => {
+            if (a.id !== athleteId) return a;
+            return {
+                ...a,
+                distances: { ...a.distances, [eventId]: distanceValue },
+                isBaseDistance: { ...a.isBaseDistance, [eventId]: !distanceValue }
+            };
+        }));
+    };
+
+    const toggleRosterBaseDistance = (athleteId, eventId, isBase) => {
+        setGroupRoster(prev => prev.map(a => {
+            if (a.id !== athleteId) return a;
+            return {
+                ...a,
+                isBaseDistance: { ...a.isBaseDistance, [eventId]: isBase }
+            };
+        }));
+    };
+
+    const handleGroupSubmit = (e) => {
+        e.preventDefault();
+        const clubRef = `LIGO-CLUB-${clubInfo.clubName.replace(/\s+/g, '').slice(0, 4).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+        setGroupSubmittedData({
+            ...clubInfo,
+            clubRef,
+            stats: groupStats,
+            roster: groupRoster
+        });
+    };
+
+    const exportGroupCSV = () => {
+        let csv = 'Athlete Name,Category,Gender,EA URN,Event,Seed Distance (m),Need Base Distance,Athlete Event Fee\n';
+        groupRoster.forEach(a => {
+            const evts = Object.keys(a.events || {}).filter(k => a.events[k]);
+            const fee = calculateIndividualFee(a.category, evts.length);
+            evts.forEach(evt => {
+                const dist = a.distances?.[evt] || 'N/A';
+                const isBase = a.isBaseDistance?.[evt] ? 'Yes' : 'No';
+                csv += `"${a.athleteName}","${a.category}","${a.gender}","${a.eaUrn || 'Unaffiliated'}","${evt}","${dist}","${isBase}","£${fee}"\n`;
+            });
+        });
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${clubInfo.clubName || 'Club'}_HAC_LiGo_Entries.csv`;
+        link.click();
     };
 
     return (
@@ -229,7 +415,7 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                     </p>
 
                     {/* Quick Stat Highlights */}
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-4xl mx-auto mb-6">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-4xl mx-auto mb-8">
                         <div className="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
                             <Calendar className="text-amber-400 mx-auto mb-1" size={20} />
                             <div className="text-sm font-black text-white">Thursday 17 June</div>
@@ -246,21 +432,36 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                             <div className="text-xs text-slate-400">Mini LiGo Certificates</div>
                         </div>
                         <div className="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
-                            <Users className="text-blue-400 mx-auto mb-1" size={20} />
-                            <div className="text-sm font-black text-white">Unaffiliated Ready</div>
-                            <div className="text-xs text-slate-400">HAC Membership Induction</div>
+                            <Building2 className="text-indigo-400 mx-auto mb-1" size={20} />
+                            <div className="text-sm font-black text-white">Club Group Entries</div>
+                            <div className="text-xs text-slate-400">Consolidated Billing & Seeding</div>
                         </div>
                     </div>
 
                     {/* Navigation Tabs */}
-                    <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 bg-white/5 border border-white/10 rounded-2xl max-w-xl mx-auto">
+                    <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 bg-white/5 border border-white/10 rounded-2xl max-w-2xl mx-auto">
                         <button
                             onClick={() => setActiveTab('entry')}
                             className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 cursor-pointer ${
                                 activeTab === 'entry' ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20' : 'text-slate-400 hover:text-white'
                             }`}
                         >
-                            <Send size={15} /> Entry Form
+                            <Send size={15} /> Individual Entry
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('group_entry')}
+                            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 cursor-pointer ${
+                                activeTab === 'group_entry' ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20' : 'text-slate-400 hover:text-white'
+                            }`}
+                        >
+                            <Building2 size={15} /> Club Group Entry
+                            {groupRoster.length > 0 && (
+                                <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-black ${
+                                    activeTab === 'group_entry' ? 'bg-black text-amber-400' : 'bg-amber-500/20 text-amber-300'
+                                }`}>
+                                    {groupRoster.length}
+                                </span>
+                            )}
                         </button>
                         <button
                             onClick={() => setActiveTab('philosophy')}
@@ -291,9 +492,9 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
             </section>
 
             {/* Main Content Area */}
-            <main className="max-w-5xl mx-auto px-6 py-10">
+            <main className="max-w-6xl mx-auto px-6 py-10">
                 <AnimatePresence mode="wait">
-                    {/* TAB 1: ENTRY FORM */}
+                    {/* TAB 1: INDIVIDUAL ENTRY FORM */}
                     {activeTab === 'entry' && (
                         <motion.div
                             key="entry"
@@ -605,7 +806,7 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                                             </div>
                                             <div className="text-right">
                                                 <span className="text-xs text-slate-400 uppercase tracking-widest font-semibold block">Entry Fee</span>
-                                                <span className="text-xl font-black text-amber-400">£{totalFee}.00</span>
+                                                <span className="text-xl font-black text-amber-400">£{individualFee}.00</span>
                                             </div>
                                         </div>
 
@@ -617,7 +818,7 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                                                 const isAllowedForCat = implementWeight && implementWeight !== '—';
 
                                                 if (!isAllowedForCat && evt.id !== 'cricket') {
-                                                    return null; // hide events not applicable to this category
+                                                    return null;
                                                 }
 
                                                 return (
@@ -801,16 +1002,16 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                                                 Total Due at Check-in
                                             </span>
                                             <span className="text-2xl font-black text-amber-400">
-                                                £{totalFee}.00
+                                                £{individualFee}.00
                                             </span>
                                             <span className="text-xs text-slate-400 ml-2">
-                                                ({eventCount} event{eventCount === 1 ? '' : 's'} selected)
+                                                ({selectedEventKeys.length} event{selectedEventKeys.length === 1 ? '' : 's'} selected)
                                             </span>
                                         </div>
 
                                         <button
                                             type="submit"
-                                            disabled={eventCount === 0}
+                                            disabled={selectedEventKeys.length === 0}
                                             className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black rounded-2xl shadow-lg shadow-amber-500/25 transition-all duration-200 transform hover:scale-[1.02] flex items-center justify-center gap-2 text-base disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
                                         >
                                             <Send size={18} /> Confirm Entry for HAC LiGo 2027
@@ -821,7 +1022,432 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                         </motion.div>
                     )}
 
-                    {/* TAB 2: PHILOSOPHY & WRITE-UP */}
+                    {/* TAB 2: CLUB GROUP ENTRY FORM (NEW!) */}
+                    {activeTab === 'group_entry' && (
+                        <motion.div
+                            key="group_entry"
+                            initial={{ opacity: 0, y: 15 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -15 }}
+                            transition={{ duration: 0.2 }}
+                            className="space-y-8"
+                        >
+                            {groupSubmittedData ? (
+                                <div className="bg-slate-900 border border-amber-500/30 rounded-3xl p-8 max-w-3xl mx-auto shadow-2xl relative">
+                                    <div className="w-16 h-16 bg-amber-500/20 rounded-full flex items-center justify-center text-amber-400 mx-auto mb-4 border border-amber-500/40">
+                                        <Building2 size={32} />
+                                    </div>
+                                    <span className="px-3 py-1 bg-amber-500/10 text-amber-400 text-xs font-bold uppercase rounded-full border border-amber-500/20 block w-fit mx-auto mb-2">
+                                        Club Roster Registered
+                                    </span>
+                                    <h3 className="text-2xl font-black text-white text-center mb-1">
+                                        {groupSubmittedData.clubName} Team Entries Confirmed!
+                                    </h3>
+                                    <p className="text-slate-400 text-sm text-center mb-6">
+                                        Club Booking ID: <strong className="text-amber-400 font-mono">{groupSubmittedData.clubRef}</strong>
+                                    </p>
+
+                                    {/* Consolidated Financial Summary Card */}
+                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-950/80 p-4 rounded-2xl border border-white/5 mb-6 text-center">
+                                        <div>
+                                            <span className="text-[10px] text-slate-400 uppercase font-semibold">Total Athletes</span>
+                                            <div className="text-lg font-black text-white">{groupSubmittedData.stats.totalAthletes}</div>
+                                        </div>
+                                        <div>
+                                            <span className="text-[10px] text-slate-400 uppercase font-semibold">Total Event Entries</span>
+                                            <div className="text-lg font-black text-white">{groupSubmittedData.stats.totalEntries}</div>
+                                        </div>
+                                        <div>
+                                            <span className="text-[10px] text-slate-400 uppercase font-semibold">Distance Seeded</span>
+                                            <div className="text-lg font-black text-blue-400">{groupSubmittedData.stats.distanceSeededCount}</div>
+                                        </div>
+                                        <div>
+                                            <span className="text-[10px] text-slate-400 uppercase font-semibold">Consolidated Fee</span>
+                                            <div className="text-lg font-black text-emerald-400">£{groupSubmittedData.stats.totalFee}.00</div>
+                                        </div>
+                                    </div>
+
+                                    {/* Athletes Table Preview */}
+                                    <div className="overflow-x-auto max-h-72 divide-y divide-white/5 bg-slate-950/50 rounded-2xl border border-white/5 text-xs mb-6">
+                                        <table className="w-full text-left">
+                                            <thead className="bg-white/5 text-slate-400 uppercase text-[10px] sticky top-0">
+                                                <tr>
+                                                    <th className="p-3">Athlete</th>
+                                                    <th className="p-3">Category</th>
+                                                    <th className="p-3">Events & Distances</th>
+                                                    <th className="p-3 text-right">Fee</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-white/5">
+                                                {groupSubmittedData.roster.map(a => {
+                                                    const evts = Object.keys(a.events || {}).filter(k => a.events[k]);
+                                                    const fee = calculateIndividualFee(a.category, evts.length);
+                                                    return (
+                                                        <tr key={a.id} className="hover:bg-white/5">
+                                                            <td className="p-3 font-bold text-white">{a.athleteName || 'Unnamed'}</td>
+                                                            <td className="p-3 text-amber-300 font-mono">{a.category.toUpperCase()}</td>
+                                                            <td className="p-3 text-slate-300">
+                                                                {evts.map(e => `${e.toUpperCase()} (${a.isBaseDistance?.[e] ? 'Base' : `${a.distances?.[e]}m`})`).join(', ')}
+                                                            </td>
+                                                            <td className="p-3 text-right font-black text-emerald-400">£{fee}.00</td>
+                                                        </tr>
+                                                    );
+                                                })}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                                        <button
+                                            onClick={exportGroupCSV}
+                                            className="w-full sm:w-auto px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-blue-500/20"
+                                        >
+                                            <Download size={14} /> Download Club Roster CSV
+                                        </button>
+                                        <button
+                                            onClick={() => setGroupSubmittedData(null)}
+                                            className="w-full sm:w-auto px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl text-xs cursor-pointer"
+                                        >
+                                            Modify / Add More Entries
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <form onSubmit={handleGroupSubmit} className="space-y-8">
+                                    {/* Club Information Card */}
+                                    <div className="bg-slate-900/90 border border-white/10 rounded-3xl p-6 sm:p-8 backdrop-blur-xl shadow-xl">
+                                        <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/10">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-sm">
+                                                    <Building2 size={16} />
+                                                </div>
+                                                <div>
+                                                    <h3 className="text-lg font-bold text-white">Club Coordinator Details</h3>
+                                                    <p className="text-xs text-slate-400">Team manager or coach submitting multi-athlete entries.</p>
+                                                </div>
+                                            </div>
+                                            <span className="hidden sm:inline-block px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
+                                                Consolidated Club Billing
+                                            </span>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                                            <div>
+                                                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+                                                    Club Name *
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    value={clubInfo.clubName}
+                                                    onChange={e => setClubInfo({ ...clubInfo, clubName: e.target.value })}
+                                                    placeholder="e.g. Harrow AC"
+                                                    className="w-full px-4 py-2 bg-slate-950/80 border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-amber-400"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+                                                    Team Coordinator Name *
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    value={clubInfo.coordinatorName}
+                                                    onChange={e => setClubInfo({ ...clubInfo, coordinatorName: e.target.value })}
+                                                    placeholder="e.g. Coach Steve"
+                                                    className="w-full px-4 py-2 bg-slate-950/80 border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-amber-400"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+                                                    Coordinator Email *
+                                                </label>
+                                                <input
+                                                    type="email"
+                                                    required
+                                                    value={clubInfo.coordinatorEmail}
+                                                    onChange={e => setClubInfo({ ...clubInfo, coordinatorEmail: e.target.value })}
+                                                    placeholder="coordinator@club.co.uk"
+                                                    className="w-full px-4 py-2 bg-slate-950/80 border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-amber-400"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+                                                    Payment Method *
+                                                </label>
+                                                <select
+                                                    value={clubInfo.paymentMethod}
+                                                    onChange={e => setClubInfo({ ...clubInfo, paymentMethod: e.target.value })}
+                                                    className="w-full px-4 py-2 bg-slate-950/80 border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-amber-400"
+                                                >
+                                                    <option value="bacs" className="bg-slate-900">Club BACS Invoice</option>
+                                                    <option value="card" className="bg-slate-900">Card on Arrival</option>
+                                                    <option value="online" className="bg-slate-900">Online Card / Stripe</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Consolidated Sticky KPI Bar */}
+                                    <div className="bg-gradient-to-r from-amber-500/20 via-orange-500/15 to-indigo-500/15 border border-amber-500/30 rounded-3xl p-5 backdrop-blur-xl shadow-xl flex flex-wrap items-center justify-between gap-4">
+                                        <div className="flex flex-wrap items-center gap-6">
+                                            <div className="flex items-center gap-2">
+                                                <Users size={18} className="text-amber-400" />
+                                                <span className="text-xs text-slate-300 font-semibold">
+                                                    Athletes: <strong className="text-white text-sm">{groupStats.totalAthletes}</strong>
+                                                </span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <Target size={18} className="text-blue-400" />
+                                                <span className="text-xs text-slate-300 font-semibold">
+                                                    Total Events: <strong className="text-white text-sm">{groupStats.totalEntries}</strong>
+                                                </span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <Activity size={18} className="text-emerald-400" />
+                                                <span className="text-xs text-slate-300 font-semibold">
+                                                    Distance Seeded: <strong className="text-white text-sm">{groupStats.distanceSeededCount}</strong>
+                                                </span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <Sparkles size={18} className="text-yellow-400" />
+                                                <span className="text-xs text-slate-300 font-semibold">
+                                                    Base Benchmarks: <strong className="text-white text-sm">{groupStats.baseDistanceCount}</strong>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-4">
+                                            <div className="text-right">
+                                                <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold block">
+                                                    Club Consolidated Total
+                                                </span>
+                                                <span className="text-2xl font-black text-emerald-400">
+                                                    £{groupStats.totalFee}.00
+                                                </span>
+                                            </div>
+
+                                            <button
+                                                type="button"
+                                                onClick={addRosterAthlete}
+                                                className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-md shadow-amber-500/20 cursor-pointer"
+                                            >
+                                                <Plus size={15} /> Add Athlete
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Athletes Roster List */}
+                                    <div className="space-y-4">
+                                        <div className="flex items-center justify-between px-2">
+                                            <h4 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                                                <Layers size={16} className="text-amber-400" />
+                                                Club Athletes Roster & Event Distance Seeding ({groupRoster.length})
+                                            </h4>
+                                            <button
+                                                type="button"
+                                                onClick={exportGroupCSV}
+                                                className="text-xs text-slate-400 hover:text-white flex items-center gap-1 cursor-pointer transition-colors"
+                                            >
+                                                <FileSpreadsheet size={14} className="text-emerald-400" /> Export CSV Draft
+                                            </button>
+                                        </div>
+
+                                        {groupRoster.map((athlete, idx) => {
+                                            const athleteEvents = Object.keys(athlete.events || {}).filter(k => athlete.events[k]);
+                                            const athleteFee = calculateIndividualFee(athlete.category, athleteEvents.length);
+                                            const catSpec = AGE_CATEGORIES.find(c => c.id === athlete.category) || AGE_CATEGORIES[0];
+                                            const isMini = athlete.category === 'u5' || athlete.category === 'u7';
+
+                                            return (
+                                                <div
+                                                    key={athlete.id}
+                                                    className="bg-slate-900/90 border border-white/10 rounded-3xl p-5 sm:p-6 backdrop-blur-xl transition-all hover:border-white/20 shadow-md"
+                                                >
+                                                    {/* Header: Athlete Name, Category & Actions */}
+                                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+                                                        <div className="flex items-center gap-3">
+                                                            <span className="w-6 h-6 rounded-full bg-white/10 text-amber-400 text-xs font-black flex items-center justify-center">
+                                                                {idx + 1}
+                                                            </span>
+                                                            <div className="flex-1 min-w-[200px]">
+                                                                <input
+                                                                    type="text"
+                                                                    required
+                                                                    placeholder="Athlete Full Name *"
+                                                                    value={athlete.athleteName}
+                                                                    onChange={e => updateRosterAthlete(athlete.id, 'athleteName', e.target.value)}
+                                                                    className="w-full bg-slate-950/60 border border-white/10 rounded-xl px-3 py-1.5 text-sm text-white font-bold focus:outline-none focus:border-amber-400"
+                                                                />
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="flex flex-wrap items-center gap-2 text-xs">
+                                                            <select
+                                                                value={athlete.category}
+                                                                onChange={e => updateRosterAthlete(athlete.id, 'category', e.target.value)}
+                                                                className="bg-slate-950/80 border border-white/10 rounded-xl px-3 py-1.5 text-white font-medium focus:outline-none focus:border-amber-400"
+                                                            >
+                                                                {AGE_CATEGORIES.map(cat => (
+                                                                    <option key={cat.id} value={cat.id} className="bg-slate-900">
+                                                                        {cat.label}
+                                                                    </option>
+                                                                ))}
+                                                            </select>
+
+                                                            <select
+                                                                value={athlete.gender}
+                                                                onChange={e => updateRosterAthlete(athlete.id, 'gender', e.target.value)}
+                                                                className="bg-slate-950/80 border border-white/10 rounded-xl px-2.5 py-1.5 text-white font-medium focus:outline-none focus:border-amber-400"
+                                                            >
+                                                                <option value="Male" className="bg-slate-900">M</option>
+                                                                <option value="Female" className="bg-slate-900">F</option>
+                                                            </select>
+
+                                                            <input
+                                                                type="text"
+                                                                placeholder="EA URN (optional)"
+                                                                value={athlete.eaUrn}
+                                                                onChange={e => updateRosterAthlete(athlete.id, 'eaUrn', e.target.value)}
+                                                                className="w-28 bg-slate-950/80 border border-white/10 rounded-xl px-2.5 py-1.5 text-white font-mono focus:outline-none focus:border-amber-400"
+                                                            />
+
+                                                            <div className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold rounded-xl">
+                                                                £{athleteFee}.00
+                                                            </div>
+
+                                                            {groupRoster.length > 1 && (
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => removeRosterAthlete(athlete.id)}
+                                                                    className="p-1.5 text-slate-500 hover:text-red-400 transition-colors cursor-pointer rounded-lg hover:bg-white/5"
+                                                                    title="Remove athlete"
+                                                                >
+                                                                    <Trash2 size={16} />
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Event Toggles & Distance Benchmarks */}
+                                                    <div className="pt-4">
+                                                        <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2 flex items-center justify-between">
+                                                            <span>Select Events & Enter Distance for Seeding:</span>
+                                                            <span className="text-amber-400 font-normal">
+                                                                Implement: {catSpec.label}
+                                                            </span>
+                                                        </div>
+
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                                                            {AVAILABLE_EVENTS.map(evt => {
+                                                                const specKey = evt.id === 'javelin' ? 'jav' : evt.id;
+                                                                const implementWeight = catSpec.spec[specKey];
+                                                                const isAllowed = implementWeight && implementWeight !== '—';
+
+                                                                if (!isAllowed && evt.id !== 'cricket') return null;
+                                                                if (isMini && evt.id !== 'cricket') return null;
+
+                                                                const isChecked = !!athlete.events?.[evt.id];
+                                                                const distanceVal = athlete.distances?.[evt.id] || '';
+                                                                const isBase = athlete.isBaseDistance?.[evt.id] ?? false;
+
+                                                                return (
+                                                                    <div
+                                                                        key={evt.id}
+                                                                        className={`p-3 rounded-2xl border transition-all text-xs ${
+                                                                            isChecked
+                                                                                ? 'bg-amber-500/10 border-amber-500/30'
+                                                                                : 'bg-slate-950/40 border-white/5 opacity-70'
+                                                                        }`}
+                                                                    >
+                                                                        <label className="flex items-center justify-between cursor-pointer mb-2">
+                                                                            <div className="flex items-center gap-2">
+                                                                                <input
+                                                                                    type="checkbox"
+                                                                                    checked={isChecked}
+                                                                                    onChange={() => toggleRosterEvent(athlete.id, evt.id)}
+                                                                                    className="rounded border-amber-400 text-amber-500"
+                                                                                />
+                                                                                <span className="font-bold text-white flex items-center gap-1">
+                                                                                    {evt.icon} {evt.name.split(' ')[0]}
+                                                                                </span>
+                                                                            </div>
+                                                                            {implementWeight && (
+                                                                                <span className="text-[10px] text-amber-300 font-mono">
+                                                                                    {implementWeight}
+                                                                                </span>
+                                                                            )}
+                                                                        </label>
+
+                                                                        {isChecked && (
+                                                                            <div className="pt-2 border-t border-white/5 flex items-center justify-between gap-2">
+                                                                                <input
+                                                                                    type="text"
+                                                                                    placeholder="Distance (m)"
+                                                                                    value={distanceVal}
+                                                                                    onChange={e => updateRosterDistance(athlete.id, evt.id, e.target.value)}
+                                                                                    className="w-20 px-2 py-1 bg-slate-900 border border-white/10 rounded-lg text-white font-mono text-xs focus:outline-none focus:border-amber-400"
+                                                                                />
+                                                                                <label className="flex items-center gap-1.5 text-[10px] text-slate-400 cursor-pointer">
+                                                                                    <input
+                                                                                        type="checkbox"
+                                                                                        checked={isBase}
+                                                                                        onChange={e => toggleRosterBaseDistance(athlete.id, evt.id, e.target.checked)}
+                                                                                        className="rounded border-white/20 text-amber-500"
+                                                                                    />
+                                                                                    <span>Base mark</span>
+                                                                                </label>
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+
+                                    {/* Consolidated Bottom Submit Bar */}
+                                    <div className="p-6 bg-slate-900 border border-amber-500/30 rounded-3xl shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
+                                        <div className="text-left">
+                                            <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold block">
+                                                {clubInfo.clubName || 'Club'} Consolidated Invoice
+                                            </span>
+                                            <div className="flex items-baseline gap-2">
+                                                <span className="text-3xl font-black text-emerald-400">
+                                                    £{groupStats.totalFee}.00
+                                                </span>
+                                                <span className="text-xs text-slate-400">
+                                                    for {groupStats.totalAthletes} athletes ({groupStats.totalEntries} event entries)
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-3 w-full sm:w-auto">
+                                            <button
+                                                type="button"
+                                                onClick={addRosterAthlete}
+                                                className="flex-1 sm:flex-none px-5 py-3.5 bg-white/10 hover:bg-white/20 text-white font-bold rounded-2xl text-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                                            >
+                                                <Plus size={16} /> Add Athlete
+                                            </button>
+                                            <button
+                                                type="submit"
+                                                disabled={groupRoster.length === 0}
+                                                className="flex-1 sm:flex-none px-8 py-3.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black rounded-2xl shadow-lg shadow-amber-500/25 transition-all text-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                                            >
+                                                <Send size={16} /> Submit Group Entries
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            )}
+                        </motion.div>
+                    )}
+
+                    {/* TAB 3: PHILOSOPHY & WRITE-UP */}
                     {activeTab === 'philosophy' && (
                         <motion.div
                             key="philosophy"
@@ -891,7 +1517,7 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                         </motion.div>
                     )}
 
-                    {/* TAB 3: IMPLEMENT WEIGHT MATRIX */}
+                    {/* TAB 4: IMPLEMENT WEIGHT MATRIX */}
                     {activeTab === 'matrix' && (
                         <motion.div
                             key="matrix"
@@ -944,7 +1570,7 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                         </motion.div>
                     )}
 
-                    {/* TAB 4: SCHEDULE & TIMETABLE */}
+                    {/* TAB 5: SCHEDULE & TIMETABLE */}
                     {activeTab === 'schedule' && (
                         <motion.div
                             key="schedule"
