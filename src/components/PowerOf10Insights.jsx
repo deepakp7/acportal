@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import fallbackData from '../assets/vets_league_2026.json';
 import juniorPBsData from '../assets/junior_pbs_2026.json';
-import { Activity, ArrowLeft, X, Award, Download, Search, Printer, Calendar, MapPin, Trophy, Sparkles, Filter, CheckCircle2 } from 'lucide-react';
+import { Activity, ArrowLeft, X, Award, Download, Search, Printer, Calendar, MapPin, Trophy, Sparkles, Filter, CheckCircle2, FileSpreadsheet, Star } from 'lucide-react';
 
 const PowerOf10Insights = ({ onClose }) => {
     const [database, setDatabase] = useState(null);
@@ -18,6 +18,7 @@ const PowerOf10Insights = ({ onClose }) => {
     // Presentation tab filters
     const [juniorCatFilter, setJuniorCatFilter] = useState('All');
     const [juniorGenderFilter, setJuniorGenderFilter] = useState('All');
+    const [juniorLevelFilter, setJuniorLevelFilter] = useState('All');
     const [juniorSearchQuery, setJuniorSearchQuery] = useState('');
 
     useEffect(() => {
@@ -57,6 +58,16 @@ const PowerOf10Insights = ({ onClose }) => {
         return juniorPBsData.athletes.filter(a => {
             if (juniorCatFilter !== 'All' && a.age_group !== juniorCatFilter) return false;
             if (juniorGenderFilter !== 'All' && a.gender !== juniorGenderFilter) return false;
+            if (juniorLevelFilter !== 'All') {
+                if (juniorLevelFilter === 'L9' && a.highest_level !== 9) return false;
+                if (juniorLevelFilter === 'L8' && a.highest_level !== 8) return false;
+                if (juniorLevelFilter === 'L7' && a.highest_level !== 7) return false;
+                if (juniorLevelFilter === 'L6' && a.highest_level !== 6) return false;
+                if (juniorLevelFilter === 'L5' && a.highest_level !== 5) return false;
+                if (juniorLevelFilter === 'L4' && a.highest_level !== 4) return false;
+                if (juniorLevelFilter === 'L1-3' && (a.highest_level < 1 || a.highest_level > 3)) return false;
+                if (juniorLevelFilter === 'Club PB' && a.highest_level !== 0) return false;
+            }
             if (juniorSearchQuery && !a.name.toLowerCase().includes(juniorSearchQuery.toLowerCase())) return false;
             return true;
         });
@@ -65,7 +76,7 @@ const PowerOf10Insights = ({ onClose }) => {
     const downloadJuniorCSV = () => {
         if (!juniorPBsData || !juniorPBsData.athletes) return;
         const rows = [
-            ['Athlete Name', 'Age Category', 'Gender', 'Event', 'PB / Best Performance', 'Date Achieved', 'Venue', 'Rank / Position']
+            ['Athlete Name', 'Age Category', 'Gender', 'Event', 'PB Performance', 'EA Award Level', 'Certificate Title', 'Standard Beaten', 'Next Target', 'Date Achieved', 'Venue', 'Rank / Position']
         ];
         juniorPBsData.athletes.forEach(a => {
             Object.values(a.events).forEach(ev => {
@@ -75,6 +86,10 @@ const PowerOf10Insights = ({ onClose }) => {
                     `"${a.gender}"`,
                     `"${ev.event}"`,
                     `"${ev.performance}"`,
+                    `"${ev.level_str || ('Level ' + ev.level)}"`,
+                    `"${ev.cert_title || 'EA PB Certificate'}"`,
+                    `"${ev.standard_achieved || '-'}"`,
+                    `"${ev.next_target || '-'}"`,
                     `"${ev.date}"`,
                     `"${ev.venue}"`,
                     `"${ev.position || '-'}"`
@@ -85,10 +100,46 @@ const PowerOf10Insights = ({ onClose }) => {
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement("a");
         link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "HAC_Junior_Presentation_PBs_2026.csv");
+        link.setAttribute("download", "HAC_Junior_EA_PB_Certificates_2026.csv");
         document.body.appendChild(link);
         link.click();
         link.remove();
+    };
+
+    const getLevelBadge = (level) => {
+        if (level === 9) {
+            return {
+                bg: "bg-amber-400 text-slate-950 font-black border border-amber-300 shadow-md",
+                text: "Level 9 🏆",
+                desc: "Highest National Grade Standard"
+            };
+        }
+        if (level >= 7) {
+            return {
+                bg: "bg-purple-500/20 text-purple-300 font-black border border-purple-400/40",
+                text: `Level ${level} ⭐`,
+                desc: "County / Regional Standard"
+            };
+        }
+        if (level >= 4) {
+            return {
+                bg: "bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-400/30",
+                text: `Level ${level}`,
+                desc: "Development Standard"
+            };
+        }
+        if (level >= 1) {
+            return {
+                bg: "bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-400/30",
+                text: `Level ${level}`,
+                desc: "Club Standard"
+            };
+        }
+        return {
+            bg: "bg-slate-800 text-slate-400 font-bold border border-slate-700",
+            text: "Club PB",
+            desc: "Personal Best Recognition"
+        };
     };
 
     if (!database) {
@@ -121,7 +172,7 @@ const PowerOf10Insights = ({ onClose }) => {
                                 <Sparkles size={12} /> 2026 Fresh Extract
                             </span>
                         </div>
-                        <p className="text-slate-400 font-medium mt-1">Official Hillingdon AC Rankings & Season Records</p>
+                        <p className="text-slate-400 font-medium mt-1">Official Hillingdon AC Rankings & Junior EA PB Certificates</p>
                     </div>
 
                     <div className="flex items-center gap-3">
@@ -174,50 +225,63 @@ const PowerOf10Insights = ({ onClose }) => {
                             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
                                 <div>
                                     <div className="flex items-center gap-2 text-amber-400 font-bold text-sm uppercase tracking-wider mb-1">
-                                        <Trophy size={18} /> England Athletics PB Certificate Awards
+                                        <Trophy size={18} /> England Athletics PB Award Standards (March 2026)
                                     </div>
                                     <h2 className="text-2xl font-black text-white">
                                         Junior Presentation Night 2026
                                     </h2>
-                                    <p className="text-slate-300 text-sm mt-1">
-                                        Tracking Personal Bests (PBs) across all competitive events during the 2026 Track & Field season (<strong className="text-amber-300">01.04.2026 – 30.09.2026</strong>) for <strong className="text-amber-300">U14, U16, U18, and U20</strong> athletes.
+                                    <p className="text-slate-300 text-sm mt-1 max-w-3xl">
+                                        Each athlete's PB achieved during <strong className="text-amber-300">01.04.2026 – 30.09.2026</strong> has been graded against official England Athletics criteria (<strong className="text-amber-300">Level 1 to Level 9</strong>). Download the complete multi-tab spreadsheet to see all individual and overall certificates.
                                     </p>
                                 </div>
                                 <div className="flex flex-wrap items-center gap-3">
+                                    <a
+                                        href="/HAC_Junior_EA_PB_Certificates_2026.xlsx"
+                                        download="HAC_Junior_EA_PB_Certificates_2026.xlsx"
+                                        className="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-xl flex items-center gap-2 font-black shadow-lg transition-all hover:scale-105"
+                                    >
+                                        <FileSpreadsheet size={18} /> Download Excel Sheet (.xlsx)
+                                    </a>
                                     <button
                                         onClick={downloadJuniorCSV}
                                         className="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl flex items-center gap-2 font-black shadow-lg transition-all hover:scale-105"
                                     >
-                                        <Download size={18} /> Download Certificates CSV
+                                        <Download size={18} /> Download CSV
                                     </button>
                                 </div>
                             </div>
 
-                            {/* Stat Counters */}
-                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-white/10">
-                                <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
-                                    <p className="text-xs font-semibold text-slate-400 uppercase">Qualifying Juniors</p>
-                                    <p className="text-2xl font-black text-white mt-1">{juniorPBsData?.total_athletes || 108}</p>
-                                    <p className="text-[11px] text-amber-400/80 mt-0.5">U14, U16, U18, U20</p>
+                            {/* Stat Counters & Level Breakdown */}
+                            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 mt-6 pt-6 border-t border-white/10">
+                                <div className="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
+                                    <p className="text-[11px] font-semibold text-slate-400 uppercase">Qualifying Juniors</p>
+                                    <p className="text-2xl font-black text-white mt-0.5">{juniorPBsData?.total_athletes || 108}</p>
+                                    <p className="text-[10px] text-amber-400/80 mt-0.5">U14, U16, U18, U20</p>
                                 </div>
-                                <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
-                                    <p className="text-xs font-semibold text-slate-400 uppercase">Total Event PBs</p>
-                                    <p className="text-2xl font-black text-amber-400 mt-1">{juniorPBsData?.total_pbs || 221}</p>
-                                    <p className="text-[11px] text-slate-400 mt-0.5">Track & Field achievements</p>
+                                <div className="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
+                                    <p className="text-[11px] font-semibold text-slate-400 uppercase">Total Event PBs</p>
+                                    <p className="text-2xl font-black text-amber-400 mt-0.5">{juniorPBsData?.total_pbs || 221}</p>
+                                    <p className="text-[10px] text-slate-400 mt-0.5">1.4.26 – 30.9.26</p>
                                 </div>
-                                <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
-                                    <p className="text-xs font-semibold text-slate-400 uppercase">Boys / Men</p>
-                                    <p className="text-2xl font-black text-blue-400 mt-1">
-                                        {juniorPBsData?.athletes?.filter(a => a.gender === 'Boys/Men').length || 51}
-                                    </p>
-                                    <p className="text-[11px] text-slate-400 mt-0.5">117 event PBs</p>
+                                <div className="bg-slate-900/60 p-3.5 rounded-xl border border-amber-500/40">
+                                    <p className="text-[11px] font-semibold text-amber-300 uppercase">Level 9 Awards</p>
+                                    <p className="text-2xl font-black text-amber-300 mt-0.5">18 PBs</p>
+                                    <p className="text-[10px] text-amber-400/70 mt-0.5">12 Athletes 🏆</p>
                                 </div>
-                                <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
-                                    <p className="text-xs font-semibold text-slate-400 uppercase">Girls / Women</p>
-                                    <p className="text-2xl font-black text-rose-400 mt-1">
-                                        {juniorPBsData?.athletes?.filter(a => a.gender === 'Girls/Women').length || 57}
-                                    </p>
-                                    <p className="text-[11px] text-slate-400 mt-0.5">104 event PBs</p>
+                                <div className="bg-slate-900/60 p-3.5 rounded-xl border border-purple-500/30">
+                                    <p className="text-[11px] font-semibold text-purple-300 uppercase">Level 7–8 Awards</p>
+                                    <p className="text-2xl font-black text-purple-300 mt-0.5">22 PBs</p>
+                                    <p className="text-[10px] text-purple-400/70 mt-0.5">16 Athletes ⭐</p>
+                                </div>
+                                <div className="bg-slate-900/60 p-3.5 rounded-xl border border-cyan-500/30">
+                                    <p className="text-[11px] font-semibold text-cyan-300 uppercase">Level 4–6 Awards</p>
+                                    <p className="text-2xl font-black text-cyan-300 mt-0.5">86 PBs</p>
+                                    <p className="text-[10px] text-cyan-400/70 mt-0.5">41 Athletes</p>
+                                </div>
+                                <div className="bg-slate-900/60 p-3.5 rounded-xl border border-emerald-500/30">
+                                    <p className="text-[11px] font-semibold text-emerald-300 uppercase">Level 1–3 Awards</p>
+                                    <p className="text-2xl font-black text-emerald-300 mt-0.5">63 PBs</p>
+                                    <p className="text-[10px] text-emerald-400/70 mt-0.5">30 Athletes</p>
                                 </div>
                             </div>
                         </div>
@@ -237,13 +301,32 @@ const PowerOf10Insights = ({ onClose }) => {
 
                             <div className="flex flex-wrap items-center gap-3">
                                 <div className="flex items-center gap-2">
+                                    <span className="text-xs font-semibold text-slate-400">Award Level:</span>
+                                    <select
+                                        value={juniorLevelFilter}
+                                        onChange={(e) => setJuniorLevelFilter(e.target.value)}
+                                        className="bg-slate-800 text-white rounded-xl px-3 py-2 text-sm border border-slate-700 outline-none focus:border-amber-400 transition-colors cursor-pointer"
+                                    >
+                                        <option value="All">All Levels</option>
+                                        <option value="L9">Level 9 (12 athletes)</option>
+                                        <option value="L8">Level 8 (6 athletes)</option>
+                                        <option value="L7">Level 7 (10 athletes)</option>
+                                        <option value="L6">Level 6 (13 athletes)</option>
+                                        <option value="L5">Level 5 (12 athletes)</option>
+                                        <option value="L4">Level 4 (16 athletes)</option>
+                                        <option value="L1-3">Level 1–3 (30 athletes)</option>
+                                        <option value="Club PB">Club PB (9 athletes)</option>
+                                    </select>
+                                </div>
+
+                                <div className="flex items-center gap-2">
                                     <span className="text-xs font-semibold text-slate-400">Category:</span>
                                     <select
                                         value={juniorCatFilter}
                                         onChange={(e) => setJuniorCatFilter(e.target.value)}
                                         className="bg-slate-800 text-white rounded-xl px-3 py-2 text-sm border border-slate-700 outline-none focus:border-amber-400 transition-colors"
                                     >
-                                        <option value="All">All Age Groups (U14-U20)</option>
+                                        <option value="All">All Ages (U14-U20)</option>
                                         <option value="U14">U14 (35 athletes)</option>
                                         <option value="U16">U16 (43 athletes)</option>
                                         <option value="U18">U18 (28 athletes)</option>
@@ -274,6 +357,7 @@ const PowerOf10Insights = ({ onClose }) => {
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                             {filteredJuniors.map((ath, idx) => {
                                 const eventList = Object.values(ath.events);
+                                const highestBadge = getLevelBadge(ath.highest_level);
                                 return (
                                     <div
                                         key={idx}
@@ -286,7 +370,7 @@ const PowerOf10Insights = ({ onClose }) => {
                                                         {ath.name}
                                                     </h3>
                                                     <div className="flex items-center gap-2 mt-1">
-                                                        <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                                                        <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 border border-slate-700">
                                                             {ath.age_group}
                                                         </span>
                                                         <span className="text-xs text-slate-400 font-medium">
@@ -294,45 +378,59 @@ const PowerOf10Insights = ({ onClose }) => {
                                                         </span>
                                                     </div>
                                                 </div>
-                                                <button
-                                                    onClick={() => setCertificateAthlete(ath)}
-                                                    className="p-2 bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-slate-300 rounded-xl transition-all"
-                                                    title="Preview Certificate"
-                                                >
-                                                    <Printer size={16} />
-                                                </button>
+
+                                                {/* Highest Certificate Badge */}
+                                                <div className="flex flex-col items-end">
+                                                    <span className={`text-xs px-2.5 py-1 rounded-lg ${highestBadge.bg}`}>
+                                                        {highestBadge.text}
+                                                    </span>
+                                                    <span className="text-[10px] text-slate-500 mt-0.5">Top Certificate</span>
+                                                </div>
                                             </div>
 
-                                            {/* PBs achieved */}
+                                            {/* PBs achieved and levels */}
                                             <div className="space-y-2 mt-4 pt-3 border-t border-slate-800/80">
                                                 <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 flex items-center justify-between">
                                                     <span>Event ({eventList.length})</span>
-                                                    <span>PB / Date Achieved</span>
+                                                    <span>PB & EA Award Level</span>
                                                 </div>
-                                                {eventList.map((ev, eIdx) => (
-                                                    <div
-                                                        key={eIdx}
-                                                        className="flex items-center justify-between text-xs py-1.5 px-2.5 rounded-lg bg-slate-950/40 border border-slate-800/60"
-                                                    >
-                                                        <span className="font-bold text-slate-200">{ev.event}</span>
-                                                        <div className="text-right">
-                                                            <span className="font-mono font-bold text-amber-400">{ev.performance}</span>
-                                                            <span className="text-[10px] text-slate-500 block">{ev.date} • {ev.venue}</span>
+                                                {eventList.map((ev, eIdx) => {
+                                                    const evBadge = getLevelBadge(ev.level);
+                                                    return (
+                                                        <div
+                                                            key={eIdx}
+                                                            className="flex items-center justify-between text-xs py-2 px-3 rounded-xl bg-slate-950/40 border border-slate-800/60"
+                                                        >
+                                                            <div>
+                                                                <span className="font-bold text-slate-200 block">{ev.event}</span>
+                                                                <span className="text-[10px] text-slate-500">{ev.date} • {ev.venue}</span>
+                                                            </div>
+                                                            <div className="text-right flex items-center gap-2">
+                                                                <div>
+                                                                    <span className="font-mono font-bold text-amber-400 block">{ev.performance}</span>
+                                                                    {ev.standard_achieved && ev.standard_achieved !== '-' && (
+                                                                        <span className="text-[9px] text-slate-500 block">Std: {ev.standard_achieved}</span>
+                                                                    )}
+                                                                </div>
+                                                                <span className={`text-[10px] px-2 py-0.5 rounded-md ${evBadge.bg}`}>
+                                                                    {ev.level_str || ('Level ' + ev.level)}
+                                                                </span>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                ))}
+                                                    );
+                                                })}
                                             </div>
                                         </div>
 
                                         <div className="mt-4 pt-3 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-500">
                                             <span className="flex items-center gap-1.5 text-emerald-400 font-medium">
-                                                <CheckCircle2 size={13} /> EA Certificate Ready
+                                                <CheckCircle2 size={13} /> {eventList.length} Certificate{eventList.length > 1 ? 's' : ''} to Award
                                             </span>
                                             <button
                                                 onClick={() => setCertificateAthlete(ath)}
-                                                className="text-amber-400 hover:underline font-bold"
+                                                className="text-amber-400 hover:underline font-bold flex items-center gap-1"
                                             >
-                                                View Certificate &rarr;
+                                                <Printer size={13} /> Preview Certificate
                                             </button>
                                         </div>
                                     </div>
@@ -342,7 +440,7 @@ const PowerOf10Insights = ({ onClose }) => {
                     </div>
                 )}
 
-                {/* TAB 2: FULL PO10 RANKINGS (EXISTING CLUB VIEW) */}
+                {/* TAB 2: FULL PO10 RANKINGS */}
                 {activeTab === 'rankings' && (
                     <div className="bg-slate-900/40 backdrop-blur-md border border-slate-800/80 rounded-2xl p-6 space-y-6">
                         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center border-b border-slate-800/80 pb-4 gap-4">
@@ -475,10 +573,10 @@ const PowerOf10Insights = ({ onClose }) => {
 
             {/* PRINTABLE EA PB CERTIFICATE MODAL */}
             {certificateAthlete && (
-                <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[300] flex items-center justify-center p-4" onClick={() => setCertificateAthlete(null)}>
-                    <div className="bg-slate-900 border border-amber-500/50 rounded-3xl w-full max-w-xl shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
-                        {/* Certificate Preview Card */}
-                        <div className="p-8 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 text-center relative border-8 border-double border-amber-500/30 m-4 rounded-2xl">
+                <div className="fixed inset-0 bg-black/85 backdrop-blur-md z-[300] flex items-center justify-center p-4 overflow-y-auto" onClick={() => setCertificateAthlete(null)}>
+                    <div className="bg-slate-900 border border-amber-500/50 rounded-3xl w-full max-w-xl shadow-2xl overflow-hidden my-8" onClick={e => e.stopPropagation()}>
+                        {/* Certificate Body */}
+                        <div className="p-8 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 text-center relative border-8 border-double border-amber-500/30 m-4 rounded-2xl shadow-inner">
                             <button
                                 onClick={() => setCertificateAthlete(null)}
                                 className="absolute top-3 right-3 p-1.5 text-slate-400 hover:text-white rounded-full bg-slate-800"
@@ -488,43 +586,63 @@ const PowerOf10Insights = ({ onClose }) => {
 
                             <div className="flex justify-center mb-3">
                                 <div className="w-16 h-16 rounded-full bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center text-amber-400 shadow-lg">
-                                    <Award size={36} />
+                                    <Trophy size={36} />
                                 </div>
                             </div>
 
                             <p className="text-amber-400 uppercase tracking-widest text-xs font-bold">Hillingdon Athletic Club</p>
-                            <h2 className="text-2xl font-black text-white mt-1">PERSONAL BEST CERTIFICATE</h2>
-                            <p className="text-slate-400 text-xs italic mt-0.5">England Athletics Junior Season 2026</p>
+                            <h2 className="text-2xl font-black text-white mt-1">ENGLAND ATHLETICS PB AWARDS</h2>
+                            <p className="text-slate-400 text-xs italic mt-0.5">Junior Presentation Night 2026</p>
 
                             <div className="my-6 py-4 border-y border-amber-500/20">
                                 <p className="text-slate-400 text-xs uppercase tracking-wider">This is proudly awarded to</p>
                                 <h3 className="text-3xl font-black text-amber-300 mt-1">{certificateAthlete.name}</h3>
                                 <p className="text-slate-300 font-bold text-sm mt-0.5">Category: {certificateAthlete.age_group} ({certificateAthlete.gender})</p>
+                                <div className="inline-block mt-2">
+                                    <span className={`text-xs px-3 py-1 rounded-full ${getLevelBadge(certificateAthlete.highest_level).bg}`}>
+                                        Highest Award: {getLevelBadge(certificateAthlete.highest_level).text}
+                                    </span>
+                                </div>
                             </div>
 
-                            <p className="text-slate-400 text-xs mb-3">In recognition of outstanding performance and personal bests achieved:</p>
+                            <p className="text-slate-400 text-xs mb-3 font-semibold">Certificates and Official Standards Achieved:</p>
 
-                            <div className="space-y-2 max-h-48 overflow-y-auto px-2">
-                                {Object.values(certificateAthlete.events).map((ev, i) => (
-                                    <div key={i} className="flex justify-between items-center text-xs py-2 px-4 rounded-xl bg-slate-900 border border-slate-800">
-                                        <span className="font-bold text-white text-sm">{ev.event}</span>
-                                        <div className="text-right">
-                                            <span className="font-mono text-amber-400 font-black text-base">{ev.performance}</span>
-                                            <span className="text-[10px] text-slate-500 block">{ev.date} • {ev.venue}</span>
+                            <div className="space-y-2.5 max-h-56 overflow-y-auto px-2 custom-scrollbar">
+                                {Object.values(certificateAthlete.events).map((ev, i) => {
+                                    const evBadge = getLevelBadge(ev.level);
+                                    return (
+                                        <div key={i} className="flex justify-between items-center text-xs py-2 px-4 rounded-xl bg-slate-900 border border-slate-800">
+                                            <div className="text-left">
+                                                <span className="font-bold text-white text-sm block">{ev.event}</span>
+                                                <span className="text-[10px] text-slate-500">{ev.date} • {ev.venue}</span>
+                                            </div>
+                                            <div className="text-right">
+                                                <div className="flex items-center gap-2 justify-end">
+                                                    <span className="font-mono text-amber-400 font-black text-base">{ev.performance}</span>
+                                                    <span className={`text-[10px] px-2 py-0.5 rounded-md ${evBadge.bg}`}>
+                                                        {ev.level_str || ('Level ' + ev.level)}
+                                                    </span>
+                                                </div>
+                                                {ev.standard_achieved && ev.standard_achieved !== '-' && (
+                                                    <span className="text-[10px] text-slate-400 block mt-0.5">
+                                                        Beat standard: {ev.standard_achieved}
+                                                    </span>
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
 
                             <div className="flex justify-between items-center mt-8 pt-4 border-t border-slate-800 text-[11px] text-slate-500">
                                 <span>Presented: Junior Presentation Night 2026</span>
-                                <span>England Athletics Club Record</span>
+                                <span>England Athletics Affiliated</span>
                             </div>
                         </div>
 
                         {/* Action Bar */}
                         <div className="bg-slate-950 p-4 border-t border-slate-800 flex justify-between items-center">
-                            <span className="text-xs text-slate-400">Ready to print or issue to athlete.</span>
+                            <span className="text-xs text-slate-400">Ready to print certificate.</span>
                             <div className="flex gap-2">
                                 <button
                                     onClick={() => window.print()}
