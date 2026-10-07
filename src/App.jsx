@@ -123,7 +123,7 @@ const LandingPage = ({ onSelect }) => {
                             <Flame size={28} />
                         </div>
                         <h3 className="text-lg font-bold mb-2 group-hover:text-white">HAC LiGo '27</h3>
-                        <p className="text-xs text-slate-500 group-hover:text-amber-50/70">Throws Open & Junior Base Distance Fest.</p>
+                        <p className="text-xs text-slate-500 group-hover:text-amber-50/70">Throws Open & Base Distance Fest (U13+).</p>
                         <ArrowRight className="mt-4 text-amber-500 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all group-hover:text-white" />
                     </button>
                 </div>

@@ -30,18 +30,14 @@ import {
 } from 'lucide-react';
 
 const AGE_CATEGORIES = [
-    { id: 'u5', label: 'Under 5 (Mini LiGo)', group: 'Junior', spec: { cricket: 'Soft Ball', shot: '—', discus: '—', jav: '—', hammer: '—' } },
-    { id: 'u7', label: 'Under 7 (Minis)', group: 'Junior', spec: { cricket: 'Standard Ball', shot: '—', discus: '—', jav: '—', hammer: '—' } },
-    { id: 'u9', label: 'Under 9', group: 'Junior', spec: { cricket: 'Standard Ball', shot: '2.00 kg', discus: '—', jav: 'TurboJav (300g)', hammer: '—' } },
-    { id: 'u11', label: 'Under 11', group: 'Junior', spec: { cricket: 'Standard Ball', shot: '2.72 kg', discus: '—', jav: 'TurboJav (300g)', hammer: '—' } },
-    { id: 'u13g', label: 'Under 13 Girls', group: 'Youth', spec: { shot: '2.72 kg', discus: '0.75 kg', jav: '400 g', hammer: '—' } },
-    { id: 'u13b', label: 'Under 13 Boys', group: 'Youth', spec: { shot: '3.00 kg', discus: '1.00 kg', jav: '400 g', hammer: '—' } },
-    { id: 'u15g', label: 'Under 15 Girls', group: 'Youth', spec: { shot: '3.00 kg', discus: '1.00 kg', jav: '500 g', hammer: '3.00 kg' } },
-    { id: 'u15b', label: 'Under 15 Boys', group: 'Youth', spec: { shot: '4.00 kg', discus: '1.25 kg', jav: '600 g', hammer: '4.00 kg' } },
-    { id: 'u17w', label: 'Under 17 Women', group: 'Junior', spec: { shot: '3.00 kg', discus: '1.00 kg', jav: '500 g', hammer: '3.00 kg' } },
-    { id: 'u17m', label: 'Under 17 Men', group: 'Junior', spec: { shot: '5.00 kg', discus: '1.50 kg', jav: '700 g', hammer: '5.00 kg' } },
-    { id: 'u20w', label: 'Under 20 Women', group: 'Junior', spec: { shot: '4.00 kg', discus: '1.00 kg', jav: '600 g', hammer: '4.00 kg' } },
-    { id: 'u20m', label: 'Under 20 Men', group: 'Junior', spec: { shot: '6.00 kg', discus: '1.75 kg', jav: '800 g', hammer: '6.00 kg' } },
+    { id: 'u13g', label: 'Under 13 Girls (Ages 11–12)', group: 'Junior', spec: { shot: '2.72 kg', discus: '0.75 kg', jav: '400 g', hammer: '—' } },
+    { id: 'u13b', label: 'Under 13 Boys (Ages 11–12)', group: 'Junior', spec: { shot: '3.00 kg', discus: '1.00 kg', jav: '400 g', hammer: '—' } },
+    { id: 'u15g', label: 'Under 15 Girls (Ages 13–14)', group: 'Youth', spec: { shot: '3.00 kg', discus: '1.00 kg', jav: '500 g', hammer: '3.00 kg' } },
+    { id: 'u15b', label: 'Under 15 Boys (Ages 13–14)', group: 'Youth', spec: { shot: '4.00 kg', discus: '1.25 kg', jav: '600 g', hammer: '4.00 kg' } },
+    { id: 'u17w', label: 'Under 17 Women (Ages 15–16)', group: 'Junior', spec: { shot: '3.00 kg', discus: '1.00 kg', jav: '500 g', hammer: '3.00 kg' } },
+    { id: 'u17m', label: 'Under 17 Men (Ages 15–16)', group: 'Junior', spec: { shot: '5.00 kg', discus: '1.50 kg', jav: '700 g', hammer: '5.00 kg' } },
+    { id: 'u20w', label: 'Under 20 Women (Ages 17–19)', group: 'Junior', spec: { shot: '4.00 kg', discus: '1.00 kg', jav: '600 g', hammer: '4.00 kg' } },
+    { id: 'u20m', label: 'Under 20 Men (Ages 17–19)', group: 'Junior', spec: { shot: '6.00 kg', discus: '1.75 kg', jav: '800 g', hammer: '6.00 kg' } },
     { id: 'senw', label: 'Senior Women (20–34)', group: 'Senior', spec: { shot: '4.00 kg', discus: '1.00 kg', jav: '600 g', hammer: '4.00 kg' } },
     { id: 'senm', label: 'Senior Men (20–34)', group: 'Senior', spec: { shot: '7.26 kg', discus: '2.00 kg', jav: '800 g', hammer: '7.26 kg' } },
     { id: 'v35w', label: 'Masters Women 35–49', group: 'Masters', spec: { shot: '4.00 kg', discus: '1.00 kg', jav: '600 g', hammer: '4.00 kg', weight: '9.08 kg' } },
@@ -55,19 +51,15 @@ const AGE_CATEGORIES = [
 ];
 
 const AVAILABLE_EVENTS = [
-    { id: 'cricket', name: 'Junior Cricket Ball Throw', icon: '🏏', note: 'Promotional event for U5, U7, U9, U11. Soft safe balls & certificates!', minAge: 3, maxAge: 11 },
-    { id: 'shot', name: 'Shot Put', icon: '⚪', note: 'Classic circle event measuring explosive kinetic chain release.', minAge: 9, maxAge: 99 },
+    { id: 'shot', name: 'Shot Put', icon: '⚪', note: 'Classic circle event measuring explosive kinetic chain release.', minAge: 11, maxAge: 99 },
     { id: 'discus', name: 'Discus Throw', icon: '🥏', note: 'Graceful rotational mechanics and aerodynamic release.', minAge: 11, maxAge: 99 },
-    { id: 'javelin', name: 'Javelin Throw / TurboJav', icon: '🗡️', note: 'Linear approach with maximum overhand whip. TurboJav for U9/U11.', minAge: 8, maxAge: 99 },
-    { id: 'hammer', name: 'Hammer Throw', icon: '⛓️', note: 'High centrifugal rotational power inside safety cage.', minAge: 13, maxAge: 99 },
+    { id: 'javelin', name: 'Javelin Throw', icon: '🗡️', note: 'Linear approach with maximum overhand whip.', minAge: 11, maxAge: 99 },
+    { id: 'hammer', name: 'Hammer Throw', icon: '⛓️', note: 'High centrifugal rotational power inside safety cage (U15+).', minAge: 13, maxAge: 99 },
     { id: 'weight', name: 'Masters Heavy Weight Throw', icon: '🏋️', note: 'Premier strength showcase for Masters V35+ athletes.', minAge: 35, maxAge: 99 }
 ];
 
 const calculateIndividualFee = (category, eventCount) => {
     if (eventCount === 0) return 0;
-    if (category === 'u5' || category === 'u7') {
-        return 3;
-    }
     const isJunior = category.startsWith('u');
     if (isJunior) {
         return 7 + (eventCount - 1) * 4;
@@ -132,12 +124,12 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
         {
             id: 2,
             athleteName: 'Maya Sharma',
-            category: 'u5',
+            category: 'u13g',
             gender: 'Female',
-            eaUrn: 'Unaffiliated',
-            events: { cricket: true },
-            distances: { cricket: '' },
-            isBaseDistance: { cricket: true }
+            eaUrn: 'URN-52918',
+            events: { shot: true, javelin: true },
+            distances: { shot: '8.40', javelin: '18.50' },
+            isBaseDistance: { shot: false, javelin: false }
         },
         {
             id: 3,
@@ -154,7 +146,7 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
     const [groupSubmittedData, setGroupSubmittedData] = useState(null);
 
     const activeCatSpec = AGE_CATEGORIES.find(c => c.id === formData.category) || AGE_CATEGORIES[0];
-    const isJunior = formData.category.startsWith('u');
+    const isUnder18 = formData.category.startsWith('u13') || formData.category.startsWith('u15') || formData.category.startsWith('u17');
 
     // Individual Fees Calculation
     const selectedEventKeys = Object.keys(formData.selectedEvents).filter(k => formData.selectedEvents[k]);
@@ -211,19 +203,9 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
     };
 
     const handleCategoryChange = (catId) => {
-        let updatedEvents = { ...formData.selectedEvents };
-
-        if (catId === 'u5' || catId === 'u7') {
-            updatedEvents = { cricket: true };
-        } else if (updatedEvents.cricket) {
-            delete updatedEvents.cricket;
-            updatedEvents.shot = true;
-        }
-
         setFormData(prev => ({
             ...prev,
-            category: catId,
-            selectedEvents: updatedEvents
+            category: catId
         }));
     };
 
@@ -369,7 +351,7 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                                         "Let It Go"
                                     </span>
                                 </div>
-                                <p className="text-xs text-slate-400">Midsummer Throws Open & Junior Base Distance Festival</p>
+                                <p className="text-xs text-slate-400">Midsummer Throws Open & Base Distance Festival (Under 12+ to Masters)</p>
                             </div>
                         </div>
                     </div>
@@ -411,7 +393,7 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                     </h2>
 
                     <p className="text-slate-300 text-base sm:text-lg max-w-3xl mx-auto mb-8 font-normal leading-relaxed">
-                        Inspired by the inclusivity of <span className="text-amber-400 font-semibold">Parkrun</span>, <strong>HAC LiGo</strong> is North West London's premier community & competitive throws meet. From Under-5 cricket ball beginners to veteran masters, every athlete sets their benchmark in a supportive, high-energy environment.
+                        Inspired by the inclusivity of <span className="text-amber-400 font-semibold">Parkrun</span>, <strong>HAC LiGo</strong> is North West London's premier community & competitive throws meet. From Under-13 youth competitors to veteran masters, every athlete sets their benchmark in a supportive, high-energy environment.
                     </p>
 
                     {/* Quick Stat Highlights */}
@@ -423,13 +405,13 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                         </div>
                         <div className="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
                             <Target className="text-emerald-400 mx-auto mb-1" size={20} />
-                            <div className="text-sm font-black text-white">6 Events Covered</div>
-                            <div className="text-xs text-slate-400">Cricket ball to Hammer</div>
+                            <div className="text-sm font-black text-white">5 Field Events</div>
+                            <div className="text-xs text-slate-400">Shot, Discus, Jav, Hammer, Weight</div>
                         </div>
                         <div className="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
                             <Sparkles className="text-orange-400 mx-auto mb-1" size={20} />
-                            <div className="text-sm font-black text-white">Under 5s Welcome</div>
-                            <div className="text-xs text-slate-400">Mini LiGo Certificates</div>
+                            <div className="text-sm font-black text-white">Under 12+ to Masters</div>
+                            <div className="text-xs text-slate-400">UKA U13 to V80+</div>
                         </div>
                         <div className="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
                             <Building2 className="text-indigo-400 mx-auto mb-1" size={20} />
@@ -576,7 +558,7 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                                             </div>
                                             <div>
                                                 <h3 className="text-lg font-bold text-white">Athlete Details</h3>
-                                                <p className="text-xs text-slate-400">Tell us who is stepping up to throw.</p>
+                                                <p className="text-xs text-slate-400">Events open for athletes Under 12+ (U13 to Masters).</p>
                                             </div>
                                         </div>
 
@@ -610,7 +592,7 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
 
                                             <div>
                                                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
-                                                    Age Category *
+                                                    Age Category (U13+) *
                                                 </label>
                                                 <select
                                                     value={formData.category}
@@ -667,19 +649,6 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                                                 />
                                             </div>
                                         </div>
-
-                                        {/* Under 5 & Under 7 Banner */}
-                                        {(formData.category === 'u5' || formData.category === 'u7') && (
-                                            <div className="mt-5 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3">
-                                                <Sparkles className="text-amber-400 shrink-0 mt-0.5" size={20} />
-                                                <div className="text-xs text-amber-200 leading-relaxed">
-                                                    <strong className="text-amber-300 block text-sm font-bold mb-0.5">
-                                                        Special Mini LiGo Experience!
-                                                    </strong>
-                                                    Under 5s and Under 7s take part in our fun <strong>Junior Cricket Ball Throw</strong> on the soft infield grass. Every child will have their throw officially measured and receive an official finisher ribbon and distance certificate!
-                                                </div>
-                                            </div>
-                                        )}
                                     </div>
 
                                     {/* Section 2: Club Affiliation & HAC Membership Welcome */}
@@ -817,7 +786,7 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                                                 const implementWeight = activeCatSpec.spec[specKey];
                                                 const isAllowedForCat = implementWeight && implementWeight !== '—';
 
-                                                if (!isAllowedForCat && evt.id !== 'cricket') {
+                                                if (!isAllowedForCat) {
                                                     return null;
                                                 }
 
@@ -925,8 +894,8 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                                         </div>
                                     </div>
 
-                                    {/* Section 4: Parental Consent & Safeguarding (For Juniors) */}
-                                    {isJunior && (
+                                    {/* Section 4: Parental Consent & Safeguarding (For Juniors < 18) */}
+                                    {isUnder18 && (
                                         <div className="bg-slate-900/90 border border-white/10 rounded-3xl p-6 sm:p-8 backdrop-blur-xl shadow-xl">
                                             <div className="flex items-center gap-3 mb-6 pb-4 border-b border-white/10">
                                                 <div className="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-sm">
@@ -945,7 +914,7 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        required={isJunior}
+                                                        required={isUnder18}
                                                         value={formData.guardianName}
                                                         onChange={e => setFormData({ ...formData, guardianName: e.target.value })}
                                                         placeholder="e.g. Priya Patel"
@@ -958,7 +927,7 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                                                     </label>
                                                     <input
                                                         type="tel"
-                                                        required={isJunior}
+                                                        required={isUnder18}
                                                         value={formData.guardianPhone}
                                                         onChange={e => setFormData({ ...formData, guardianPhone: e.target.value })}
                                                         placeholder="07987 654321"
@@ -971,7 +940,7 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                                                 <label className="flex items-start gap-2.5 cursor-pointer">
                                                     <input
                                                         type="checkbox"
-                                                        required={isJunior}
+                                                        required={isUnder18}
                                                         checked={formData.parentConsent}
                                                         onChange={e => setFormData({ ...formData, parentConsent: e.target.checked })}
                                                         className="mt-0.5 rounded border-purple-400 text-purple-500"
@@ -1022,7 +991,7 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                         </motion.div>
                     )}
 
-                    {/* TAB 2: CLUB GROUP ENTRY FORM (NEW!) */}
+                    {/* TAB 2: CLUB GROUP ENTRY FORM */}
                     {activeTab === 'group_entry' && (
                         <motion.div
                             key="group_entry"
@@ -1257,7 +1226,6 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                                             const athleteEvents = Object.keys(athlete.events || {}).filter(k => athlete.events[k]);
                                             const athleteFee = calculateIndividualFee(athlete.category, athleteEvents.length);
                                             const catSpec = AGE_CATEGORIES.find(c => c.id === athlete.category) || AGE_CATEGORIES[0];
-                                            const isMini = athlete.category === 'u5' || athlete.category === 'u7';
 
                                             return (
                                                 <div
@@ -1344,8 +1312,7 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                                                                 const implementWeight = catSpec.spec[specKey];
                                                                 const isAllowed = implementWeight && implementWeight !== '—';
 
-                                                                if (!isAllowed && evt.id !== 'cricket') return null;
-                                                                if (isMini && evt.id !== 'cricket') return null;
+                                                                if (!isAllowed) return null;
 
                                                                 const isChecked = !!athlete.events?.[evt.id];
                                                                 const distanceVal = athlete.distances?.[evt.id] || '';
@@ -1369,7 +1336,7 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                                                                                     className="rounded border-amber-400 text-amber-500"
                                                                                 />
                                                                                 <span className="font-bold text-white flex items-center gap-1">
-                                                                                    {evt.icon} {evt.name.split(' ')[0]}
+                                                                                    {evt.icon} {evt.name}
                                                                                 </span>
                                                                             </div>
                                                                             {implementWeight && (
@@ -1529,7 +1496,7 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                                 <div>
                                     <h3 className="text-xl font-black text-white">Official Implement Weight Specifications</h3>
-                                    <p className="text-xs text-slate-400">Compliant with UK Athletics (UKA) & World Masters Athletics rules.</p>
+                                    <p className="text-xs text-slate-400">Compliant with UK Athletics (UKA) & World Masters Athletics rules (Under 12+ / U13 to Masters).</p>
                                 </div>
                                 <span className="px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-bold rounded-xl border border-amber-500/30 w-fit">
                                     2027 Competition Weights
@@ -1545,22 +1512,21 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                                             <th className="py-3 px-4">Discus</th>
                                             <th className="py-3 px-4">Javelin</th>
                                             <th className="py-3 px-4">Hammer</th>
-                                            <th className="py-3 px-4">Special / Weight</th>
+                                            <th className="py-3 px-4">Masters Heavy Weight</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-white/5">
                                         {AGE_CATEGORIES.map(cat => (
                                             <tr key={cat.id} className="hover:bg-white/5 transition-colors">
-                                                <td className="py-3 px-4 font-bold text-white flex items-center gap-2">
+                                                <td className="py-3 px-4 font-bold text-white">
                                                     {cat.label}
-                                                    {cat.id === 'u5' && <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">Featured</span>}
                                                 </td>
                                                 <td className="py-3 px-4 text-slate-300 font-mono">{cat.spec.shot || '—'}</td>
                                                 <td className="py-3 px-4 text-slate-300 font-mono">{cat.spec.discus || '—'}</td>
                                                 <td className="py-3 px-4 text-slate-300 font-mono">{cat.spec.jav || '—'}</td>
                                                 <td className="py-3 px-4 text-slate-300 font-mono">{cat.spec.hammer || '—'}</td>
                                                 <td className="py-3 px-4 text-amber-400 font-semibold font-mono">
-                                                    {cat.spec.cricket || cat.spec.weight || '—'}
+                                                    {cat.spec.weight || '—'}
                                                 </td>
                                             </tr>
                                         ))}
@@ -1602,31 +1568,16 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                                         </div>
                                     </div>
 
-                                    <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-4">
-                                        <div className="w-16 text-center shrink-0">
-                                            <span className="text-xs font-bold text-amber-400 block">17:15</span>
-                                            <span className="text-[10px] text-amber-300 uppercase">Featured</span>
-                                        </div>
-                                        <div>
-                                            <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                                                Mini LiGo: Junior Cricket Ball Throw (U5 & U7) 🏏
-                                            </h4>
-                                            <p className="text-xs text-slate-300 mt-0.5">
-                                                Continuous fun attempts on the infield grass grid. Every junior receives a custom ribbon and their official distance certificate.
-                                            </p>
-                                        </div>
-                                    </div>
-
                                     <div className="p-4 rounded-2xl bg-white/5 border border-white/10 flex items-start gap-4">
                                         <div className="w-16 text-center shrink-0">
-                                            <span className="text-xs font-bold text-amber-400 block">17:45</span>
+                                            <span className="text-xs font-bold text-amber-400 block">17:30</span>
                                             <span className="text-[10px] text-slate-400 uppercase">Flight 1</span>
                                         </div>
                                         <div className="space-y-1">
                                             <h4 className="text-sm font-bold text-white">Flight 1: Youth & Masters Opening</h4>
                                             <ul className="text-xs text-slate-400 list-disc list-inside space-y-0.5">
-                                                <li><strong>Cage A:</strong> Hammer Throw (U15, U17, Masters Pool)</li>
                                                 <li><strong>Circle 1:</strong> Shot Put (U13 & U15 Juniors)</li>
+                                                <li><strong>Cage A:</strong> Hammer Throw (U15, U17, Masters Pool)</li>
                                                 <li><strong>Javelin Runway:</strong> Senior & Masters Javelin</li>
                                             </ul>
                                         </div>
@@ -1634,7 +1585,7 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
 
                                     <div className="p-4 rounded-2xl bg-white/5 border border-white/10 flex items-start gap-4">
                                         <div className="w-16 text-center shrink-0">
-                                            <span className="text-xs font-bold text-amber-400 block">19:15</span>
+                                            <span className="text-xs font-bold text-amber-400 block">19:00</span>
                                             <span className="text-[10px] text-slate-400 uppercase">Flight 2</span>
                                         </div>
                                         <div className="space-y-1">
@@ -1642,14 +1593,14 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
                                             <ul className="text-xs text-slate-400 list-disc list-inside space-y-0.5">
                                                 <li><strong>Cage A:</strong> Discus (Seeded pools based on estimated distance)</li>
                                                 <li><strong>Circle 1:</strong> Shot Put (Seniors & Masters)</li>
-                                                <li><strong>Javelin Runway:</strong> U9/U11 TurboJav & U13–U17 Javelin</li>
+                                                <li><strong>Javelin Runway:</strong> U13–U17 Junior Javelin</li>
                                             </ul>
                                         </div>
                                     </div>
 
                                     <div className="p-4 rounded-2xl bg-white/5 border border-white/10 flex items-start gap-4">
                                         <div className="w-16 text-center shrink-0">
-                                            <span className="text-xs font-bold text-amber-400 block">20:45</span>
+                                            <span className="text-xs font-bold text-amber-400 block">20:30</span>
                                             <span className="text-[10px] text-slate-400 uppercase">Twilight</span>
                                         </div>
                                         <div>
@@ -1660,7 +1611,7 @@ const HacLiGoThrows = ({ onClose, onJoinClub }) => {
 
                                     <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-start gap-4">
                                         <div className="w-16 text-center shrink-0">
-                                            <span className="text-xs font-bold text-emerald-400 block">21:20</span>
+                                            <span className="text-xs font-bold text-emerald-400 block">21:15</span>
                                             <span className="text-[10px] text-emerald-300 uppercase">Social</span>
                                         </div>
                                         <div>
