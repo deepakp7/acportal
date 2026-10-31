@@ -33,6 +33,8 @@ import {
 } from 'lucide-react';
 
 const SUGGESTED_QUERIES = [
+    { label: "New EA Age Groups (2026)", query: "What are the new England Athletics age groups and why did they change?", icon: BookOpen },
+    { label: "UKA Shot & Hurdle Rules", query: "What weight shot put does an under 14 boy throw under UKA rules?", icon: ShieldCheck },
     { label: "Track Weather (Uxbridge)", query: "What is the live weather and track condition at Hillingdon Athletics Stadium?", icon: CloudSun },
     { label: "Bradley Stone PB Awards", query: "What are Bradley Stone's junior PB awards and high jump score?", icon: Award },
     { label: "Zoe Dobbs Arlington Trial", query: "What are Zoe Dobbs' Arlington Drive time trial scores?", icon: Activity },
@@ -55,6 +57,7 @@ export default function HacyChatbot({ onClose, embedded = false }) {
 I'm your **Hillingdon Athletic Club Intelligent Assistant**, connected directly to our verified **RAG Knowledge Base**.
 
 I can answer questions regarding:
+- ⚖️ **EA Age Group Changes & UKA Rules** (New 2026 U14/U16/U18 age groups, school year DOB mapping, implement weights, hurdle specs, distance limits).
 - 🌤️ **Live Weather & Track Conditions** (Real-time Uxbridge station temperature, rain probability, wind, spike advice, cancellation policy).
 - 📋 **Club Membership & Renewals** (Junior & Senior processes, England Athletics URNs, GoCardless direct debit, fee tiers).
 - 🏃 **Athlete & Training Scores** (Arlington Drive 0.45m time trials, Junior EA PB awards, Southern Vets League results).

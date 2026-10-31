@@ -186,18 +186,22 @@ export class HacyRagEngine {
     rebuildIndex() {
         const docs = [];
 
-        // 1. Membership FAQs & Policy
+        // 1. Membership FAQs, Policy, and EA/UKA Rules & Regulations
         if (this.baseData.membership_faq) {
             this.baseData.membership_faq.forEach(faq => {
+                const isRules = faq.category === 'rules_and_regulations';
                 docs.push({
                     id: faq.id,
-                    type: 'membership',
+                    type: isRules ? 'rules_and_regulations' : 'membership',
                     title: faq.title,
                     content: faq.content,
                     keywords: faq.keywords || [],
                     tags: faq.tags || [],
                     tokens: tokenize(`${faq.title} ${faq.content} ${(faq.keywords || []).join(' ')}`),
-                    metadata: { source: 'Club Membership Policy & AGM 2026', category: 'Membership' }
+                    metadata: {
+                        source: isRules ? 'England Athletics & UK Athletics Rules for Competition 2026-2028' : 'Club Membership Policy & AGM 2026',
+                        category: isRules ? 'Rules & Regulations' : 'Membership'
+                    }
                 });
             });
         }
@@ -815,9 +819,12 @@ User inquiry: "${query}"`;
     /**
      * Synthesize clean, structured response using verified RAG documents
      */
-    synthesizeAnswer(query, docs, matchedEntities) {
+    synthesizeAnswer(query, docs, matchedEntities = []) {
         const primaryDoc = docs[0];
-        const athleteDoc = docs.find(d => d.athleteName);
+        // Only treat as athlete score inquiry if an athlete entity was specifically matched or primary doc is an athlete doc
+        const athleteDoc = (matchedEntities && matchedEntities.length > 0)
+            ? docs.find(d => matchedEntities.includes(d.athleteName))
+            : (primaryDoc?.athleteName ? primaryDoc : null);
 
         let answerMarkdown = "";
 
@@ -876,7 +883,13 @@ User inquiry: "${query}"`;
                 answerMarkdown += `\n`;
             }
         }
-        // Scenario 2: General Enquiries (Parking, Spikes, Kit, Nutrition, Records)
+        // Scenario 2: Rules & Regulations (EA Age Groups & UKA Competition Rules)
+        else if (primaryDoc.type === 'rules_and_regulations') {
+            answerMarkdown += `### ⚖️ ${primaryDoc.title}\n\n`;
+            answerMarkdown += `${primaryDoc.content}\n\n`;
+            answerMarkdown += `> **UKA & EA Compliance:** Verified against UK Athletics (UKA) Rules for Competition 2026–2028 & England Athletics Age Group Guidance. For team selection, competition entries, or rule clarifications, check with your HAC Team Manager or contact \`${this.baseData.contacts.general}\`.\n\n`;
+        }
+        // Scenario 3: General Enquiries (Parking, Spikes, Kit, Nutrition, Records)
         else if (primaryDoc.type === 'general_enquiry') {
             answerMarkdown += `### 🏟️ ${primaryDoc.title}\n\n`;
             answerMarkdown += `${primaryDoc.content}\n\n`;
