@@ -179,3 +179,35 @@ INSERT INTO training_sessions (day, session_type, time, venue, target_group) VAL
 ('Wed/Thu', 'Track', '18:30-20:00', 'Hillingdon Stadium', 'Adults'),
 ('Tue/Thu', 'Academy Training', '18:00-19:30', 'Hillingdon Stadium', 'Juniors')
 ON CONFLICT DO NOTHING;
+
+-- ==============================================================================
+-- HACY AI Assistant: Persistent Tables & Knowledge Base
+-- ==============================================================================
+CREATE TABLE IF NOT EXISTS hacy_knowledge_notes (
+    id TEXT PRIMARY KEY DEFAULT ('custom_' || floor(extract(epoch from now()) * 1000)::text),
+    title TEXT NOT NULL,
+    content TEXT NOT NULL,
+    category TEXT DEFAULT 'admin_note',
+    author TEXT DEFAULT 'Admin',
+    created_at TIMESTAMPTZ DEFAULT now(),
+    updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_hacy_notes_category ON hacy_knowledge_notes(category);
+CREATE INDEX IF NOT EXISTS idx_hacy_notes_created_at ON hacy_knowledge_notes(created_at DESC);
+
+CREATE TABLE IF NOT EXISTS hacy_query_logs (
+    id TEXT PRIMARY KEY,
+    query TEXT NOT NULL,
+    status TEXT DEFAULT 'unanswered',
+    confidence NUMERIC DEFAULT 0,
+    sources_count INTEGER DEFAULT 0,
+    admin_response TEXT,
+    resolved_by TEXT,
+    resolved_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_hacy_logs_status ON hacy_query_logs(status);
+CREATE INDEX IF NOT EXISTS idx_hacy_logs_created_at ON hacy_query_logs(created_at DESC);
+

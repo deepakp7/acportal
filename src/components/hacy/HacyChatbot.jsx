@@ -29,34 +29,27 @@ import {
     Users,
     CloudSun,
     MapPin,
-    Cpu
+    Cpu,
+    RotateCcw,
+    Trophy,
+    CheckSquare,
+    Zap,
+    Tag
 } from 'lucide-react';
 
-const SUGGESTED_QUERIES = [
-    { label: "New EA Age Groups (2026)", query: "What are the new England Athletics age groups and why did they change?", icon: BookOpen },
-    { label: "UKA Shot & Hurdle Rules", query: "What weight shot put does an under 14 boy throw under UKA rules?", icon: ShieldCheck },
-    { label: "Track Weather (Uxbridge)", query: "What is the live weather and track condition at Hillingdon Athletics Stadium?", icon: CloudSun },
-    { label: "Bradley Stone PB Awards", query: "What are Bradley Stone's junior PB awards and high jump score?", icon: Award },
-    { label: "Zoe Dobbs Arlington Trial", query: "What are Zoe Dobbs' Arlington Drive time trial scores?", icon: Activity },
-    { label: "Stadium Parking & Address", query: "Where is Hillingdon Athletics Stadium and what are the parking rules?", icon: MapPin },
-    { label: "Junior Membership Renewal", query: "How does the junior membership renewal process work?", icon: Users },
-    { label: "GoCardless Direct Debit", query: "How do track fees and GoCardless direct debit payments work?", icon: CreditCard },
-    { label: "Training Schedule", query: "When and where are the club training sessions held?", icon: Calendar },
-    { label: "Spikes & Footwear Rules", query: "What length spikes are allowed on the track?", icon: Sparkles }
-];
+const STORAGE_CHAT_MESSAGES = 'hacy_chat_active_messages';
 
-export default function HacyChatbot({ onClose, embedded = false }) {
-    const [messages, setMessages] = useState([
-        {
-            id: 'welcome',
-            sender: 'bot',
-            timestamp: new Date().toISOString(),
-            content: {
-                isFallback: false,
-                content: `### 👋 Hi, I'm **HACY**!
+const DEFAULT_WELCOME_MESSAGE = {
+    id: 'welcome',
+    sender: 'bot',
+    timestamp: new Date().toISOString(),
+    content: {
+        isFallback: false,
+        content: `### 👋 Hi, I'm **HACY**!
 I'm your **Hillingdon Athletic Club Intelligent Assistant**, connected directly to our verified **RAG Knowledge Base**.
 
 I can answer questions regarding:
+- 🏆 **Meet Management & Checklists** (Pre-meet, during-meet, post-meet checklists for YDL, Alder Valley, VETS League, dates, Stacey & Sons bibs, card reader results).
 - ⚖️ **EA Age Group Changes & UKA Rules** (New 2026 U14/U16/U18 age groups, school year DOB mapping, implement weights, hurdle specs, distance limits).
 - 🌤️ **Live Weather & Track Conditions** (Real-time Uxbridge station temperature, rain probability, wind, spike advice, cancellation policy).
 - 📋 **Club Membership & Renewals** (Junior & Senior processes, England Athletics URNs, GoCardless direct debit, fee tiers).
@@ -65,9 +58,37 @@ I can answer questions regarding:
 - ℹ️ **General Enquiries & Facilities** (Gatting Way parking, spike lengths, club kit, volunteering, nutrition, benchmarks).
 
 *If I don't have a verified record to answer your query, I will guide you on the exact next steps and connect you with the appropriate club secretary or coaching contact.*`
+    }
+};
+
+const SUGGESTED_QUERIES = [
+    { label: "Meet Prep Checklist", query: "What is on the checklist of items we need to do before the meet for YDL, Alder Valley, and VETS?", icon: CheckSquare },
+    { label: "Bibs & Stacey and Sons", query: "Who supplies our race bibs and how do we place an order?", icon: Tag },
+    { label: "Meet Dates & Michael Illing", query: "What days of the week are YDL and VETS held, and who confirms the dates?", icon: Trophy },
+    { label: "Card Reader Results Workflow", query: "How does the card reader record results during the meeting?", icon: Zap },
+    { label: "New EA Age Groups (2026)", query: "What are the new England Athletics age groups and why did they change?", icon: BookOpen },
+    { label: "UKA Shot & Hurdle Rules", query: "What weight shot put does an under 14 boy throw under UKA rules?", icon: ShieldCheck },
+    { label: "Track Weather (Uxbridge)", query: "What is the live weather and track condition at Hillingdon Athletics Stadium?", icon: CloudSun },
+    { label: "Bradley Stone PB Awards", query: "What are Bradley Stone's junior PB awards and high jump score?", icon: Award },
+    { label: "Zoe Dobbs Arlington Trial", query: "What are Zoe Dobbs' Arlington Drive time trial scores?", icon: Activity },
+    { label: "Stadium Parking & Address", query: "Where is Hillingdon Athletics Stadium and what are the parking rules?", icon: MapPin },
+    { label: "Junior Membership Renewal", query: "How does the junior membership renewal process work?", icon: Users },
+    { label: "GoCardless Direct Debit", query: "How do track fees and GoCardless direct debit payments work?", icon: CreditCard }
+];
+
+export default function HacyChatbot({ onClose, embedded = false }) {
+    const [messages, setMessages] = useState(() => {
+        try {
+            const saved = sessionStorage.getItem(STORAGE_CHAT_MESSAGES);
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (Array.isArray(parsed) && parsed.length > 0) return parsed;
             }
+        } catch (e) {
+            console.warn('Could not restore chat messages:', e);
         }
-    ]);
+        return [DEFAULT_WELCOME_MESSAGE];
+    });
 
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -79,6 +100,24 @@ I can answer questions regarding:
 
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
+
+    // Save active chat messages to sessionStorage so refresh doesn't wipe conversation
+    useEffect(() => {
+        try {
+            sessionStorage.setItem(STORAGE_CHAT_MESSAGES, JSON.stringify(messages));
+        } catch (e) {
+            console.warn('Could not persist chat messages:', e);
+        }
+    }, [messages]);
+
+    const handleResetChat = () => {
+        setMessages([DEFAULT_WELCOME_MESSAGE]);
+        try {
+            sessionStorage.removeItem(STORAGE_CHAT_MESSAGES);
+        } catch (e) {
+            console.warn('Could not clear chat messages:', e);
+        }
+    };
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -246,6 +285,15 @@ I can answer questions regarding:
                 </div>
 
                 <div className="flex items-center gap-2">
+                    {/* Reset / New Chat */}
+                    <button
+                        onClick={handleResetChat}
+                        className="p-2.5 rounded-xl border bg-slate-800 border-slate-700 text-slate-400 hover:text-white transition"
+                        title="Start New Chat Session"
+                    >
+                        <RotateCcw size={16} />
+                    </button>
+
                     {/* Text to speech toggle */}
                     <button
                         onClick={() => setTtsEnabled(!ttsEnabled)}

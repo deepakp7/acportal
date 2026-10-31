@@ -1,5 +1,6 @@
 import rawKbData from '../data/hacyKnowledgeData.json';
 import { hacyModelService } from './hacyModelService';
+import { supabase } from '../lib/supabase';
 
 // Local storage keys for persistent admin assist & custom knowledge
 const STORAGE_CUSTOM_NOTES = 'hacy_custom_knowledge_notes';
@@ -78,10 +79,15 @@ function isWeatherQuery(query) {
 export class HacyRagEngine {
     constructor() {
         this.baseData = rawKbData;
-        this.customNotes = this.loadCustomNotes();
-        this.queryLogs = this.loadQueryLogs();
+        // Synchronously load from local storage cache so RAG is immediately ready
+        this.customNotes = this.loadLocalCustomNotes();
+        this.queryLogs = this.loadLocalQueryLogs();
         this.documents = [];
+        this.isSupabaseConnected = false;
         this.rebuildIndex();
+
+        // Asynchronously synchronize with Supabase in the background
+        this.syncFromSupabase();
     }
 
     getGeminiApiKey() {
@@ -104,7 +110,7 @@ export class HacyRagEngine {
         }
     }
 
-    loadCustomNotes() {
+    loadLocalCustomNotes() {
         try {
             const saved = localStorage.getItem(STORAGE_CUSTOM_NOTES);
             return saved ? JSON.parse(saved) : [];
@@ -113,35 +119,15 @@ export class HacyRagEngine {
         }
     }
 
-    saveCustomNotes(notes) {
-        this.customNotes = notes;
+    saveLocalCustomNotes(notes) {
         try {
             localStorage.setItem(STORAGE_CUSTOM_NOTES, JSON.stringify(notes));
         } catch (e) {
-            console.error('Failed to save custom notes', e);
+            console.error('Failed to save local custom notes cache', e);
         }
-        this.rebuildIndex();
     }
 
-    addCustomNote(title, content, category = 'admin_note') {
-        const newNote = {
-            id: 'custom_' + Date.now(),
-            title,
-            content,
-            category,
-            createdAt: new Date().toISOString()
-        };
-        const updated = [newNote, ...this.customNotes];
-        this.saveCustomNotes(updated);
-        return newNote;
-    }
-
-    deleteCustomNote(id) {
-        const updated = this.customNotes.filter(n => n.id !== id);
-        this.saveCustomNotes(updated);
-    }
-
-    loadQueryLogs() {
+    loadLocalQueryLogs() {
         try {
             const saved = localStorage.getItem(STORAGE_QUERY_LOGS);
             return saved ? JSON.parse(saved) : [];
@@ -150,34 +136,245 @@ export class HacyRagEngine {
         }
     }
 
-    saveQueryLogs(logs) {
-        this.queryLogs = logs;
+    saveLocalQueryLogs(logs) {
         try {
             localStorage.setItem(STORAGE_QUERY_LOGS, JSON.stringify(logs.slice(0, 100)));
         } catch (e) {
-            console.error('Failed to save query logs', e);
+            console.error('Failed to save local query logs cache', e);
         }
     }
 
-    logQuery(entry) {
-        const logs = [entry, ...this.queryLogs.filter(l => l.id !== entry.id)].slice(0, 100);
-        this.saveQueryLogs(logs);
+    /**
+     * Background synchronization with Supabase
+     */
+    async syncFromSupabase() {
+        try {
+            await Promise.all([
+                this.loadCustomNotes(),
+                this.loadQueryLogs()
+            ]);
+            this.isSupabaseConnected = true;
+        } catch (err) {
+            console.warn('Supabase sync skipped/failed, using local storage cache:', err.message || err);
+            this.isSupabaseConnected = false;
+        }
     }
 
-    updateQueryResolution(id, assistResponse, resolvedBy = 'Admin') {
-        const updated = this.queryLogs.map(l => {
+    /**
+     * Load custom knowledge notes from Supabase with localStorage fallback
+     */
+    async loadCustomNotes() {
+        try {
+            const { data, error } = await supabase
+                .from('hacy_knowledge_notes')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+
+            if (data && Array.isArray(data)) {
+                const mapped = data.map(item => ({
+                    id: item.id,
+                    title: item.title,
+                    content: item.content,
+                    category: item.category || 'admin_note',
+                    author: item.author || 'Admin',
+                    createdAt: item.created_at || new Date().toISOString()
+                }));
+                this.customNotes = mapped;
+                this.saveLocalCustomNotes(mapped);
+                this.rebuildIndex();
+                this.isSupabaseConnected = true;
+                return mapped;
+            }
+        } catch (e) {
+            console.warn('Using local custom notes cache (Supabase offline or unreachable):', e.message || e);
+            this.isSupabaseConnected = false;
+        }
+        return this.customNotes;
+    }
+
+    /**
+     * Add custom note with Supabase persistence and optimistic local update
+     */
+    async addCustomNote(title, content, category = 'admin_note', author = 'Admin') {
+        const newNote = {
+            id: 'custom_' + Date.now(),
+            title,
+            content,
+            category,
+            author,
+            createdAt: new Date().toISOString()
+        };
+
+        // Optimistic local update
+        this.customNotes = [newNote, ...this.customNotes];
+        this.saveLocalCustomNotes(this.customNotes);
+        this.rebuildIndex();
+
+        // Persist to Supabase
+        try {
+            const { error } = await supabase
+                .from('hacy_knowledge_notes')
+                .upsert({
+                    id: newNote.id,
+                    title: newNote.title,
+                    content: newNote.content,
+                    category: newNote.category,
+                    author: newNote.author,
+                    created_at: newNote.createdAt
+                });
+            if (error) throw error;
+            this.isSupabaseConnected = true;
+        } catch (err) {
+            console.warn('Could not persist custom note to Supabase (saved to local cache):', err.message || err);
+            this.isSupabaseConnected = false;
+        }
+
+        return newNote;
+    }
+
+    /**
+     * Delete custom note with Supabase persistence and optimistic local update
+     */
+    async deleteCustomNote(id) {
+        // Optimistic local update
+        this.customNotes = this.customNotes.filter(n => n.id !== id);
+        this.saveLocalCustomNotes(this.customNotes);
+        this.rebuildIndex();
+
+        // Delete from Supabase
+        try {
+            const { error } = await supabase
+                .from('hacy_knowledge_notes')
+                .delete()
+                .eq('id', id);
+            if (error) throw error;
+            this.isSupabaseConnected = true;
+        } catch (err) {
+            console.warn('Could not delete note in Supabase (removed from local cache):', err.message || err);
+            this.isSupabaseConnected = false;
+        }
+    }
+
+    /**
+     * Load query audit logs from Supabase with localStorage fallback
+     */
+    async loadQueryLogs() {
+        try {
+            const { data, error } = await supabase
+                .from('hacy_query_logs')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .limit(100);
+
+            if (error) throw error;
+
+            if (data && Array.isArray(data)) {
+                const mapped = data.map(item => ({
+                    id: item.id,
+                    query: item.query,
+                    status: item.status,
+                    confidence: Number(item.confidence || 0),
+                    sourcesCount: item.sources_count || 0,
+                    adminResponse: item.admin_response,
+                    resolvedBy: item.resolved_by,
+                    resolvedAt: item.resolved_at,
+                    timestamp: item.created_at || new Date().toISOString()
+                }));
+                this.queryLogs = mapped;
+                this.saveLocalQueryLogs(mapped);
+                this.isSupabaseConnected = true;
+                return mapped;
+            }
+        } catch (e) {
+            console.warn('Using local query logs cache (Supabase offline or unreachable):', e.message || e);
+            this.isSupabaseConnected = false;
+        }
+        return this.queryLogs;
+    }
+
+    /**
+     * Log a query to Supabase & local storage
+     */
+    async logQuery(entry) {
+        const fullEntry = {
+            id: entry.id || ('q_' + Date.now()),
+            query: entry.query,
+            status: entry.status || 'unanswered',
+            confidence: entry.confidence || 0,
+            sourcesCount: entry.sourcesCount || 0,
+            adminResponse: entry.adminResponse || null,
+            resolvedBy: entry.resolvedBy || null,
+            resolvedAt: entry.resolvedAt || null,
+            timestamp: entry.timestamp || new Date().toISOString()
+        };
+
+        // Optimistic local update
+        this.queryLogs = [fullEntry, ...this.queryLogs.filter(l => l.id !== fullEntry.id)].slice(0, 100);
+        this.saveLocalQueryLogs(this.queryLogs);
+
+        // Persist to Supabase
+        try {
+            const { error } = await supabase
+                .from('hacy_query_logs')
+                .upsert({
+                    id: fullEntry.id,
+                    query: fullEntry.query,
+                    status: fullEntry.status,
+                    confidence: fullEntry.confidence,
+                    sources_count: fullEntry.sourcesCount,
+                    admin_response: fullEntry.adminResponse,
+                    resolved_by: fullEntry.resolvedBy,
+                    resolved_at: fullEntry.resolvedAt,
+                    created_at: fullEntry.timestamp
+                });
+            if (error) throw error;
+            this.isSupabaseConnected = true;
+        } catch (err) {
+            console.warn('Could not persist query log to Supabase (cached locally):', err.message || err);
+            this.isSupabaseConnected = false;
+        }
+    }
+
+    /**
+     * Update query resolution (Admin Assist)
+     */
+    async updateQueryResolution(id, assistResponse, resolvedBy = 'Admin') {
+        const resolvedAt = new Date().toISOString();
+
+        // Optimistic local update
+        this.queryLogs = this.queryLogs.map(l => {
             if (l.id === id) {
                 return {
                     ...l,
                     status: 'resolved_by_admin',
                     adminResponse: assistResponse,
                     resolvedBy,
-                    resolvedAt: new Date().toISOString()
+                    resolvedAt
                 };
             }
             return l;
         });
-        this.saveQueryLogs(updated);
+        this.saveLocalQueryLogs(this.queryLogs);
+
+        // Update in Supabase
+        try {
+            const { error } = await supabase
+                .from('hacy_query_logs')
+                .update({
+                    status: 'resolved_by_admin',
+                    admin_response: assistResponse,
+                    resolved_by: resolvedBy,
+                    resolved_at: resolvedAt
+                })
+                .eq('id', id);
+            if (error) throw error;
+            this.isSupabaseConnected = true;
+        } catch (err) {
+            console.warn('Could not update query log in Supabase (updated locally):', err.message || err);
+            this.isSupabaseConnected = false;
+        }
     }
 
     /**
@@ -448,20 +645,129 @@ export class HacyRagEngine {
             }
         });
 
-        // 13. Admin Custom Notes & Overrides
+        // 13. MEET MANAGEMENT & OPERATIONS (YDL, Alder Valley, VETS League)
+        docs.push({
+            id: 'meet_management_checklists_full',
+            type: 'meet_management',
+            title: 'Meet Manager: Pre-Meet, During-Meet & Post-Meet Checklists',
+            content: `Hillingdon AC Meet Manager Operations & Complete Checklists for YDL, Alder Valley, and VETS League:
+
+1. CHECKLIST BEFORE THE MEET:
+- Priority Task 1: Dates finalized for all 3 meets. Ask for a Sunday for YDL and Alder Valley, and for VETS it is a Monday anyway. Michael Illing to confirm.
+- Priority Task 2: Signup to the league (Annual registration/affiliation fee to pay every year).
+- Send formal notice letter to all visiting club managers 2 weeks before the event with timetables and parking instructions.
+- Book stadium (Hillingdon Athletics Stadium, Gatting Way).
+- Book Photo finish equipment and licensed timing operators.
+- Book first aid medical cover (St John Ambulance / qualified paramedics).
+- Book starters and starter assistants (UKA licensed Chief Starter & Marksman).
+- Book EDM (Electronic Distance Measurement) for field throws and jumps.
+- Book BIBS by placing an order with Stacey and Sons in advance.
+- Print event cards for track and field officials and keep 2 copies at the desk.
+- Publish order of events and timings timetable.
+- Fetch the record results sheet from the respective league websites:
+  * YDL Website: https://www.ukydl.org.uk
+  * Alder Valley League Website: https://bmhac.co.uk/alder-valley-league/
+  * VETS League (SCVAC) Website: http://www.scvac.org.uk
+- Get ink for clubhouse results printer.
+- Get paper and cardstock for printer.
+- Arrange food, hot beverages, and refreshments for volunteer officials.
+- Print official scoring and non-scoring sheets.
+- Confirm car parking situation: Paid parking applies at Gatting Way via PayByPhone/machines. Advise all clubs to avoid PCNs.
+- Visit venue to confirm equipment availability (hurdles, high jump mats, cages, blocks, steeplechase).
+- Prepare a bar code / QR code for live results trackside.
+
+2. CHECKLIST DURING THE MEETING:
+- Arrival for the meeting (early setup at least 90m before start).
+- Signing sheets for officials in reception (for UKA licensing and travel allowances).
+- Signing sheets for non-scoring officials at reception.
+- Bibs at reception (distribution of club envelopes from Stacey and Sons).
+- Welcome officials with technical briefing and radio assignment.
+- Food placed at the right location in clubhouse hospitality room.
+- RECORDING RESULTS VIA CARD READER (Essential Step): Card reader scans physical cards and automatically publishes results on an Excel sheet instead of manual typing.
+
+3. CHECKLIST AFTER THE MEETING:
+- Send PDF of results to all club managers within 24 hours.
+- Send results to Power of 10 (Athletics Data) for official national athlete ranking updates.`,
+            keywords: ['meet manager', 'checklist', 'before meet', 'during meeting', 'after meeting', 'ydl', 'alder valley', 'vets', 'stacey and sons', 'michael illing', 'card reader', 'power of 10', 'photo finish', 'first aid', 'starters', 'edm', 'bibs', 'bar code', 'qr code', 'parking', 'printer ink', 'paper', 'food for officials'],
+            tokens: tokenize('meet manager checklist before meet during meeting after ydl alder valley vets stacey and sons michael illing card reader excel power of 10 photo finish first aid starters edm bibs bar code qr parking ink paper food officials'),
+            metadata: {
+                source: 'HAC Meet Management Operations Manual',
+                category: 'Meet Management'
+            }
+        });
+
+        docs.push({
+            id: 'meet_management_contacts_and_dates',
+            type: 'meet_management',
+            title: 'Meet Manager: Key Contacts, League Dates & Scheduling',
+            content: `Meet Management Key Contacts & Schedule Rules for Hillingdon AC:
+
+1. MEET DATES & SCHEDULING RULE:
+- YDL (Youth Development League): Ask for a Sunday.
+- Alder Valley League: Ask for a Sunday.
+- VETS League (Southern Veterans): Always held on a Monday evening (18:30 start).
+- Confirmation: Michael Illing to confirm dates for all 3 meets.
+- League Affiliation: Annual league registration fee must be paid every year.
+
+2. KEY CONTACTS DIRECTORY:
+- Stadium Contact: Hillingdon Athletics Stadium, Gatting Way, Uxbridge UB8 1ES (Tel: 01895 250777). Paid parking applies!
+- Photo Finish: Precision Timing & Photo Finish UK (photofinish@precisiontiming.co.uk).
+- First Aid: St John Ambulance Event Medical Cover (Tel: 0303 003 0101).
+- Starters & Starter Assistants: UKA Level 3 Chief Starter & Marksman Panel.
+- EDM: Electronic Distance Measurement Specialist (EDM Throws & Jumps Unit).
+- BIBS Supplier: Stacey and Sons (orders@staceyandsons.co.uk, 01992 583123) - Official race numbers and bibs.
+- Officials: HAC Officials Secretary (officials@hillingdonac.co.uk).
+- Meeting Managers & Team Captains: Michael Illing (VETS Captain & Meet Coordinator), Sarah Speed (Juniors/YDL), plus Visiting Club Managers (BA, ESM, Herne Hill, TVH, Metros, etc.).
+
+3. OFFICIAL LEAGUE WEBSITES:
+- YDL (Youth Development League): https://www.ukydl.org.uk (Download official scoring sheets, timetable rules, and declarations)
+- Alder Valley League: https://bmhac.co.uk/alder-valley-league/ (Match rotas, declarations, age groups, and match results)
+- VETS League (Southern Counties Veterans AC): http://www.scvac.org.uk (Western Division fixtures, Monday timetable, and league standings)`,
+            keywords: ['key contacts', 'stacey and sons', 'michael illing', 'photo finish', 'first aid', 'starters', 'edm', 'stadium contact', 'bibs supplier', 'officials', 'sunday', 'monday', 'dates', 'ydl dates', 'vets dates', 'ukydl', 'ukydl.org.uk', 'bmhac', 'scvac', 'scvac.org.uk', 'websites', 'urls', 'league websites'],
+            tokens: tokenize('key contacts stacey and sons michael illing photo finish first aid starters edm stadium bibs officials sunday monday dates ydl vets alder valley ukydl bmhac scvac websites official portal'),
+            metadata: {
+                source: 'HAC Meet Management Contacts & Directory',
+                category: 'Meet Management'
+            }
+        });
+
+        docs.push({
+            id: 'meet_management_card_reader_and_po10',
+            type: 'meet_management',
+            title: 'Card Reader Results Workflow & Power of 10 Submission',
+            content: `Automated Results Recording & Submission Workflow:
+- Card Reader Technology: At the meet, we use a digital card reader that reads physical event cards and automatically publishes results directly into an Excel scoring spreadsheet instead of volunteers manually typing them in. This is marked as a critical step in the meet process.
+- Live Public Results Barcode: A trackside QR code / barcode is generated and posted around the stadium so athletes, coaches, and parents can scan with their smartphones to view live/provisional results in real time.
+- Power of 10 Submission: Immediately after the meet, verified results are exported in the official UKA / Athletics Data format and submitted directly to Power of 10 for national rankings, alongside emailing PDF results to all visiting club managers.
+- Long-Running Autonomous Agents: Dedicated background agents (YDL Prep Agent, Alder Valley Agent, VETS Agent) track task states (not_started, in_progress, completed, blocked), check deadlines, run automated audits, and monitor expected weather at Hillingdon Athletics Stadium.`,
+            keywords: ['card reader', 'automatic results', 'excel', 'typing results', 'barcode', 'qr code', 'power of 10', 'po10', 'results pdf', 'long running agents', 'weather'],
+            tokens: tokenize('card reader automatic results excel typing barcode qr power of 10 po10 submission long running agents weather uxbridge'),
+            metadata: {
+                source: 'Digital Meet Scoring & Power of 10 Architecture',
+                category: 'Meet Management'
+            }
+        });
+
+        // 14. Admin Custom Notes & Overrides (Overrides base knowledge if matching ID exists)
         this.customNotes.forEach(note => {
-            docs.push({
+            const docObj = {
                 id: note.id,
                 type: 'custom_note',
                 title: note.title,
                 content: note.content,
                 tokens: tokenize(`${note.title} ${note.content} ${note.category}`),
                 metadata: {
-                    source: 'HACY Admin Assist Verified Note',
-                    category: 'Admin Update',
+                    source: note.category === 'UKA Rules & Regulations' ? 'UKA Rules for Competition 2026-2028' : 'HACY Admin Assist Verified Note',
+                    category: note.category || 'Admin Update',
                     raw: note
                 }
-            });
+            };
+            const existingIndex = docs.findIndex(d => d.id === note.id);
+            if (existingIndex >= 0) {
+                docs[existingIndex] = docObj;
+            } else {
+                docs.push(docObj);
+            }
         });
 
         this.documents = docs;
@@ -888,6 +1194,12 @@ User inquiry: "${query}"`;
             answerMarkdown += `### ⚖️ ${primaryDoc.title}\n\n`;
             answerMarkdown += `${primaryDoc.content}\n\n`;
             answerMarkdown += `> **UKA & EA Compliance:** Verified against UK Athletics (UKA) Rules for Competition 2026–2028 & England Athletics Age Group Guidance. For team selection, competition entries, or rule clarifications, check with your HAC Team Manager or contact \`${this.baseData.contacts.general}\`.\n\n`;
+        }
+        // Scenario 2b: Meet Management & Meeting Operations
+        else if (primaryDoc.type === 'meet_management') {
+            answerMarkdown += `### 🏆 ${primaryDoc.title}\n\n`;
+            answerMarkdown += `${primaryDoc.content}\n\n`;
+            answerMarkdown += `> **Meet Operations Tip:** Open the **Meet Manager** tile on the dashboard to view interactive checklists, live weather forecasts for Uxbridge, autonomous agent task audits, and the automatic card reader results ingest stream!\n\n`;
         }
         // Scenario 3: General Enquiries (Parking, Spikes, Kit, Nutrition, Records)
         else if (primaryDoc.type === 'general_enquiry') {

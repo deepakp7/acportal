@@ -14,7 +14,7 @@
         "how much",
         "rates"
       ],
-      "content": "Hillingdon AC Membership Fee Structure (Agreed at AGM):\n- Senior Individual (18+): \u00a382.00 per year\n- Junior Individual (Under 18): \u00a362.00 per year\n- Full-Time Student / Under 23: \u00a362.00 per year\n- Family Membership: Discounted package covering multiple athletes in the same household\n- Life Members, Active Coaches, Officials & Team Managers: Free membership tier (no membership fee)\n- England Athletics (EA) Registration Fee: Approx \u00a319/\u00a320 per year (included in Junior registration; required for competing in licensed league matches and championships).\n- Track & Facility Fees: Handled separately via monthly GoCardless Direct Debit (\u00a320-\u00a325/month depending on age group).",
+      "content": "Hillingdon AC Membership Fee Structure (Agreed at AGM):\n- Senior Individual (18+): £82.00 per year\n- Junior Individual (Under 18): £62.00 per year\n- Full-Time Student / Under 23: £62.00 per year\n- Family Membership: Discounted package covering multiple athletes in the same household\n- Life Members, Active Coaches, Officials & Team Managers: Free membership tier (no membership fee)\n- England Athletics (EA) Registration Fee: Approx £19/£20 per year (included in Junior registration; required for competing in licensed league matches and championships).\n- Track & Facility Fees: Handled separately via monthly GoCardless Direct Debit (£20-£25/month depending on age group).",
       "tags": [
         "fees",
         "costs",
@@ -348,6 +348,54 @@
         "high jump clash",
         "referee",
         "uka rules"
+      ]
+    },
+    {
+      "id": "meet_management_full_guide",
+      "title": "Meet Manager: Complete Checklists, Rules, Contacts & Procedures",
+      "category": "meet_management",
+      "keywords": [
+        "meet manager",
+        "checklist",
+        "ydl",
+        "alder valley",
+        "vets",
+        "michael illing",
+        "stacey and sons",
+        "bibs",
+        "photo finish",
+        "first aid",
+        "starters",
+        "edm",
+        "card reader",
+        "power of 10",
+        "parking",
+        "gatting way",
+        "bar code",
+        "qr code",
+        "results excel",
+        "ukydl",
+        "ukydl.org.uk",
+        "bmhac",
+        "scvac",
+        "scvac.org.uk",
+        "website",
+        "websites",
+        "url",
+        "link"
+      ],
+      "content": "Meet Manager Full Operations Guide for Hillingdon AC (YDL, Alder Valley, VETS League):\n\n1. PRE-MEET CHECKLIST:\n- Priority Task 1: Finalize meet dates for all 3 meets. Ask for a Sunday for YDL and Alder Valley, and for VETS it is a Monday anyway. Michael Illing to confirm.\n- Priority Task 2: Pay annual league signup / affiliation fee.\n- Send formal letter to all club managers 2 weeks before the event with timetables and parking notice.\n- Book stadium (Hillingdon Athletics Stadium, Gatting Way).\n- Book Photo finish timing operators.\n- Book first aid medical cover.\n- Book UKA qualified starters and starter assistants (marksmen).\n- Book EDM (Electronic Distance Measurement) for throws and jumps.\n- Book BIBS by placing an order with Stacey and Sons in advance.\n- Print event cards for track and field officials and keep 2 copies at the desk.\n- Publish order of events and timings timetable.\n- Fetch record results sheet from respective league websites.\n- Get ink for clubhouse printer; get paper and cardstock.\n- Arrange food and hot drinks for volunteer officials.\n- Print official scoring and non-scoring sheets.\n- Confirm car parking: Remind visiting clubs that Gatting Way is PAID parking (PayByPhone/machines) to avoid PCNs.\n- Visit venue to confirm equipment availability (hurdles, high jump mats, cages, water jump, blocks).\n- Prepare a bar code / QR code for live results trackside.\n\n2. DURING THE MEETING CHECKLIST:\n- Early arrival for setup (at least 90m before start).\n- Signing sheets for officials at reception.\n- Signing sheets for non-scoring officials at reception.\n- Bibs laid out at reception for team managers to collect.\n- Welcome officials with technical briefing and station allocations.\n- Food placed at the right location in the clubhouse hospitality room.\n- RECORDING RESULTS VIA CARD READER: A card reader scans physical event cards and automatically publishes results into an Excel spreadsheet instead of typing them manually. This is an essential marked step in the meet workflow.\n\n3. POST-MEET CHECKLIST:\n- Send PDF of results to all club managers within 24 hours.\n- Send results to Power of 10 for official athlete ranking updates.\n\n4. KEY CONTACTS:\n- Stadium: Hillingdon Athletics Stadium, Gatting Way (01895 250777).\n- Photo Finish: Precision Timing (photofinish@precisiontiming.co.uk).\n- First Aid: St John Ambulance (0303 003 0101).\n- Starters & Assistants: UKA Level 3 Panel.\n- EDM: Electronic Distance Measurement Unit.\n- BIBS: Stacey and Sons (orders@staceyandsons.co.uk, 01992 583123).\n- Officials: HAC Officials Secretary.\n- Meet Managers & Captains: Michael Illing (VETS Captain & Fixture Coordinator).\n\n5. LONG-RUNNING AGENTS:\nAutonomous agents continuously monitor the state of each meeting task, flag approaching deadlines (such as sending the 2-week letter or checking Stacey and Sons bib deliveries), and provide automated audit checks.\n\nOFFICIAL LEAGUE WEBSITES:\n- YDL (Youth Development League): https://www.ukydl.org.uk\n- Alder Valley League: https://bmhac.co.uk/alder-valley-league/\n- VETS (Southern Counties Veterans AC - SCVAC): http://www.scvac.org.uk\nUse these links to download scoring templates, review declarations, and verify competition rules.",
+      "tags": [
+        "meet manager",
+        "ydl",
+        "alder valley",
+        "vets",
+        "checklist",
+        "officials",
+        "stacey and sons",
+        "michael illing",
+        "card reader",
+        "power of 10"
       ]
     }
   ],
@@ -4638,8 +4686,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "14.3",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 1,
@@ -4655,8 +4703,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "15.1",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 1,
@@ -4672,8 +4720,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "14.7",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 1,
@@ -4689,8 +4737,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "15.2",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 1,
@@ -4706,8 +4754,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "23.2",
-        "points_scored": 1.0,
-        "league_points": 1.0
+        "points_scored": 1,
+        "league_points": 1
       },
       {
         "meet_id": 1,
@@ -4723,8 +4771,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "63.3",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 1,
@@ -4740,8 +4788,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "68.5",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 1,
@@ -4757,8 +4805,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "62.8",
-        "points_scored": 8.0,
-        "league_points": 8.0
+        "points_scored": 8,
+        "league_points": 8
       },
       {
         "meet_id": 1,
@@ -4774,8 +4822,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "75.1",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 1,
@@ -4790,9 +4838,9 @@
         "age_clean": "M45",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "5\u201928.4\u201d",
-        "points_scored": 3.0,
-        "league_points": 3.0
+        "perf": "5’28.4”",
+        "points_scored": 3,
+        "league_points": 3
       },
       {
         "meet_id": 1,
@@ -4807,9 +4855,9 @@
         "age_clean": "M65",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "5\u201923.9\u201d",
-        "points_scored": 4.0,
-        "league_points": 4.0
+        "perf": "5’23.9”",
+        "points_scored": 4,
+        "league_points": 4
       },
       {
         "meet_id": 1,
@@ -4824,9 +4872,9 @@
         "age_clean": "M50",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "5\u201959.7\u201d",
-        "points_scored": 2.0,
-        "league_points": 2.0
+        "perf": "5’59.7”",
+        "points_scored": 2,
+        "league_points": 2
       },
       {
         "meet_id": 1,
@@ -4841,9 +4889,9 @@
         "age_clean": "M60",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "5\u201946.9\u201d",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "perf": "5’46.9”",
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 1,
@@ -4858,9 +4906,9 @@
         "age_clean": "M45",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "13\u201926.7\u201d",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "perf": "13’26.7”",
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 1,
@@ -4875,9 +4923,9 @@
         "age_clean": "M50",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "15\u201928.1\u201d",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "perf": "15’28.1”",
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 1,
@@ -4892,9 +4940,9 @@
         "age_clean": "M65",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "13\u201917.8\u201d",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "perf": "13’17.8”",
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 1,
@@ -4909,9 +4957,9 @@
         "age_clean": "M85",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "15\u201932.1\u201d",
-        "points_scored": 2.0,
-        "league_points": 2.0
+        "perf": "15’32.1”",
+        "points_scored": 2,
+        "league_points": 2
       },
       {
         "meet_id": 1,
@@ -4927,8 +4975,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "6.12",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 1,
@@ -4944,8 +4992,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "8.50",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 1,
@@ -4961,8 +5009,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "6.91",
-        "points_scored": 4.0,
-        "league_points": 4.0
+        "points_scored": 4,
+        "league_points": 4
       },
       {
         "meet_id": 1,
@@ -4978,8 +5026,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "18.36",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 1,
@@ -4995,8 +5043,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "26.40",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 1,
@@ -5012,8 +5060,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "19.24",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 1,
@@ -5029,8 +5077,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "8.19",
-        "points_scored": 4.0,
-        "league_points": 4.0
+        "points_scored": 4,
+        "league_points": 4
       },
       {
         "meet_id": 1,
@@ -5046,8 +5094,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "1.40",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 1,
@@ -5063,8 +5111,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "1.10",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 1,
@@ -5080,8 +5128,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "0.80",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 1,
@@ -5097,8 +5145,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "4.18",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 1,
@@ -5114,8 +5162,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "2.90",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 1,
@@ -5130,9 +5178,9 @@
         "age_clean": "M35",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "4\u201940.4\u201d",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "perf": "4’40.4”",
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 1,
@@ -5148,8 +5196,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "20.2",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 1,
@@ -5165,8 +5213,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "18.6",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 1,
@@ -5182,8 +5230,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "22.2",
-        "points_scored": 3.0,
-        "league_points": 3.0
+        "points_scored": 3,
+        "league_points": 3
       },
       {
         "meet_id": 1,
@@ -5199,8 +5247,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "19.3",
-        "points_scored": 4.0,
-        "league_points": 4.0
+        "points_scored": 4,
+        "league_points": 4
       },
       {
         "meet_id": 1,
@@ -5216,8 +5264,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "93.6",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 1,
@@ -5232,9 +5280,9 @@
         "age_clean": "W35",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "1\u201940.2\u201d",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "perf": "1’40.2”",
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 1,
@@ -5249,9 +5297,9 @@
         "age_clean": "W50",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "1\u201954.6\u201d",
-        "points_scored": 3.0,
-        "league_points": 3.0
+        "perf": "1’54.6”",
+        "points_scored": 3,
+        "league_points": 3
       },
       {
         "meet_id": 1,
@@ -5266,9 +5314,9 @@
         "age_clean": "W70",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "1\u201942.7\"",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "perf": "1’42.7\"",
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 1,
@@ -5283,9 +5331,9 @@
         "age_clean": "W45",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "6\u201938.8\u201d",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "perf": "6’38.8”",
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 1,
@@ -5300,9 +5348,9 @@
         "age_clean": "W35",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "8\u201925.6\u201d",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "perf": "8’25.6”",
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 1,
@@ -5317,9 +5365,9 @@
         "age_clean": "W50",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "8\u201948.5\u201d",
-        "points_scored": 4.0,
-        "league_points": 4.0
+        "perf": "8’48.5”",
+        "points_scored": 4,
+        "league_points": 4
       },
       {
         "meet_id": 1,
@@ -5334,9 +5382,9 @@
         "age_clean": "W70",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "8\u201900.1\u201d",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "perf": "8’00.1”",
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 1,
@@ -5351,9 +5399,9 @@
         "age_clean": "W45",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "14\u201901.0\u201d",
-        "points_scored": 8.0,
-        "league_points": 8.0
+        "perf": "14’01.0”",
+        "points_scored": 8,
+        "league_points": 8
       },
       {
         "meet_id": 1,
@@ -5368,9 +5416,9 @@
         "age_clean": "W70",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "14\u201949.8\u201d",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "perf": "14’49.8”",
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 1,
@@ -5385,9 +5433,9 @@
         "age_clean": "W75",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "16\u201919.2\u201d",
-        "points_scored": 4.0,
-        "league_points": 4.0
+        "perf": "16’19.2”",
+        "points_scored": 4,
+        "league_points": 4
       },
       {
         "meet_id": 1,
@@ -5403,8 +5451,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "4.43",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 1,
@@ -5420,8 +5468,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "6.13",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 1,
@@ -5437,8 +5485,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "5.80",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 1,
@@ -5454,8 +5502,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "10.83",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 1,
@@ -5471,8 +5519,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "18.24",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 1,
@@ -5488,8 +5536,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "12.59",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 1,
@@ -5505,8 +5553,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "9.57",
-        "points_scored": 2.0,
-        "league_points": 2.0
+        "points_scored": 2,
+        "league_points": 2
       },
       {
         "meet_id": 1,
@@ -5539,8 +5587,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "1.13",
-        "points_scored": 8.0,
-        "league_points": 8.0
+        "points_scored": 8,
+        "league_points": 8
       },
       {
         "meet_id": 1,
@@ -5556,8 +5604,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "2.09",
-        "points_scored": 4.0,
-        "league_points": 4.0
+        "points_scored": 4,
+        "league_points": 4
       },
       {
         "meet_id": 1,
@@ -5573,8 +5621,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "2.55",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 1,
@@ -5589,9 +5637,9 @@
         "age_clean": "W35",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "7\u201925.1\u201d",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "perf": "7’25.1”",
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 2,
@@ -5607,8 +5655,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "28.9",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 2,
@@ -5624,8 +5672,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "35.0",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 2,
@@ -5641,8 +5689,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "31.1",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 2,
@@ -5658,8 +5706,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "31.6",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 2,
@@ -5675,8 +5723,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "38.8",
-        "points_scored": 2.0,
-        "league_points": 2.0
+        "points_scored": 2,
+        "league_points": 2
       },
       {
         "meet_id": 2,
@@ -5692,8 +5740,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "2,29.3",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 2,
@@ -5709,8 +5757,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "2,24.2",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 2,
@@ -5726,8 +5774,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "2,30.7",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 2,
@@ -5743,8 +5791,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "2,42.6",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 2,
@@ -5760,8 +5808,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "10,55.8",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 2,
@@ -5777,8 +5825,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "11,04.9",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 2,
@@ -5794,8 +5842,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "12,28.2",
-        "points_scored": 2.0,
-        "league_points": 2.0
+        "points_scored": 2,
+        "league_points": 2
       },
       {
         "meet_id": 2,
@@ -5811,8 +5859,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "11,21.0",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 2,
@@ -5828,8 +5876,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "18,04.5",
-        "points_scored": 2.0,
-        "league_points": 2.0
+        "points_scored": 2,
+        "league_points": 2
       },
       {
         "meet_id": 2,
@@ -5845,8 +5893,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "8.61",
-        "points_scored": 8.0,
-        "league_points": 8.0
+        "points_scored": 8,
+        "league_points": 8
       },
       {
         "meet_id": 2,
@@ -5862,8 +5910,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "8.77",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 2,
@@ -5879,8 +5927,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "6.88",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 2,
@@ -5896,8 +5944,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "3.65",
-        "points_scored": 1.0,
-        "league_points": 1.0
+        "points_scored": 1,
+        "league_points": 1
       },
       {
         "meet_id": 2,
@@ -5913,8 +5961,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "22.58",
-        "points_scored": 8.0,
-        "league_points": 8.0
+        "points_scored": 8,
+        "league_points": 8
       },
       {
         "meet_id": 2,
@@ -5930,8 +5978,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "26.28",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 2,
@@ -5947,8 +5995,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "23.46",
-        "points_scored": 4.0,
-        "league_points": 4.0
+        "points_scored": 4,
+        "league_points": 4
       },
       {
         "meet_id": 2,
@@ -5964,8 +6012,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "9.78",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 2,
@@ -5981,8 +6029,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "9.11",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 2,
@@ -5998,8 +6046,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "6.19",
-        "points_scored": 8.0,
-        "league_points": 8.0
+        "points_scored": 8,
+        "league_points": 8
       },
       {
         "meet_id": 2,
@@ -6015,8 +6063,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "4.54",
-        "points_scored": 8.0,
-        "league_points": 8.0
+        "points_scored": 8,
+        "league_points": 8
       },
       {
         "meet_id": 2,
@@ -6032,8 +6080,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "4.02",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 2,
@@ -6049,8 +6097,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "2.81",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 2,
@@ -6066,8 +6114,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "57.8",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 2,
@@ -6083,8 +6131,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "31.9",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 2,
@@ -6100,8 +6148,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "36.7",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 2,
@@ -6117,8 +6165,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "35.4",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 2,
@@ -6134,8 +6182,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "39.5",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 2,
@@ -6151,8 +6199,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "43.2",
-        "points_scored": 4.0,
-        "league_points": 4.0
+        "points_scored": 4,
+        "league_points": 4
       },
       {
         "meet_id": 2,
@@ -6168,8 +6216,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "2,38.7",
-        "points_scored": 8.0,
-        "league_points": 8.0
+        "points_scored": 8,
+        "league_points": 8
       },
       {
         "meet_id": 2,
@@ -6185,8 +6233,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "3,00.5",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 2,
@@ -6202,8 +6250,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "3,13.5",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 2,
@@ -6219,8 +6267,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "3,24.3",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 2,
@@ -6236,8 +6284,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "11,47.6",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 2,
@@ -6253,8 +6301,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "12,46.7",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 2,
@@ -6270,8 +6318,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "13,56.0",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 2,
@@ -6287,8 +6335,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "13,09.3",
-        "points_scored": 8.0,
-        "league_points": 8.0
+        "points_scored": 8,
+        "league_points": 8
       },
       {
         "meet_id": 2,
@@ -6304,8 +6352,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "15.,58.6",
-        "points_scored": 3.0,
-        "league_points": 3.0
+        "points_scored": 3,
+        "league_points": 3
       },
       {
         "meet_id": 2,
@@ -6321,8 +6369,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "6.97",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 2,
@@ -6338,8 +6386,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "6.22",
-        "points_scored": 4.0,
-        "league_points": 4.0
+        "points_scored": 4,
+        "league_points": 4
       },
       {
         "meet_id": 2,
@@ -6355,8 +6403,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "6.25",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 2,
@@ -6372,8 +6420,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "5.02",
-        "points_scored": 3.0,
-        "league_points": 3.0
+        "points_scored": 3,
+        "league_points": 3
       },
       {
         "meet_id": 2,
@@ -6389,8 +6437,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "10.63",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 2,
@@ -6406,8 +6454,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "17.28",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 2,
@@ -6423,8 +6471,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "12.82",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 2,
@@ -6440,8 +6488,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "7.01",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 2,
@@ -6457,8 +6505,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "6.25",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 2,
@@ -6474,8 +6522,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "3.70",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 2,
@@ -6491,8 +6539,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "3.01",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 2,
@@ -6508,8 +6556,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "2.52",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 2,
@@ -6525,8 +6573,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "67.3",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 2,
@@ -6542,8 +6590,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "15.25",
-        "points_scored": 0.0,
-        "league_points": 0.0
+        "points_scored": 0,
+        "league_points": 0
       },
       {
         "meet_id": 2,
@@ -6559,8 +6607,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "27.05",
-        "points_scored": 0.0,
-        "league_points": 0.0
+        "points_scored": 0,
+        "league_points": 0
       },
       {
         "meet_id": 2,
@@ -6576,8 +6624,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "7.58",
-        "points_scored": 0.0,
-        "league_points": 0.0
+        "points_scored": 0,
+        "league_points": 0
       },
       {
         "meet_id": 2,
@@ -6593,8 +6641,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "31.8",
-        "points_scored": 0.0,
-        "league_points": 0.0
+        "points_scored": 0,
+        "league_points": 0
       },
       {
         "meet_id": 2,
@@ -6610,8 +6658,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "2,34.3",
-        "points_scored": 0.0,
-        "league_points": 0.0
+        "points_scored": 0,
+        "league_points": 0
       },
       {
         "meet_id": 2,
@@ -6627,8 +6675,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "14,31.0",
-        "points_scored": 0.0,
-        "league_points": 0.0
+        "points_scored": 0,
+        "league_points": 0
       },
       {
         "meet_id": 3,
@@ -6644,8 +6692,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "13.9",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 3,
@@ -6661,8 +6709,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "16.7",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 3,
@@ -6678,8 +6726,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "14.7",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 3,
@@ -6695,8 +6743,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "14.9",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 3,
@@ -6712,8 +6760,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "64.6",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 3,
@@ -6729,8 +6777,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "69.9",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 3,
@@ -6746,8 +6794,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "69.7",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 3,
@@ -6763,8 +6811,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "100.1",
-        "points_scored": 4.0,
-        "league_points": 4.0
+        "points_scored": 4,
+        "league_points": 4
       },
       {
         "meet_id": 3,
@@ -6780,8 +6828,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "106.2",
-        "points_scored": 2.0,
-        "league_points": 2.0
+        "points_scored": 2,
+        "league_points": 2
       },
       {
         "meet_id": 3,
@@ -6797,8 +6845,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "5:35.1",
-        "points_scored": 4.0,
-        "league_points": 4.0
+        "points_scored": 4,
+        "league_points": 4
       },
       {
         "meet_id": 3,
@@ -6814,8 +6862,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "6:12.4",
-        "points_scored": 4.0,
-        "league_points": 4.0
+        "points_scored": 4,
+        "league_points": 4
       },
       {
         "meet_id": 3,
@@ -6831,8 +6879,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "5:17.5",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 3,
@@ -6848,8 +6896,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "5:45.1",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 3,
@@ -6865,8 +6913,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "8:18.1",
-        "points_scored": 1.0,
-        "league_points": 1.0
+        "points_scored": 1,
+        "league_points": 1
       },
       {
         "meet_id": 3,
@@ -6882,8 +6930,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "13:32.4",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 3,
@@ -6899,8 +6947,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "14:49.3",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 3,
@@ -6916,8 +6964,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "13:10.6",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 3,
@@ -6933,8 +6981,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "24.70",
-        "points_scored": 8.0,
-        "league_points": 8.0
+        "points_scored": 8,
+        "league_points": 8
       },
       {
         "meet_id": 3,
@@ -6950,8 +6998,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "22.91",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 3,
@@ -6967,8 +7015,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "23.63",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 3,
@@ -6984,8 +7032,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "19.64",
-        "points_scored": 4.0,
-        "league_points": 4.0
+        "points_scored": 4,
+        "league_points": 4
       },
       {
         "meet_id": 3,
@@ -7001,8 +7049,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "25.83",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 3,
@@ -7018,8 +7066,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "16.58",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 3,
@@ -7035,8 +7083,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "1.15",
-        "points_scored": 6.0,
-        "league_points": 6.0
+        "points_scored": 6,
+        "league_points": 6
       },
       {
         "meet_id": 3,
@@ -7052,8 +7100,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "1.40",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 3,
@@ -7069,8 +7117,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "1.20",
-        "points_scored": 8.0,
-        "league_points": 8.0
+        "points_scored": 8,
+        "league_points": 8
       },
       {
         "meet_id": 3,
@@ -7086,8 +7134,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "6.30",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 3,
@@ -7103,8 +7151,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "9.08",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 3,
@@ -7120,8 +7168,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "4.33",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 3,
@@ -7137,8 +7185,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "5:27.7",
-        "points_scored": 5.0,
-        "league_points": 5.0
+        "points_scored": 5,
+        "league_points": 5
       },
       {
         "meet_id": 3,
@@ -7154,8 +7202,8 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "15.4",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       },
       {
         "meet_id": 3,
@@ -7171,10 +7219,97 @@
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
         "perf": "18.1",
-        "points_scored": 7.0,
-        "league_points": 7.0
+        "points_scored": 7,
+        "league_points": 7
       }
     ]
   },
-  "ea_and_uka_rules_updated": "2026-10-31T22:17:44.717512"
+  "ea_and_uka_rules_updated": "2026-10-31T22:17:44.717512",
+  "meet_management": {
+    "description": "Comprehensive Meet Management operations for Youth Development League (YDL), Alder Valley League, and Southern Vets League.",
+    "priority_task": "Dates finalized for all 3 meets. Ask for a Sunday for YDL and Alder Valley, and for the VETS it is a Monday anyway. Michael Illing to confirm.",
+    "leagues": [
+      {
+        "id": "ydl",
+        "name": "Youth Development League (YDL)",
+        "website": "https://www.ukydl.org.uk",
+        "schedule_day": "Sunday",
+        "age_groups": "U13, U15, U17, U20",
+        "coordinator": "Michael Illing to confirm",
+        "venue": "Hillingdon Athletics Stadium, Gatting Way, Uxbridge UB8 1ES",
+        "hac_role": "Host & Competing Club"
+      },
+      {
+        "id": "alder_valley",
+        "name": "Alder Valley League",
+        "website": "https://bmhac.co.uk/alder-valley-league/",
+        "schedule_day": "Sunday",
+        "age_groups": "Junior Boys & Girls",
+        "coordinator": "Michael Illing to confirm",
+        "venue": "Hillingdon Athletics Stadium, Gatting Way, Uxbridge UB8 1ES",
+        "hac_role": "Host & Competing Club"
+      },
+      {
+        "id": "vets",
+        "name": "Southern Veterans Track & Field League",
+        "website": "http://www.scvac.org.uk",
+        "schedule_day": "Monday (Evening Fixture from 18:30)",
+        "age_groups": "M35, M50, M60, W35, W50, W60",
+        "coordinator": "Michael Illing (Confirmed - Monday)",
+        "venue": "Hillingdon Athletics Stadium, Gatting Way, Uxbridge UB8 1ES",
+        "hac_role": "Host of Meet 2 & Competing in All Meets"
+      }
+    ],
+    "checklist_before": [
+      "Finalize dates for all 3 meets (First priority: Sunday for YDL & Alder Valley, Monday for VETS, Michael Illing to confirm)",
+      "Signup to the league (Annual participation/affiliation fee to pay every year)",
+      "Send a letter to all club managers 2 weeks before the event with timetable and parking rules",
+      "Book stadium at Hillingdon Athletics Stadium, Gatting Way",
+      "Book Photo finish equipment and qualified timing operator",
+      "Book first aid medical cover (St John Ambulance or certified event paramedics)",
+      "Book starters and starter assistant (UKA licensed chief starter and marksman)",
+      "Book EDM (Electronic Distance Measurement) for field throws and jumps",
+      "Book BIBS by placing an order with Stacey and Sons in advance",
+      "Print event cards for track and field officials and keep 2 copies",
+      "Publish order of events and timings timetable",
+      "Fetch the record results sheet from the respective league websites",
+      "Get ink for clubhouse printer",
+      "Get paper and cards for printer",
+      "Arrange food and refreshments for officials",
+      "Print official and non-scoring sheets for reception",
+      "Confirm car parking situation: Paid parking applies at Gatting Way via ticket machines / PayByPhone; remind all visiting clubs to avoid PCNs",
+      "Visit venue to confirm equipment availability (hurdles, high jump mats, cages, blocks, steeplechase)",
+      "Prepare a bar code / QR code for results so athletes and parents can scan trackside for live results"
+    ],
+    "checklist_during": [
+      "Arrival for the meeting (early setup at least 90 minutes prior to first event)",
+      "Signing sheets for officials in the reception",
+      "Signing sheets for non-scoring officials at reception",
+      "Bibs at reception (distribution of club bib envelopes from Stacey and Sons)",
+      "Welcome officials with morning briefing and radio assignment",
+      "Food placed at the right location in the clubhouse hospitality room",
+      "Recording results via card reader: Card reader scans physical cards and automatically publishes results into an Excel scoring sheet instead of manual keyboard typing (marked as an essential process step)"
+    ],
+    "checklist_after": [
+      "Send PDF of results to all participating club managers within 24 hours",
+      "Send results to Power of 10 (Athletics Data) formatted for official national ranking updates"
+    ],
+    "key_contacts": {
+      "stadium": "Hillingdon Athletics Stadium, Gatting Way, Uxbridge UB8 1ES (01895 250777)",
+      "photo_finish": "Precision Timing & Photo Finish UK (photofinish@precisiontiming.co.uk)",
+      "first_aid": "St John Ambulance Event Medical Cover (0303 003 0101)",
+      "starters": "UKA Starters & Marksman Panel (Chief Starter Level 3)",
+      "edm": "EDM Electronic Distance Measurement Specialist",
+      "bibs": "Stacey and Sons (orders@staceyandsons.co.uk, 01992 583123) - Official race bib suppliers",
+      "officials": "HAC Officials Roster (officials@hillingdonac.co.uk)",
+      "managers_captains": "Michael Illing (VETS Captain), Sarah Speed (Juniors/YDL), and Visiting Club Managers"
+    },
+    "weather_guidance": "When hosting meets at Hillingdon Athletics Stadium (Uxbridge UB8 1ES), expected weather conditions (temperature, wind speed, rain probability, track dryness) are monitored automatically by meet agents.",
+    "long_running_agents": "Autonomous background agents monitor task states (not_started, in_progress, completed, blocked), check deadlines, run automated audits, pre-generate letters, and simulate card reader batch ingests.",
+    "official_websites": {
+      "ydl": "https://www.ukydl.org.uk",
+      "alder_valley": "https://bmhac.co.uk/alder-valley-league/",
+      "vets": "http://www.scvac.org.uk"
+    }
+  }
 }

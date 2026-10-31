@@ -4,6 +4,7 @@ import MembershipForm from './components/MembershipForm';
 import VetsLeagueInsights from './components/VetsLeagueInsights';
 import PowerOf10Insights from './components/PowerOf10Insights';
 import HacLiGoThrows from './components/HacLiGoThrows';
+import MeetManager from './components/MeetManager';
 import HacyChatbot from './components/hacy/HacyChatbot';
 import HacyFloatingWidget from './components/hacy/HacyFloatingWidget';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -19,7 +20,8 @@ import {
     Award,
     Activity,
     Flame,
-    Bot
+    Bot,
+    Trophy
 } from 'lucide-react';
 
 const LandingPage = ({ onSelect }) => {
@@ -57,7 +59,7 @@ const LandingPage = ({ onSelect }) => {
                     A frictionless, paperless application process and an integrated athlete dashboard for the premier athletic club in North West London.
                 </p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-5 mb-16">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-8 gap-4 mb-16">
                     <button
                         onClick={() => onSelect('hacy')}
                         className="group flex flex-col items-center p-6 bg-gradient-to-b from-emerald-500/10 via-teal-500/10 to-blue-500/10 border-2 border-emerald-500/40 rounded-3xl hover:bg-gradient-to-br hover:from-emerald-500 hover:to-teal-600 hover:border-emerald-300 transition-all duration-300 hover:scale-105 hover:shadow-[0_20px_45px_rgba(16,185,129,0.35)] relative overflow-hidden"
@@ -70,6 +72,21 @@ const LandingPage = ({ onSelect }) => {
                         </div>
                         <h3 className="text-lg font-extrabold mb-2 group-hover:text-white text-emerald-300">Ask HACY</h3>
                         <p className="text-xs text-slate-400 group-hover:text-emerald-50/90 text-center">AI RAG query assistant for scores & membership.</p>
+                        <ArrowRight className="mt-4 text-emerald-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all group-hover:text-white" />
+                    </button>
+
+                    <button
+                        onClick={() => onSelect('meet_manager')}
+                        className="group flex flex-col items-center p-6 bg-gradient-to-b from-teal-500/10 via-emerald-500/10 to-slate-800/40 border-2 border-emerald-500/40 rounded-3xl hover:bg-gradient-to-br hover:from-teal-600 hover:to-emerald-600 hover:border-emerald-300 transition-all duration-300 hover:scale-105 hover:shadow-[0_20px_45px_rgba(16,185,129,0.35)] relative overflow-hidden"
+                    >
+                        <div className="absolute top-2 right-2 px-2 py-0.5 bg-emerald-400 text-slate-950 font-black text-[9px] uppercase tracking-wider rounded-full shadow">
+                            OPS AGENTS
+                        </div>
+                        <div className="w-14 h-14 bg-emerald-500/20 rounded-2xl flex items-center justify-center mb-6 text-emerald-400 group-hover:bg-white/20 group-hover:text-white transition-colors">
+                            <Trophy size={28} />
+                        </div>
+                        <h3 className="text-lg font-extrabold mb-2 group-hover:text-white text-emerald-300">Meet Manager</h3>
+                        <p className="text-xs text-slate-400 group-hover:text-emerald-50/90 text-center">YDL, Alder Valley & VETS ops, agents & checklists.</p>
                         <ArrowRight className="mt-4 text-emerald-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all group-hover:text-white" />
                     </button>
 
@@ -223,6 +240,10 @@ const App = () => {
                     onClose={handleBackToLanding}
                     onJoinClub={() => setView('register')}
                 />
+            )}
+
+            {view === 'meet_manager' && (
+                <MeetManager onClose={handleBackToLanding} />
             )}
 
             {view === 'hacy' && (

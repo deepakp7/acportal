@@ -13,7 +13,9 @@ import {
     Sparkles,
     UserCheck,
     Clock,
-    Send
+    Send,
+    Database,
+    RefreshCw
 } from 'lucide-react';
 
 export default function HacyAdminAssist({ onBackToChat }) {
@@ -37,11 +39,23 @@ export default function HacyAdminAssist({ onBackToChat }) {
     const [testResult, setTestResult] = useState(null);
     const [geminiKey, setGeminiKey] = useState(hacyRagService.getGeminiApiKey());
     const [keySavedMessage, setKeySavedMessage] = useState('');
+    const [isSyncing, setIsSyncing] = useState(false);
 
-    const refreshData = () => {
-        setQueryLogs(hacyRagService.loadQueryLogs());
-        setCustomNotes(hacyRagService.loadCustomNotes());
-        setGeminiKey(hacyRagService.getGeminiApiKey());
+    const refreshData = async () => {
+        setIsSyncing(true);
+        try {
+            const [logs, notes] = await Promise.all([
+                hacyRagService.loadQueryLogs(),
+                hacyRagService.loadCustomNotes()
+            ]);
+            setQueryLogs(logs || []);
+            setCustomNotes(notes || []);
+            setGeminiKey(hacyRagService.getGeminiApiKey());
+        } catch (e) {
+            console.warn('Refresh data notice:', e);
+        } finally {
+            setIsSyncing(false);
+        }
     };
 
     const handleSaveGeminiKey = (e) => {
@@ -60,14 +74,14 @@ export default function HacyAdminAssist({ onBackToChat }) {
         setAssistText(q.adminResponse || '');
     };
 
-    const handleSubmitAssist = (e) => {
+    const handleSubmitAssist = async (e) => {
         e.preventDefault();
         if (!selectedQuery || !assistText.trim()) return;
 
-        hacyRagService.updateQueryResolution(selectedQuery.id, assistText.trim(), 'Club Admin');
+        await hacyRagService.updateQueryResolution(selectedQuery.id, assistText.trim(), 'Club Admin');
         
         if (saveToKb) {
-            hacyRagService.addCustomNote(
+            await hacyRagService.addCustomNote(
                 `Query Resolution: ${selectedQuery.query}`,
                 assistText.trim(),
                 'Admin Assisted FAQ'
@@ -76,22 +90,22 @@ export default function HacyAdminAssist({ onBackToChat }) {
 
         setSelectedQuery(null);
         setAssistText('');
-        refreshData();
+        await refreshData();
     };
 
-    const handleAddNote = (e) => {
+    const handleAddNote = async (e) => {
         e.preventDefault();
         if (!newTitle.trim() || !newContent.trim()) return;
 
-        hacyRagService.addCustomNote(newTitle.trim(), newContent.trim(), newCategory);
+        await hacyRagService.addCustomNote(newTitle.trim(), newContent.trim(), newCategory);
         setNewTitle('');
         setNewContent('');
-        refreshData();
+        await refreshData();
     };
 
-    const handleDeleteNote = (id) => {
-        hacyRagService.deleteCustomNote(id);
-        refreshData();
+    const handleDeleteNote = async (id) => {
+        await hacyRagService.deleteCustomNote(id);
+        await refreshData();
     };
 
     const handleRunTest = async (e) => {
@@ -125,6 +139,21 @@ export default function HacyAdminAssist({ onBackToChat }) {
                     </p>
                 </div>
                 <div className="flex items-center gap-3">
+                    <button
+                        onClick={refreshData}
+                        disabled={isSyncing}
+                        className={`px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 border transition ${
+                            hacyRagService.isSupabaseConnected
+                                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20'
+                                : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
+                        }`}
+                        title="Synchronize with Supabase Cloud Database"
+                    >
+                        <Database size={15} className={hacyRagService.isSupabaseConnected ? "text-emerald-400" : "text-amber-400"} />
+                        <span>{hacyRagService.isSupabaseConnected ? "Supabase Synced" : "Local / Cloud Sync"}</span>
+                        <RefreshCw size={13} className={isSyncing ? "animate-spin text-purple-400" : "text-slate-400"} />
+                    </button>
+
                     <button
                         onClick={onBackToChat}
                         className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-sm font-semibold flex items-center gap-2 transition"
