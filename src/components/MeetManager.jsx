@@ -33,14 +33,20 @@ import {
     Crosshair,
     Tag,
     Copy,
-    Check
+    Check,
+    Folder,
+    FileSpreadsheet,
+    Link,
+    Cloud,
+    History,
+    Edit3
 } from 'lucide-react';
-import { LEAGUES, KEY_CONTACTS, TIMETABLES, MOCK_WEATHER_FORECASTS } from '../data/meetManagerData';
+import { LEAGUES, KEY_CONTACTS, TIMETABLES, MOCK_WEATHER_FORECASTS, DEFAULT_ONEDRIVE_FOLDER_URL, DEFAULT_DOCUMENT_LIBRARY } from '../data/meetManagerData';
 import { meetAgentService } from '../services/meetAgentService';
 
 export default function MeetManager({ onClose }) {
     const [selectedLeague, setSelectedLeague] = useState('all');
-    const [activeTab, setActiveTab] = useState('checklist'); // 'checklist' | 'timetable' | 'contacts' | 'card_reader' | 'agent_logs'
+    const [activeTab, setActiveTab] = useState('checklist'); // 'checklist' | 'documents' | 'timetable' | 'contacts' | 'card_reader' | 'agent_logs'
     const [stageFilter, setStageFilter] = useState('all'); // 'all' | 'before' | 'during' | 'after'
     const [checklist, setChecklist] = useState([]);
     const [agentLogs, setAgentLogs] = useState([]);
@@ -57,6 +63,27 @@ export default function MeetManager({ onClose }) {
         email: '',
         location: '',
         notes: ''
+    });
+
+    // Documents & OneDrive Archive State
+    const [docCategoryFilter, setDocCategoryFilter] = useState('all');
+    const [docLeagueFilter, setDocLeagueFilter] = useState('all');
+    const [searchDoc, setSearchDoc] = useState('');
+    const [documents, setDocuments] = useState([]);
+    const [oneDriveUrl, setOneDriveUrl] = useState(meetAgentService.oneDriveUrl || DEFAULT_ONEDRIVE_FOLDER_URL);
+    const [showOneDriveModal, setShowOneDriveModal] = useState(false);
+    const [tempOneDriveUrl, setTempOneDriveUrl] = useState('');
+    const [showAddDocModal, setShowAddDocModal] = useState(false);
+    const [newDoc, setNewDoc] = useState({
+        title: '',
+        category: 'Templates & Blank Sheets',
+        league: 'all',
+        format: 'Excel (.xlsx)',
+        year: '2026/27 Template',
+        size: '120 KB',
+        description: '',
+        oneDriveFileName: '',
+        oneDriveUrl: ''
     });
 
     // Modals & Tools
@@ -76,12 +103,14 @@ export default function MeetManager({ onClose }) {
         const syncState = () => {
             setChecklist(meetAgentService.getChecklist(stageFilter, selectedLeague));
             setAgentLogs([...meetAgentService.agentLogs]);
+            setDocuments(meetAgentService.getAllDocuments(docCategoryFilter, docLeagueFilter));
+            setOneDriveUrl(meetAgentService.oneDriveUrl);
         };
 
         syncState();
         const unsubscribe = meetAgentService.subscribe(syncState);
         return () => unsubscribe();
-    }, [stageFilter, selectedLeague]);
+    }, [stageFilter, selectedLeague, docCategoryFilter, docLeagueFilter]);
 
     // Load custom contacts
     useEffect(() => {
@@ -190,6 +219,43 @@ export default function MeetManager({ onClose }) {
         'Officials',
         'Meeting Managers & Team Captains'
     ];
+
+    // Filtered documents for archive
+    const filteredDocs = documents.filter(doc => {
+        const q = searchDoc.toLowerCase();
+        const matchCategory = docCategoryFilter === 'all' || doc.category === docCategoryFilter;
+        const matchLeague = docLeagueFilter === 'all' || doc.league === 'all' || doc.league === docLeagueFilter;
+        const matchSearch = !q ||
+            doc.title.toLowerCase().includes(q) ||
+            doc.description.toLowerCase().includes(q) ||
+            doc.format.toLowerCase().includes(q) ||
+            doc.year.toLowerCase().includes(q);
+        return matchCategory && matchLeague && matchSearch;
+    });
+
+    const handleSaveOneDriveUrl = (e) => {
+        e.preventDefault();
+        meetAgentService.saveOneDriveUrl(tempOneDriveUrl);
+        setShowOneDriveModal(false);
+    };
+
+    const handleAddDoc = (e) => {
+        e.preventDefault();
+        if (!newDoc.title) return;
+        meetAgentService.addCustomDocument(newDoc);
+        setShowAddDocModal(false);
+        setNewDoc({
+            title: '',
+            category: 'Templates & Blank Sheets',
+            league: 'all',
+            format: 'Excel (.xlsx)',
+            year: '2026/27 Template',
+            size: '120 KB',
+            description: '',
+            oneDriveFileName: '',
+            oneDriveUrl: ''
+        });
+    };
 
     // Compute stats for current view
     const currentLeagueStats = selectedLeague === 'all'
@@ -404,6 +470,17 @@ export default function MeetManager({ onClose }) {
                         </button>
 
                         <button
+                            onClick={() => setActiveTab('documents')}
+                            className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition ${activeTab === 'documents'
+                                ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20'
+                                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                                }`}
+                        >
+                            <Folder size={14} />
+                            Documents & Archive ({documents.length})
+                        </button>
+
+                        <button
                             onClick={() => setActiveTab('timetable')}
                             className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition ${activeTab === 'timetable'
                                 ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20'
@@ -467,6 +544,82 @@ export default function MeetManager({ onClose }) {
                 {/* ========================================================================= */}
                 {activeTab === 'checklist' && (
                     <div className="space-y-6">
+                        {/* Independent League Checklist Selector Bar */}
+                        <div className="bg-slate-900/90 p-4 rounded-3xl border border-slate-800 flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-lg">
+                            <div className="flex items-center gap-2 flex-wrap">
+                                <span className="text-xs font-black uppercase tracking-wider text-slate-400 mr-1">
+                                    Managing Checklist:
+                                </span>
+                                <button
+                                    onClick={() => setSelectedLeague('ydl')}
+                                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-2 ${selectedLeague === 'ydl'
+                                        ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20'
+                                        : 'bg-slate-800 text-slate-300 hover:text-white border border-slate-700'
+                                        }`}
+                                >
+                                    <span>YDL (Sunday)</span>
+                                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold ${selectedLeague === 'ydl' ? 'bg-slate-950 text-emerald-400' : 'bg-slate-900 text-slate-400'}`}>
+                                        {meetAgentService.getLeagueStats('ydl').percentage}%
+                                    </span>
+                                </button>
+
+                                <button
+                                    onClick={() => setSelectedLeague('alder_valley')}
+                                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-2 ${selectedLeague === 'alder_valley'
+                                        ? 'bg-blue-500 text-white shadow-md shadow-blue-500/20'
+                                        : 'bg-slate-800 text-slate-300 hover:text-white border border-slate-700'
+                                        }`}
+                                >
+                                    <span>Alder Valley (Sunday)</span>
+                                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold ${selectedLeague === 'alder_valley' ? 'bg-slate-950 text-blue-400' : 'bg-slate-900 text-slate-400'}`}>
+                                        {meetAgentService.getLeagueStats('alder_valley').percentage}%
+                                    </span>
+                                </button>
+
+                                <button
+                                    onClick={() => setSelectedLeague('vets')}
+                                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-2 ${selectedLeague === 'vets'
+                                        ? 'bg-indigo-500 text-white shadow-md shadow-indigo-500/20'
+                                        : 'bg-slate-800 text-slate-300 hover:text-white border border-slate-700'
+                                        }`}
+                                >
+                                    <span>VETS League (Monday)</span>
+                                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold ${selectedLeague === 'vets' ? 'bg-slate-950 text-indigo-400' : 'bg-slate-900 text-slate-400'}`}>
+                                        {meetAgentService.getLeagueStats('vets').percentage}%
+                                    </span>
+                                </button>
+
+                                <button
+                                    onClick={() => setSelectedLeague('all')}
+                                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition ${selectedLeague === 'all'
+                                        ? 'bg-slate-700 text-white border border-slate-600'
+                                        : 'bg-slate-800 text-slate-400 hover:text-white border border-slate-700'
+                                        }`}
+                                >
+                                    <span>All 3 Meets Combined</span>
+                                </button>
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                                {selectedLeague !== 'all' ? (
+                                    <button
+                                        onClick={() => {
+                                            const lName = LEAGUES.find(l => l.id === selectedLeague)?.shortName || selectedLeague;
+                                            if (window.confirm(`Reset only the ${lName} checklist? Other meets will not be changed.`)) {
+                                                meetAgentService.resetLeagueChecklist(selectedLeague);
+                                                setChecklist(meetAgentService.getChecklist(stageFilter, selectedLeague));
+                                            }
+                                        }}
+                                        className="text-[11px] text-slate-400 hover:text-rose-400 flex items-center gap-1.5 transition px-2.5 py-1 rounded-xl bg-slate-800/80 border border-slate-700"
+                                    >
+                                        <RefreshCw size={11} /> Reset {selectedLeague.toUpperCase()} Checklist Only
+                                    </button>
+                                ) : (
+                                    <span className="text-[11px] text-slate-500 italic">Select an individual meet to update or reset its tasks separately</span>
+                                )}
+                            </div>
+                        </div>
+
                         {/* Sub-Filters for Stages */}
                         <div className="flex items-center justify-between flex-wrap gap-3">
                             <div className="flex items-center gap-2">
@@ -491,7 +644,7 @@ export default function MeetManager({ onClose }) {
                             </div>
 
                             <div className="text-xs text-slate-400">
-                                Showing <span className="text-white font-bold">{checklist.length}</span> items
+                                Showing <span className="text-white font-bold">{checklist.length}</span> tasks for <span className="text-emerald-400 font-bold">{selectedLeague === 'all' ? 'All Meets' : selectedLeague.toUpperCase()}</span>
                             </div>
                         </div>
 
@@ -551,6 +704,11 @@ export default function MeetManager({ onClose }) {
                                                         <h4 className={`text-sm font-bold ${isCompleted ? 'line-through text-slate-400' : 'text-white'}`}>
                                                             {item.task}
                                                         </h4>
+                                                        {item.leagueShortName && (
+                                                            <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                                                                {item.leagueShortName}
+                                                            </span>
+                                                        )}
                                                         {item.critical && (
                                                             <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-rose-500/20 text-rose-300 border border-rose-500/30">
                                                                 Critical
@@ -641,7 +799,243 @@ export default function MeetManager({ onClose }) {
                 )}
 
                 {/* ========================================================================= */}
-                {/* TAB 2: TIMETABLES & WEATHER FORECAST */}
+                {/* TAB 2: DOCUMENTS, TEMPLATES & HISTORICAL RESULTS ARCHIVE */}
+                {/* ========================================================================= */}
+                {activeTab === 'documents' && (
+                    <div className="space-y-6">
+                        {/* Master OneDrive Integration Banner */}
+                        <div className="p-6 bg-gradient-to-r from-blue-950/40 via-slate-900 to-indigo-950/40 border border-blue-500/30 rounded-3xl space-y-4 shadow-xl">
+                            <div className="flex items-center justify-between flex-wrap gap-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-12 h-12 rounded-2xl bg-blue-500/20 text-blue-400 flex items-center justify-center shadow-inner">
+                                        <Cloud size={24} />
+                                    </div>
+                                    <div>
+                                        <div className="flex items-center gap-2">
+                                            <h3 className="text-base font-black text-white">
+                                                Master OneDrive & Historical Results Archive
+                                            </h3>
+                                            <span className="px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30 uppercase tracking-wider">
+                                                Cloud Linked
+                                            </span>
+                                        </div>
+                                        <p className="text-xs text-slate-400 mt-0.5 max-w-2xl">
+                                            Official scoring templates, blank recording cards, risk assessments, and historical match results (2024–2026) are linked to cloud storage so your Git repository remains lightweight.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center gap-2 flex-wrap">
+                                    <a
+                                        href={oneDriveUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 transition shadow-lg shadow-blue-600/20"
+                                    >
+                                        <ExternalLink size={14} /> Open Master OneDrive Folder
+                                    </a>
+                                    <button
+                                        onClick={() => {
+                                            setTempOneDriveUrl(oneDriveUrl);
+                                            setShowOneDriveModal(true);
+                                        }}
+                                        className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold flex items-center gap-1.5 transition border border-slate-700"
+                                        title="Configure Master OneDrive URL"
+                                    >
+                                        <Edit3 size={13} /> Edit Link
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="bg-slate-950/60 p-3 rounded-2xl border border-slate-800 flex items-center justify-between text-xs font-mono text-slate-400">
+                                <div className="flex items-center gap-2 truncate">
+                                    <Link size={13} className="text-blue-400 shrink-0" />
+                                    <span className="text-slate-500">Repository Folder:</span>
+                                    <span className="text-slate-300 truncate">{oneDriveUrl}</span>
+                                </div>
+                                <button
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(oneDriveUrl);
+                                        alert('OneDrive repository link copied to clipboard!');
+                                    }}
+                                    className="text-[11px] text-blue-400 hover:text-blue-300 flex items-center gap-1 shrink-0 ml-2"
+                                >
+                                    <Copy size={12} /> Copy
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Search & Actions Bar */}
+                        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+                            <div className="relative flex-1 max-w-md">
+                                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
+                                <input
+                                    type="text"
+                                    placeholder="Search templates, sample results, risk assessments..."
+                                    value={searchDoc}
+                                    onChange={(e) => setSearchDoc(e.target.value)}
+                                    className="w-full bg-slate-900 border border-slate-800 rounded-2xl pl-10 pr-4 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500"
+                                />
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={() => setShowAddDocModal(true)}
+                                    className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-slate-950 rounded-2xl text-xs font-bold flex items-center gap-2 transition shadow-md shadow-emerald-500/20"
+                                >
+                                    <Plus size={16} /> Add Document / OneDrive Link
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Category & League Filter Controls */}
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-2 overflow-x-auto pb-1">
+                                <span className="text-[10px] uppercase font-bold text-slate-500 whitespace-nowrap">Category:</span>
+                                {[
+                                    'all',
+                                    'Templates & Blank Sheets',
+                                    'Sample Historical Results',
+                                    'Letters & Technical Notices',
+                                    'Venue & Governance',
+                                    'Equipment & Supplies'
+                                ].map(cat => (
+                                    <button
+                                        key={cat}
+                                        onClick={() => setDocCategoryFilter(cat)}
+                                        className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition ${docCategoryFilter === cat
+                                            ? 'bg-emerald-500 text-slate-950'
+                                            : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
+                                            }`}
+                                    >
+                                        {cat === 'all' ? 'All Archive Documents' : cat}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <div className="flex items-center gap-2 overflow-x-auto pb-1">
+                                <span className="text-[10px] uppercase font-bold text-slate-500 whitespace-nowrap">League:</span>
+                                {[
+                                    { id: 'all', label: 'All Meets' },
+                                    { id: 'ydl', label: 'YDL' },
+                                    { id: 'alder_valley', label: 'Alder Valley' },
+                                    { id: 'vets', label: 'VETS League' }
+                                ].map(lg => (
+                                    <button
+                                        key={lg.id}
+                                        onClick={() => setDocLeagueFilter(lg.id)}
+                                        className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition ${docLeagueFilter === lg.id
+                                            ? 'bg-blue-600 text-white'
+                                            : 'bg-slate-900/60 text-slate-400 hover:text-white border border-slate-800'
+                                            }`}
+                                    >
+                                        {lg.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Documents & Templates Grid */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {filteredDocs.map(doc => {
+                                const isExcel = doc.format?.includes('Excel') || doc.format?.includes('.xlsx');
+                                const isPDF = doc.format?.includes('PDF') || doc.format?.includes('.pdf');
+                                const isWord = doc.format?.includes('Word') || doc.format?.includes('.docx');
+
+                                return (
+                                    <div
+                                        key={doc.id}
+                                        className="bg-slate-900 border border-slate-800 hover:border-slate-700 p-5 rounded-2xl flex flex-col justify-between space-y-4 transition shadow-md group"
+                                    >
+                                        <div className="space-y-2.5">
+                                            <div className="flex items-start justify-between gap-2">
+                                                <div className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center shrink-0">
+                                                    {isExcel ? (
+                                                        <FileSpreadsheet className="text-emerald-400" size={20} />
+                                                    ) : isPDF ? (
+                                                        <FileText className="text-rose-400" size={20} />
+                                                    ) : isWord ? (
+                                                        <FileText className="text-blue-400" size={20} />
+                                                    ) : (
+                                                        <Folder className="text-amber-400" size={20} />
+                                                    )}
+                                                </div>
+
+                                                <div className="flex items-center gap-1.5 flex-wrap justify-end">
+                                                    <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-slate-800 text-slate-300 border border-slate-700">
+                                                        {doc.format}
+                                                    </span>
+                                                    <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-500/10 text-blue-300 border border-blue-500/30">
+                                                        {doc.year}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-slate-800 text-emerald-400">
+                                                        {doc.league ? doc.league.toUpperCase() : 'ALL'}
+                                                    </span>
+                                                    <span className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold truncate">
+                                                        {doc.category}
+                                                    </span>
+                                                </div>
+                                                <h4 className="text-sm font-bold text-white group-hover:text-emerald-300 transition">
+                                                    {doc.title}
+                                                </h4>
+                                                <p className="text-xs text-slate-400 leading-relaxed mt-1">
+                                                    {doc.description}
+                                                </p>
+                                            </div>
+
+                                            {doc.oneDriveFileName && (
+                                                <div className="text-[11px] font-mono text-slate-400 bg-slate-950/60 p-2 rounded-xl border border-slate-800/60 flex items-center gap-1.5 truncate">
+                                                    <Folder size={12} className="text-blue-400 shrink-0" />
+                                                    <span className="truncate">{doc.oneDriveFileName}</span>
+                                                    <span className="text-[10px] text-slate-500 ml-auto shrink-0">({doc.size})</span>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Actions */}
+                                        <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                                            <a
+                                                href={doc.oneDriveUrl || oneDriveUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="px-3 py-1.5 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 border border-blue-500/30 text-xs font-bold flex items-center gap-1.5 transition flex-1 justify-center"
+                                            >
+                                                <ExternalLink size={12} /> Open in OneDrive / Portal
+                                            </a>
+
+                                            {doc.sampleAvailable && (
+                                                <button
+                                                    onClick={() => {
+                                                        // Sample generator download
+                                                        const sampleContent = `[HILLINGDON ATHLETIC CLUB ARCHIVE]\nDocument: ${doc.title}\nCategory: ${doc.category}\nFormat: ${doc.format}\nYear: ${doc.year}\nFile: ${doc.oneDriveFileName}\nOneDrive URL: ${doc.oneDriveUrl || oneDriveUrl}\n\nNotice: This document is archived in the club cloud repository. Open the Master OneDrive folder to view complete spreadsheets and verified PDFs.`;
+                                                        const blob = new Blob([sampleContent], { type: 'text/plain' });
+                                                        const url = URL.createObjectURL(blob);
+                                                        const a = document.createElement('a');
+                                                        a.href = url;
+                                                        a.download = `${doc.oneDriveFileName || 'HAC_Document_Reference'}.txt`;
+                                                        a.click();
+                                                    }}
+                                                    className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold flex items-center gap-1.5 transition"
+                                                    title="Download document summary"
+                                                >
+                                                    <Download size={12} /> Summary
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                )}
+
+                {/* ========================================================================= */}
+                {/* TAB 3: TIMETABLES & WEATHER FORECAST */}
                 {/* ========================================================================= */}
                 {activeTab === 'timetable' && (
                     <div className="space-y-8">
@@ -1404,6 +1798,212 @@ export default function MeetManager({ onClose }) {
                                     className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-slate-950 rounded-xl text-xs font-bold"
                                 >
                                     Save Contact
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal 5: Configure Master OneDrive Repository URL */}
+            {showOneDriveModal && (
+                <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+                    <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+                        <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h3 className="text-base font-bold text-white flex items-center gap-2">
+                                <Cloud size={18} className="text-blue-400" />
+                                Configure Club OneDrive / SharePoint URL
+                            </h3>
+                            <button
+                                onClick={() => setShowOneDriveModal(false)}
+                                className="text-slate-400 hover:text-white text-xs font-bold"
+                            >
+                                Close
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleSaveOneDriveUrl} className="space-y-4">
+                            <div>
+                                <label className="text-[11px] font-bold text-slate-400 uppercase">
+                                    Master Cloud Folder URL (OneDrive / SharePoint / Google Drive)
+                                </label>
+                                <input
+                                    type="url"
+                                    required
+                                    placeholder="https://onedrive.live.com/?id=..."
+                                    value={tempOneDriveUrl}
+                                    onChange={(e) => setTempOneDriveUrl(e.target.value)}
+                                    className="w-full mt-1.5 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 font-mono"
+                                />
+                                <p className="text-[11px] text-slate-500 mt-1.5 leading-relaxed">
+                                    Paste your shared OneDrive folder link. Team managers will be able to launch this directly to access past years' spreadsheets and certified result PDFs.
+                                </p>
+                            </div>
+
+                            <div className="flex items-center justify-end gap-2 pt-2">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowOneDriveModal(false)}
+                                    className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold"
+                                >
+                                    Save OneDrive Link
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal 6: Add Custom Document / OneDrive File Link */}
+            {showAddDocModal && (
+                <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+                    <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] flex flex-col shadow-2xl">
+                        <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h3 className="text-base font-bold text-white flex items-center gap-2">
+                                <Folder size={18} className="text-emerald-400" />
+                                Add Document to Archive (OneDrive Linked)
+                            </h3>
+                            <button
+                                onClick={() => setShowAddDocModal(false)}
+                                className="text-slate-400 hover:text-white text-xs font-bold"
+                            >
+                                Close
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleAddDoc} className="space-y-3 overflow-y-auto">
+                            <div>
+                                <label className="text-[11px] font-bold text-slate-400 uppercase">Document Title</label>
+                                <input
+                                    type="text"
+                                    required
+                                    placeholder="e.g. 2025 YDL Lower Final Standings & Scorecard"
+                                    value={newDoc.title}
+                                    onChange={(e) => setNewDoc({ ...newDoc, title: e.target.value })}
+                                    className="w-full mt-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label className="text-[11px] font-bold text-slate-400 uppercase">Category</label>
+                                    <select
+                                        value={newDoc.category}
+                                        onChange={(e) => setNewDoc({ ...newDoc, category: e.target.value })}
+                                        className="w-full mt-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                                    >
+                                        <option value="Templates & Blank Sheets">Templates & Blank Sheets</option>
+                                        <option value="Sample Historical Results">Sample Historical Results</option>
+                                        <option value="Letters & Technical Notices">Letters & Technical Notices</option>
+                                        <option value="Venue & Governance">Venue & Governance</option>
+                                        <option value="Equipment & Supplies">Equipment & Supplies</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="text-[11px] font-bold text-slate-400 uppercase">League Association</label>
+                                    <select
+                                        value={newDoc.league}
+                                        onChange={(e) => setNewDoc({ ...newDoc, league: e.target.value })}
+                                        className="w-full mt-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                                    >
+                                        <option value="all">All Meets</option>
+                                        <option value="ydl">Youth Development League (YDL)</option>
+                                        <option value="alder_valley">Alder Valley League</option>
+                                        <option value="vets">Southern Vets League</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label className="text-[11px] font-bold text-slate-400 uppercase">File Format</label>
+                                    <select
+                                        value={newDoc.format}
+                                        onChange={(e) => setNewDoc({ ...newDoc, format: e.target.value })}
+                                        className="w-full mt-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                                    >
+                                        <option value="Excel (.xlsx)">Excel (.xlsx)</option>
+                                        <option value="PDF (.pdf)">PDF (.pdf)</option>
+                                        <option value="Word (.docx)">Word (.docx)</option>
+                                        <option value="Text (.txt / .csv)">Text (.txt / .csv)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="text-[11px] font-bold text-slate-400 uppercase">Year / Season</label>
+                                    <input
+                                        type="text"
+                                        placeholder="e.g. 2025 Season / Template"
+                                        value={newDoc.year}
+                                        onChange={(e) => setNewDoc({ ...newDoc, year: e.target.value })}
+                                        className="w-full mt-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="text-[11px] font-bold text-slate-400 uppercase">Direct File Link (OneDrive / SharePoint URL)</label>
+                                <input
+                                    type="url"
+                                    placeholder="https://1drv.ms/u/s!..."
+                                    value={newDoc.oneDriveUrl}
+                                    onChange={(e) => setNewDoc({ ...newDoc, oneDriveUrl: e.target.value })}
+                                    className="w-full mt-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label className="text-[11px] font-bold text-slate-400 uppercase">Target File Name</label>
+                                    <input
+                                        type="text"
+                                        placeholder="e.g. YDL_2025_Results.xlsx"
+                                        value={newDoc.oneDriveFileName}
+                                        onChange={(e) => setNewDoc({ ...newDoc, oneDriveFileName: e.target.value })}
+                                        className="w-full mt-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-[11px] font-bold text-slate-400 uppercase">File Size</label>
+                                    <input
+                                        type="text"
+                                        placeholder="e.g. 210 KB"
+                                        value={newDoc.size}
+                                        onChange={(e) => setNewDoc({ ...newDoc, size: e.target.value })}
+                                        className="w-full mt-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="text-[11px] font-bold text-slate-400 uppercase">Description / Notes</label>
+                                <textarea
+                                    rows={2}
+                                    placeholder="Brief note on what this document contains..."
+                                    value={newDoc.description}
+                                    onChange={(e) => setNewDoc({ ...newDoc, description: e.target.value })}
+                                    className="w-full mt-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                                />
+                            </div>
+
+                            <div className="flex items-center justify-end gap-2 pt-2">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowAddDocModal(false)}
+                                    className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-slate-950 rounded-xl text-xs font-bold"
+                                >
+                                    Save Document Link
                                 </button>
                             </div>
                         </form>

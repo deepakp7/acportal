@@ -5,17 +5,21 @@
  * and provides persistent state management across sessions.
  */
 
-import { INITIAL_CHECKLIST_ITEMS, LEAGUES, MOCK_WEATHER_FORECASTS } from '../data/meetManagerData';
+import { INITIAL_CHECKLIST_ITEMS, LEAGUES, MOCK_WEATHER_FORECASTS, buildInitialChecklistsForLeagues, DEFAULT_ONEDRIVE_FOLDER_URL, DEFAULT_DOCUMENT_LIBRARY } from '../data/meetManagerData';
 import { supabase } from '../lib/supabase';
 
-const STORAGE_KEY_CHECKLISTS = 'hac_meet_manager_checklists_v1';
+const STORAGE_KEY_CHECKLISTS = 'hac_meet_manager_checklists_v2';
 const STORAGE_KEY_AGENT_LOGS = 'hac_meet_manager_agent_logs_v1';
 const STORAGE_KEY_CUSTOM_CONTACTS = 'hac_meet_manager_custom_contacts_v1';
+const STORAGE_KEY_ONEDRIVE_URL = 'hac_meet_manager_onedrive_url';
+const STORAGE_KEY_CUSTOM_DOCS = 'hac_meet_manager_custom_docs_v1';
 
 class MeetAgentService {
     constructor() {
         this.checklists = this.loadChecklists();
         this.agentLogs = this.loadAgentLogs();
+        this.customDocs = this.loadCustomDocs();
+        this.oneDriveUrl = this.loadOneDriveUrl();
         this.listeners = new Set();
         this.heartbeatTimer = null;
         this.startHeartbeat();
@@ -29,14 +33,14 @@ class MeetAgentService {
             const raw = localStorage.getItem(STORAGE_KEY_CHECKLISTS);
             if (raw) {
                 const parsed = JSON.parse(raw);
-                if (Array.isArray(parsed) && parsed.length > 0) {
+                if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].leagueId) {
                     return parsed;
                 }
             }
         } catch (e) {
             console.warn('Failed to load checklists from localStorage:', e);
         }
-        return JSON.parse(JSON.stringify(INITIAL_CHECKLIST_ITEMS));
+        return buildInitialChecklistsForLeagues();
     }
 
     saveChecklists() {
@@ -46,6 +50,69 @@ class MeetAgentService {
             console.error('Failed to save checklists:', e);
         }
         this.notifyListeners();
+    }
+
+    loadOneDriveUrl() {
+        try {
+            return localStorage.getItem(STORAGE_KEY_ONEDRIVE_URL) || DEFAULT_ONEDRIVE_FOLDER_URL;
+        } catch {
+            return DEFAULT_ONEDRIVE_FOLDER_URL;
+        }
+    }
+
+    saveOneDriveUrl(url) {
+        try {
+            this.oneDriveUrl = url || DEFAULT_ONEDRIVE_FOLDER_URL;
+            localStorage.setItem(STORAGE_KEY_ONEDRIVE_URL, this.oneDriveUrl);
+        } catch (e) {
+            console.error('Failed to save OneDrive URL:', e);
+        }
+        this.notifyListeners();
+    }
+
+    loadCustomDocs() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY_CUSTOM_DOCS);
+            return raw ? JSON.parse(raw) : [];
+        } catch {
+            return [];
+        }
+    }
+
+    saveCustomDocs(docs) {
+        try {
+            this.customDocs = docs;
+            localStorage.setItem(STORAGE_KEY_CUSTOM_DOCS, JSON.stringify(docs));
+        } catch (e) {
+            console.error('Failed to save custom documents:', e);
+        }
+        this.notifyListeners();
+    }
+
+    getAllDocuments(categoryFilter = 'all', leagueFilter = 'all') {
+        const combined = [...this.customDocs, ...DEFAULT_DOCUMENT_LIBRARY];
+        return combined.filter(doc => {
+            const matchCat = categoryFilter === 'all' || doc.category === categoryFilter;
+            const matchLeague = leagueFilter === 'all' || doc.league === 'all' || doc.league === leagueFilter;
+            return matchCat && matchLeague;
+        });
+    }
+
+    addCustomDocument(newDoc) {
+        const docObj = {
+            ...newDoc,
+            id: 'custom_doc_' + Date.now(),
+            createdAt: new Date().toISOString()
+        };
+        const updated = [docObj, ...this.customDocs];
+        this.saveCustomDocs(updated);
+        this.logAgentActivity(
+            docObj.league || 'all',
+            'Document Archive Agent',
+            `Added document link: "${docObj.title}" (${docObj.format}) to archive repository.`,
+            'success'
+        );
+        return docObj;
     }
 
     loadAgentLogs() {
@@ -166,12 +233,12 @@ class MeetAgentService {
     }
 
     // ----------------------------------------------------
-    // CHECKLIST RETRIEVAL & MUTATION
+    // CHECKLIST RETRIEVAL & MUTATION (PER-LEAGUE INDEPENDENCE)
     // ----------------------------------------------------
     getChecklist(stageFilter = 'all', leagueFilter = 'all') {
         return this.checklists.filter(item => {
             const matchesStage = stageFilter === 'all' || item.stage === stageFilter;
-            const matchesLeague = leagueFilter === 'all' || (item.leagues && item.leagues.includes(leagueFilter));
+            const matchesLeague = leagueFilter === 'all' || item.leagueId === leagueFilter;
             return matchesStage && matchesLeague;
         });
     }
@@ -196,26 +263,42 @@ class MeetAgentService {
         if (changedTask) {
             const statusLabel = newStatus.replace('_', ' ').toUpperCase();
             this.logAgentActivity(
-                'task_agent',
-                'Task Coordinator Agent',
-                `Task updated: "${changedTask.task}" marked as ${statusLabel}`,
+                changedTask.leagueId || 'task_agent',
+                `${changedTask.leagueShortName || 'Meet'} Agent`,
+                `[${changedTask.leagueShortName || 'Meet'}] Task updated: "${changedTask.task}" marked as ${statusLabel}`,
                 newStatus === 'completed' ? 'success' : newStatus === 'blocked' ? 'error' : 'info'
             );
         }
         return changedTask;
     }
 
-    resetChecklistToDefault() {
-        this.checklists = JSON.parse(JSON.stringify(INITIAL_CHECKLIST_ITEMS));
+    resetLeagueChecklist(leagueId) {
+        const freshLeagues = buildInitialChecklistsForLeagues().filter(i => i.leagueId === leagueId);
+        this.checklists = [
+            ...this.checklists.filter(i => i.leagueId !== leagueId),
+            ...freshLeagues
+        ];
         this.saveChecklists();
-        this.logAgentActivity('system', 'System Orchestrator', 'Checklists reset to default club template.', 'info');
+        const league = LEAGUES.find(l => l.id === leagueId);
+        this.logAgentActivity(
+            leagueId,
+            `${league ? league.shortName : 'Meet'} Agent`,
+            `Reset ${league ? league.shortName : 'Meet'} checklist to fresh template. Other meets preserved.`,
+            'info'
+        );
+    }
+
+    resetChecklistToDefault() {
+        this.checklists = buildInitialChecklistsForLeagues();
+        this.saveChecklists();
+        this.logAgentActivity('system', 'System Orchestrator', 'All meet checklists reset to default initial state.', 'info');
     }
 
     // ----------------------------------------------------
-    // LEAGUE READINESS & METRICS
+    // LEAGUE READINESS & METRICS (PER-LEAGUE ACCURACY)
     // ----------------------------------------------------
     getLeagueStats(leagueId) {
-        const items = this.checklists.filter(i => !i.leagues || i.leagues.includes(leagueId));
+        const items = this.checklists.filter(i => i.leagueId === leagueId);
         const total = items.length;
         const completed = items.filter(i => i.defaultStatus === 'completed').length;
         const inProgress = items.filter(i => i.defaultStatus === 'in_progress').length;
@@ -259,7 +342,7 @@ class MeetAgentService {
 
         const auditReport = leaguesToAudit.map(league => {
             const stats = this.getLeagueStats(league.id);
-            const leagueItems = this.checklists.filter(i => !i.leagues || i.leagues.includes(league.id));
+            const leagueItems = this.checklists.filter(i => i.leagueId === league.id);
             const criticalPending = leagueItems.filter(i => i.critical && i.defaultStatus !== 'completed');
 
             return {

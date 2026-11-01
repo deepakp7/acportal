@@ -737,3 +737,291 @@ export const MOCK_WEATHER_FORECASTS = {
     }
 };
 
+/**
+ * Generates independent, dedicated checklists for each of the 3 meets (YDL, Alder Valley, VETS).
+ * Changes in one meet's checklist will NOT affect the other meets.
+ */
+export const buildInitialChecklistsForLeagues = () => {
+    const list = [];
+    LEAGUES.forEach(league => {
+        INITIAL_CHECKLIST_ITEMS.forEach(item => {
+            let specificDesc = item.description;
+            let specificNote = item.agentNote;
+
+            if (item.id === 'chk-pre-01') {
+                if (league.id === 'vets') {
+                    specificDesc = 'Finalize date for VETS League. Held on a Monday evening anyway (Michael Illing confirmed).';
+                    specificNote = 'Monday evening fixture confirmed by Michael Illing.';
+                } else {
+                    specificDesc = `Finalize date for ${league.shortName}. Ask for a Sunday (Michael Illing to confirm).`;
+                    specificNote = `Sunday slot requested for ${league.shortName} at Hillingdon Athletics Stadium.`;
+                }
+            } else if (item.id === 'chk-pre-03') {
+                specificDesc = `Send formal match invitation letter to all visiting club managers 2 weeks before the ${league.shortName} event with timetable and parking guidance.`;
+            } else if (item.id === 'chk-pre-12') {
+                specificDesc = `Download official electronic results scoring spreadsheet templates from the ${league.shortName} official website (${league.websiteUrl}).`;
+            }
+
+            list.push({
+                ...item,
+                id: `${league.id}_${item.id}`,
+                baseId: item.id,
+                leagueId: league.id,
+                leagueName: league.name,
+                leagueShortName: league.shortName,
+                description: specificDesc,
+                agentNote: specificNote,
+                defaultStatus: item.defaultStatus
+            });
+        });
+    });
+    return list;
+};
+
+/**
+ * Master OneDrive Archive URL for HAC Meet Management
+ * Team managers can set their own club OneDrive / SharePoint folder URL in settings.
+ */
+export const DEFAULT_ONEDRIVE_FOLDER_URL = 'https://onedrive.live.com/?id=HAC_Meet_Manager_Archive';
+
+/**
+ * Document & Template Library
+ * Houses official scoring templates, blank recording cards, risk assessments,
+ * and sample results from previous years (2024, 2025, 2026).
+ */
+export const DEFAULT_DOCUMENT_LIBRARY = [
+    // ----------------------------------------------------
+    // CATEGORY 1: TEMPLATES & BLANK SHEETS
+    // ----------------------------------------------------
+    {
+        id: 'doc-tpl-01',
+        title: 'YDL Official Match Scoring Workbook Template',
+        category: 'Templates & Blank Sheets',
+        league: 'ydl',
+        format: 'Excel (.xlsx)',
+        year: '2026/27 Template',
+        size: '142 KB',
+        description: 'Official UK Youth Development League scoring spreadsheet with automated team point tables, string allocations, and track/field calculation formulas.',
+        oneDriveFileName: 'YDL_Match_Scoring_Template_2026.xlsx',
+        oneDriveUrl: 'https://www.ukydl.org.uk',
+        sampleAvailable: true
+    },
+    {
+        id: 'doc-tpl-02',
+        title: 'Alder Valley Match Declaration & Scoring Sheet',
+        category: 'Templates & Blank Sheets',
+        league: 'alder_valley',
+        format: 'Excel (.xlsx)',
+        year: '2026/27 Template',
+        size: '118 KB',
+        description: 'Multi-club team declaration and scoring template for Alder Valley boys and girls development age groups.',
+        oneDriveFileName: 'Alder_Valley_Declaration_Scoring_2026.xlsx',
+        oneDriveUrl: 'https://bmhac.co.uk/alder-valley-league/',
+        sampleAvailable: true
+    },
+    {
+        id: 'doc-tpl-03',
+        title: 'SCVAC Southern Vets Master Results Workbook',
+        category: 'Templates & Blank Sheets',
+        league: 'vets',
+        format: 'Excel (.xlsx)',
+        year: '2026/27 Template',
+        size: '156 KB',
+        description: 'Southern Counties Veterans AC master results file with age group scoring tables (M35, M50, M60, W35, W50, W60) for Western Division fixtures.',
+        oneDriveFileName: 'SCVAC_Southern_Vets_Results_Template.xlsx',
+        oneDriveUrl: 'http://www.scvac.org.uk',
+        sampleAvailable: true
+    },
+    {
+        id: 'doc-tpl-04',
+        title: 'Track Event Result Slips (Dual Copy Printable)',
+        category: 'Templates & Blank Sheets',
+        league: 'all',
+        format: 'PDF (.pdf)',
+        year: 'Standard Template',
+        size: '85 KB',
+        description: 'Standard printable slips (2 copies per event) for track judges, timekeepers, and photo-finish backup recording.',
+        oneDriveFileName: 'Track_Result_Slips_Dual_Copy.pdf',
+        oneDriveUrl: '',
+        sampleAvailable: true
+    },
+    {
+        id: 'doc-tpl-05',
+        title: 'Field Event Recording Card (Throws & Jumps)',
+        category: 'Templates & Blank Sheets',
+        league: 'all',
+        format: 'PDF (.pdf)',
+        year: 'Standard Template',
+        size: '92 KB',
+        description: 'Printable heavy-stock field cards with 3 trial rounds, top-8 finals grid, wind reading column, and EDM measurement fields.',
+        oneDriveFileName: 'Field_Event_Recording_Cards.pdf',
+        oneDriveUrl: '',
+        sampleAvailable: true
+    },
+    {
+        id: 'doc-tpl-06',
+        title: 'Officials Sign-In Register & Travel Expenses Form',
+        category: 'Templates & Blank Sheets',
+        league: 'all',
+        format: 'PDF (.pdf)',
+        year: '2026 UKA Format',
+        size: '78 KB',
+        description: 'Mandatory UKA licensed officials sign-in register and volunteer travel expense reimbursement claim sheet for reception.',
+        oneDriveFileName: 'Officials_Register_Travel_Expenses.pdf',
+        oneDriveUrl: '',
+        sampleAvailable: true
+    },
+    {
+        id: 'doc-tpl-07',
+        title: 'Non-Scoring Competitor Declaration Sheet',
+        category: 'Templates & Blank Sheets',
+        league: 'all',
+        format: 'Word (.docx)',
+        year: 'Standard Template',
+        size: '64 KB',
+        description: 'Declaration sheet for non-scoring club athletes and guest competitors checking in at reception on meet day.',
+        oneDriveFileName: 'Non_Scoring_Declaration_Form.docx',
+        oneDriveUrl: '',
+        sampleAvailable: true
+    },
+
+    // ----------------------------------------------------
+    // CATEGORY 2: SAMPLE RESULTS FROM PREVIOUS YEARS
+    // ----------------------------------------------------
+    {
+        id: 'doc-res-01',
+        title: '2025 YDL Lower Age Group Match 1 Full Results',
+        category: 'Sample Historical Results',
+        league: 'ydl',
+        format: 'Excel (.xlsx)',
+        year: '2025 Season',
+        size: '210 KB',
+        description: 'Complete certified results and match scores from the 2025 YDL Lower Match hosted at Hillingdon Athletics Stadium.',
+        oneDriveFileName: '2025_YDL_Lower_Match_1_Results_HAC.xlsx',
+        oneDriveUrl: 'https://www.ukydl.org.uk',
+        sampleAvailable: true
+    },
+    {
+        id: 'doc-res-02',
+        title: '2025 Alder Valley Match 2 Official Results PDF',
+        category: 'Sample Historical Results',
+        league: 'alder_valley',
+        format: 'PDF (.pdf)',
+        year: '2025 Season',
+        size: '345 KB',
+        description: 'Full verified match scores and athlete performances distributed to all participating clubs in June 2025.',
+        oneDriveFileName: '2025_Alder_Valley_Match_2_Results.pdf',
+        oneDriveUrl: 'https://bmhac.co.uk/alder-valley-league/',
+        sampleAvailable: true
+    },
+    {
+        id: 'doc-res-03',
+        title: '2025 Southern Vets Match 2 (Hillingdon Stadium) Results',
+        category: 'Sample Historical Results',
+        league: 'vets',
+        format: 'Excel (.xlsx)',
+        year: '2025 Season',
+        size: '185 KB',
+        description: 'Complete results archive of the floodlit Monday evening fixture hosted at Hillingdon Athletics Stadium, showing masters scoring breakdown.',
+        oneDriveFileName: '2025_SCVAC_Vets_Match_2_Hillingdon.xlsx',
+        oneDriveUrl: 'http://www.scvac.org.uk',
+        sampleAvailable: true
+    },
+    {
+        id: 'doc-res-04',
+        title: '2024 Southern Vets Match 4 (Perivale) Final Standings',
+        category: 'Sample Historical Results',
+        league: 'vets',
+        format: 'PDF (.pdf)',
+        year: '2024 Season',
+        size: '290 KB',
+        description: 'End-of-season championship standings and divisional rankings for Hillingdon AC masters squad.',
+        oneDriveFileName: '2024_SCVAC_Vets_Final_Standings.pdf',
+        oneDriveUrl: 'http://www.scvac.org.uk',
+        sampleAvailable: true
+    },
+    {
+        id: 'doc-res-05',
+        title: 'Power of 10 Submission File (Official Format Sample)',
+        category: 'Sample Historical Results',
+        league: 'all',
+        format: 'Text (.txt / .csv)',
+        year: 'Current Format',
+        size: '42 KB',
+        description: 'Standard UKA / Athletics Data compliant text format used for uploading meet results directly to Power of 10.',
+        oneDriveFileName: 'Sample_PowerOf10_Upload_Format.txt',
+        oneDriveUrl: '',
+        sampleAvailable: true
+    },
+
+    // ----------------------------------------------------
+    // CATEGORY 3: FORMAL LETTERS, CONTRACTS & NOTICES
+    // ----------------------------------------------------
+    {
+        id: 'doc-gov-01',
+        title: '2-Week Club Invitation Letter & Technical Notice',
+        category: 'Letters & Technical Notices',
+        league: 'all',
+        format: 'Word (.docx)',
+        year: '2026/27 Template',
+        size: '54 KB',
+        description: 'Formal match notice sent to visiting club managers 2 weeks prior, including timetables, officials duty allocations, and Gatting Way parking advice.',
+        oneDriveFileName: 'HAC_2Week_Meet_Notice_Letter_Template.docx',
+        oneDriveUrl: '',
+        sampleAvailable: true
+    },
+    {
+        id: 'doc-gov-02',
+        title: 'Hillingdon Stadium Facility Hire Agreement & Track License',
+        category: 'Venue & Governance',
+        league: 'all',
+        format: 'PDF (.pdf)',
+        year: '2026 Certified',
+        size: '420 KB',
+        description: 'Signed facility hire agreement with Fusion Lifestyle / Hillingdon Sports and Leisure Complex covering 8-lane track, jumps pits, cages, and clubhouse.',
+        oneDriveFileName: 'Hillingdon_Stadium_Hire_Agreement_2026.pdf',
+        oneDriveUrl: '',
+        sampleAvailable: true
+    },
+    {
+        id: 'doc-gov-03',
+        title: 'UKA Track & Field Competition Risk Assessment',
+        category: 'Venue & Governance',
+        league: 'all',
+        format: 'PDF (.pdf)',
+        year: '2026 UKA Certified',
+        size: '310 KB',
+        description: 'Comprehensive risk assessment and emergency action plan covering throwing cage safety, hurdle heights, track surface, and first aid provisions.',
+        oneDriveFileName: 'HAC_Track_and_Field_Risk_Assessment_2026.pdf',
+        oneDriveUrl: '',
+        sampleAvailable: true
+    },
+    {
+        id: 'doc-gov-04',
+        title: 'Stacey and Sons Race Bib Order Specification Form',
+        category: 'Equipment & Supplies',
+        league: 'all',
+        format: 'Excel (.xlsx)',
+        year: '2026 Order Form',
+        size: '95 KB',
+        description: 'Official order specification form for cloth numbers, letters, pins, and team packages placed with Stacey and Sons Ltd.',
+        oneDriveFileName: 'Stacey_and_Sons_Bib_Order_Spec_2026.xlsx',
+        oneDriveUrl: '',
+        sampleAvailable: true
+    },
+    {
+        id: 'doc-gov-05',
+        title: 'Gatting Way Parking Advisory Notice (Paid Parking Notice)',
+        category: 'Letters & Technical Notices',
+        league: 'all',
+        format: 'PDF (.pdf)',
+        year: '2026 Notice',
+        size: '120 KB',
+        description: 'Printable flyer for team buses, officials, and visiting parents explaining parking machine tariffs and PayByPhone mobile payments to prevent PCNs.',
+        oneDriveFileName: 'Gatting_Way_Parking_Advisory_Notice.pdf',
+        oneDriveUrl: '',
+        sampleAvailable: true
+    }
+];
+
+

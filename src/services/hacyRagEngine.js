@@ -748,6 +748,43 @@ export class HacyRagEngine {
             }
         });
 
+        docs.push({
+            id: 'meet_management_documents_and_archive',
+            type: 'meet_management',
+            title: 'Meet Manager: Document Archive, Templates & Historical Results (OneDrive)',
+            content: `Meet Manager Document Library, Templates & Cloud Archive:
+
+1. ONEDRIVE CLOUD ARCHIVE ARCHITECTURE:
+- To keep the Git repository lightweight, all large official scoring workbooks (.xlsx), blank printable cards (.pdf), risk assessments, and historical results from previous years (2024, 2025, 2026) are linked to a shared club OneDrive / SharePoint repository.
+- Team managers can open the master OneDrive folder in one click or customize the OneDrive repository link in settings.
+
+2. TEMPLATES & BLANK SHEETS:
+- YDL Official Match Scoring Workbook (.xlsx)
+- Alder Valley Match Declaration & Scoring Sheet (.xlsx)
+- SCVAC Southern Vets Master Results Workbook (.xlsx)
+- Track Event Result Slips (dual copy printable PDF)
+- Field Event Recording Cards (Throws & Jumps)
+- Officials Sign-In Register & Travel Expenses Form (UKA format)
+- Non-Scoring Competitor Declaration Sheet
+
+3. HISTORICAL RESULTS ARCHIVE:
+- 2025 YDL Lower Age Group Match 1 Full Results
+- 2025 Alder Valley Match 2 Official Results PDF
+- 2025 Southern Vets Match 2 (Hillingdon Stadium) Results
+- 2024 Southern Vets Match 4 (Perivale) Final Standings
+- Power of 10 Submission File sample (.txt)
+
+4. INDEPENDENT PER-MEET CHECKLISTS:
+- Checklists are independently maintained for each of the 3 meets (YDL, Alder Valley, VETS League).
+- Updating, completing, or resetting tasks in one meet will not affect the status or notes of the other meets.`,
+            keywords: ['documents', 'templates', 'onedrive', 'historical results', 'sample results', '2024 results', '2025 results', 'sharepoint', 'independent checklists', 'separate checklists'],
+            tokens: tokenize('documents templates onedrive historical results sample results 2024 2025 sharepoint independent checklists separate ydl alder valley vets scoring archive'),
+            metadata: {
+                source: 'HAC Meet Management Document Archive Guide',
+                category: 'Meet Management'
+            }
+        });
+
         // 14. Admin Custom Notes & Overrides (Overrides base knowledge if matching ID exists)
         this.customNotes.forEach(note => {
             const docObj = {

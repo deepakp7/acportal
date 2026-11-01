@@ -397,6 +397,35 @@
         "card reader",
         "power of 10"
       ]
+    },
+    {
+      "id": "meet_manager_document_archive",
+      "title": "Meet Manager: Document Archive, Templates & Historical Results (OneDrive)",
+      "category": "meet_management",
+      "keywords": [
+        "documents",
+        "templates",
+        "onedrive",
+        "sharepoint",
+        "previous years",
+        "historical results",
+        "sample results",
+        "2024 results",
+        "2025 results",
+        "scoring templates",
+        "risk assessment",
+        "independent checklists",
+        "separate checklists"
+      ],
+      "content": "Meet Manager Document Library & Archive:\n1. STORAGE IN ONEDRIVE:\nOfficial match templates, blank recording sheets, and historical results from previous years (2024, 2025, 2026) are hosted in a shared club OneDrive / SharePoint folder (default: https://onedrive.live.com/?id=HAC_Meet_Manager_Archive). This avoids checking large Excel and PDF binaries into Git while providing team managers with instant 1-click access to download or reference them.\n\n2. AVAILABLE DOCUMENTS & TEMPLATES:\n- Templates: YDL Official Match Scoring Workbook (.xlsx), Alder Valley Declaration & Scoring Sheet (.xlsx), SCVAC Southern Vets Master Results Workbook (.xlsx), Track Event Result Slips (dual copy printable PDF), Field Event Recording Cards (PDF), Officials Sign-In Register & Travel Expenses (PDF), Non-Scoring Competitor Declaration Sheet (Word).\n- Historical Results: 2025 YDL Lower Age Group Match 1 Full Results, 2025 Alder Valley Match 2 Official Results PDF, 2025 Southern Vets Match 2 (Hillingdon Stadium) Results, 2024 Southern Vets Match 4 (Perivale) Final Standings, Power of 10 Submission File sample.\n- Governance: 2-Week Club Invitation Letter (.docx), Hillingdon Stadium Facility Hire Agreement (.pdf), UKA Track & Field Competition Risk Assessment (.pdf), Stacey and Sons Race Bib Order Form (.xlsx), Gatting Way Parking Advisory Notice (.pdf).\n\n3. INDEPENDENT PER-MEET CHECKLISTS:\nChecklists are strictly independent for each of the 3 meets (YDL, Alder Valley, VETS). You can update, mark complete, or reset tasks for YDL without affecting Alder Valley or VETS.",
+      "tags": [
+        "documents",
+        "templates",
+        "onedrive",
+        "historical results",
+        "sample results",
+        "independent checklists"
+      ]
     }
   ],
   "contacts": {
@@ -7310,6 +7339,19 @@
       "ydl": "https://www.ukydl.org.uk",
       "alder_valley": "https://bmhac.co.uk/alder-valley-league/",
       "vets": "http://www.scvac.org.uk"
+    },
+    "document_archive": {
+      "description": "Repository of official match scoring spreadsheets, blank recording card templates, risk assessments, and historical results from previous years (2024, 2025, 2026).",
+      "storage_architecture": "Documents are organized in a dedicated club OneDrive / SharePoint repository and referenced directly in the Meet Manager portal rather than checking large binary files into Git.",
+      "master_onedrive_url": "https://onedrive.live.com/?id=HAC_Meet_Manager_Archive",
+      "categories": [
+        "Templates & Blank Sheets (YDL, Alder Valley, SCVAC scoring workbooks, dual-copy track slips, field cards, officials registers)",
+        "Sample Historical Results (2025 YDL Lower, 2025 Alder Valley Match 2, 2025 Southern Vets Hillingdon fixture, 2024 final standings, Po10 sample)",
+        "Letters, Technical Notices & Risk Assessments (2-week match notice letter, stadium hire agreement, UKA risk assessment, Stacey and Sons bib order form, Gatting Way parking notice)"
+      ]
+    },
+    "independent_checklists": {
+      "rule": "Each meet (YDL, Alder Valley, VETS League) maintains its own independent checklist. Updating, completing, or resetting a task in one meet will not alter the status or notes of the other meets."
     }
   }
 }

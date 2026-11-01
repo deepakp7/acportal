@@ -34,7 +34,8 @@ import {
     Trophy,
     CheckSquare,
     Zap,
-    Tag
+    Tag,
+    Folder
 } from 'lucide-react';
 
 const STORAGE_CHAT_MESSAGES = 'hacy_chat_active_messages';
@@ -63,6 +64,7 @@ I can answer questions regarding:
 
 const SUGGESTED_QUERIES = [
     { label: "Meet Prep Checklist", query: "What is on the checklist of items we need to do before the meet for YDL, Alder Valley, and VETS?", icon: CheckSquare },
+    { label: "Document & Result Archive", query: "Where can I find the official scoring templates, blank event cards, and historical meet results from previous years?", icon: Folder },
     { label: "Bibs & Stacey and Sons", query: "Who supplies our race bibs and how do we place an order?", icon: Tag },
     { label: "Meet Dates & Michael Illing", query: "What days of the week are YDL and VETS held, and who confirms the dates?", icon: Trophy },
     { label: "Card Reader Results Workflow", query: "How does the card reader record results during the meeting?", icon: Zap },
