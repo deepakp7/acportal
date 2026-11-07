@@ -14,7 +14,7 @@
         "how much",
         "rates"
       ],
-      "content": "Hillingdon AC Membership Fee Structure (Agreed at AGM):\n- Senior Individual (18+): £82.00 per year\n- Junior Individual (Under 18): £62.00 per year\n- Full-Time Student / Under 23: £62.00 per year\n- Family Membership: Discounted package covering multiple athletes in the same household\n- Life Members, Active Coaches, Officials & Team Managers: Free membership tier (no membership fee)\n- England Athletics (EA) Registration Fee: Approx £19/£20 per year (included in Junior registration; required for competing in licensed league matches and championships).\n- Track & Facility Fees: Handled separately via monthly GoCardless Direct Debit (£20-£25/month depending on age group).",
+      "content": "Hillingdon AC Membership Fee Structure (Agreed at AGM):\n- Senior Individual (18+): \u00a382.00 per year\n- Junior Individual (Under 18): \u00a362.00 per year\n- Full-Time Student / Under 23: \u00a362.00 per year\n- Family Membership: Discounted package covering multiple athletes in the same household\n- Life Members, Active Coaches, Officials & Team Managers: Free membership tier (no membership fee)\n- England Athletics (EA) Registration Fee: Approx \u00a319/\u00a320 per year (included in Junior registration; required for competing in licensed league matches and championships).\n- Track & Facility Fees: Handled separately via monthly GoCardless Direct Debit (\u00a320-\u00a325/month depending on age group).",
       "tags": [
         "fees",
         "costs",
@@ -774,19 +774,32 @@
   ],
   "junior_pbs_summary": {
     "season": "2026 Track & Field",
-    "total_athletes": 108,
-    "total_pbs": 221,
-    "level_summary": {
-      "Level 9": 11,
+    "period": "1.4.26 to 30.9.26",
+    "total_athletes": 115,
+    "total_pbs": 238,
+    "total_ea_certificates_to_purchase": 201,
+    "certificates_to_purchase": {
+      "Level 9": 13,
       "Level 8": 5,
-      "Level 7": 13,
-      "Level 6": 26,
-      "Level 5": 30,
-      "Level 4": 36,
+      "Level 7": 15,
+      "Level 6": 29,
+      "Level 5": 32,
+      "Level 4": 39,
       "Level 3": 19,
-      "Level 2": 21,
+      "Level 2": 24,
+      "Level 1": 25
+    },
+    "level_summary": {
+      "Level 9": 13,
+      "Level 8": 5,
+      "Level 7": 15,
+      "Level 6": 29,
+      "Level 5": 32,
+      "Level 4": 39,
+      "Level 3": 19,
+      "Level 2": 24,
       "Level 1": 25,
-      "Club PB / Below L1": 35
+      "Club PB / Below L1": 37
     },
     "athletes": [
       {
@@ -797,6 +810,70 @@
         "highest_level_str": "Level 9",
         "highest_event": "High_Jump",
         "highest_perf": "1.80",
+        "total_certificates": 5,
+        "ea_certificates_count": 5,
+        "events_list": [
+          {
+            "event": "High_Jump",
+            "performance": "1.80",
+            "date": "1 Aug",
+            "venue": "Guildford",
+            "position": "1",
+            "level": 9,
+            "level_str": "Level 9",
+            "cert_title": "EA Level 9 Award",
+            "standard_achieved": "1.76m",
+            "next_target": "Max Level"
+          },
+          {
+            "event": "Long_Jump",
+            "performance": "6.16",
+            "date": "19 Sep",
+            "venue": "Bedford",
+            "position": "1",
+            "level": 9,
+            "level_str": "Level 9",
+            "cert_title": "EA Level 9 Award",
+            "standard_achieved": "6.08m",
+            "next_target": "Max Level"
+          },
+          {
+            "event": "Triple_Jump",
+            "performance": "12.63",
+            "date": "15 Jul",
+            "venue": "Horspath",
+            "position": "1",
+            "level": 8,
+            "level_str": "Level 8",
+            "cert_title": "EA Level 8 Award",
+            "standard_achieved": "12.30m",
+            "next_target": "12.80m"
+          },
+          {
+            "event": "Pentathlon",
+            "performance": "2800",
+            "date": "19 Sep",
+            "venue": "Bedford",
+            "position": "1",
+            "level": 9,
+            "level_str": "Level 9",
+            "cert_title": "EA Level 9 Award",
+            "standard_achieved": "2800 pts",
+            "next_target": "Max Level"
+          },
+          {
+            "event": "800m",
+            "performance": "2:16.59",
+            "date": "8 Mar",
+            "venue": "Sheffield",
+            "position": "9",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "2:20.00",
+            "next_target": "2:16.50"
+          }
+        ],
         "events": {
           "High_Jump": {
             "event": "High_Jump",
@@ -833,6 +910,30 @@
             "cert_title": "EA Level 8 Award",
             "standard_achieved": "12.30m",
             "next_target": "12.80m"
+          },
+          "Pentathlon": {
+            "event": "Pentathlon",
+            "performance": "2800",
+            "date": "19 Sep",
+            "venue": "Bedford",
+            "position": "1",
+            "level": 9,
+            "level_str": "Level 9",
+            "cert_title": "EA Level 9 Award",
+            "standard_achieved": "2800 pts",
+            "next_target": "Max Level"
+          },
+          "800m": {
+            "event": "800m",
+            "performance": "2:16.59",
+            "date": "8 Mar",
+            "venue": "Sheffield",
+            "position": "9",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "2:20.00",
+            "next_target": "2:16.50"
           }
         }
       },
@@ -844,6 +945,70 @@
         "highest_level_str": "Level 9",
         "highest_event": "800m",
         "highest_perf": "1:56.48",
+        "total_certificates": 5,
+        "ea_certificates_count": 5,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "4:16.24",
+            "date": "4 May",
+            "venue": "Oxford",
+            "position": "3",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "4:20.00",
+            "next_target": "4:15.00"
+          },
+          {
+            "event": "200m",
+            "performance": "24.0",
+            "date": "26 Jul",
+            "venue": "Guildford",
+            "position": "5",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "24.00s",
+            "next_target": "23.60s"
+          },
+          {
+            "event": "3000m",
+            "performance": "9:00.43",
+            "date": "1 Apr",
+            "venue": "Watford",
+            "position": "1",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "9:10.00",
+            "next_target": "9:00.00"
+          },
+          {
+            "event": "800m",
+            "performance": "1:56.48",
+            "date": "27 Jun",
+            "venue": "Cardiff",
+            "position": "1",
+            "level": 9,
+            "level_str": "Level 9",
+            "cert_title": "EA Level 9 Award",
+            "standard_achieved": "1:57.00",
+            "next_target": "Max Level"
+          },
+          {
+            "event": "Mile",
+            "performance": "4:38.57",
+            "date": "4 May",
+            "venue": "Oxford",
+            "position": "2",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "4:20.00",
+            "next_target": "4:15.00"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -915,6 +1080,34 @@
         "highest_level_str": "Level 9",
         "highest_event": "100m",
         "highest_perf": "12.4",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "12.4",
+            "date": "8 Aug",
+            "venue": "Hillingdon",
+            "position": "2",
+            "level": 9,
+            "level_str": "Level 9",
+            "cert_title": "EA Level 9 Award",
+            "standard_achieved": "12.40s",
+            "next_target": "Max Level"
+          },
+          {
+            "event": "200m",
+            "performance": "27.09",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "2",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "27.25s",
+            "next_target": "26.75s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -950,6 +1143,46 @@
         "highest_level_str": "Level 9",
         "highest_event": "1500m",
         "highest_perf": "3:59.92",
+        "total_certificates": 3,
+        "ea_certificates_count": 3,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "3:59.92",
+            "date": "27 May",
+            "venue": "Watford",
+            "position": "1",
+            "level": 9,
+            "level_str": "Level 9",
+            "cert_title": "EA Level 9 Award",
+            "standard_achieved": "4:01.25",
+            "next_target": "Max Level"
+          },
+          {
+            "event": "400m",
+            "performance": "53.8",
+            "date": "8 Aug",
+            "venue": "Hillingdon",
+            "position": "4",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "54.30s",
+            "next_target": "53.10s"
+          },
+          {
+            "event": "Mile",
+            "performance": "4:25.27",
+            "date": "4 May",
+            "venue": "Oxford",
+            "position": "1",
+            "level": 7,
+            "level_str": "Level 7",
+            "cert_title": "EA Level 7 Award",
+            "standard_achieved": "4:10.00",
+            "next_target": "4:05.00"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -997,6 +1230,70 @@
         "highest_level_str": "Level 9",
         "highest_event": "200m",
         "highest_perf": "22.08",
+        "total_certificates": 5,
+        "ea_certificates_count": 5,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "11.17",
+            "date": "19 Jul",
+            "venue": "Parliament Hill",
+            "position": "1",
+            "level": 8,
+            "level_str": "Level 8",
+            "cert_title": "EA Level 8 Award",
+            "standard_achieved": "11.20s",
+            "next_target": "11.10s"
+          },
+          {
+            "event": "200m",
+            "performance": "22.08",
+            "date": "19 Jul",
+            "venue": "Parliament Hill",
+            "position": "1",
+            "level": 9,
+            "level_str": "Level 9",
+            "cert_title": "EA Level 9 Award",
+            "standard_achieved": "22.50s",
+            "next_target": "Max Level"
+          },
+          {
+            "event": "High_Jump",
+            "performance": "1.70",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "3",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "1.67m",
+            "next_target": "1.73m"
+          },
+          {
+            "event": "Long_Jump",
+            "performance": "5.77",
+            "date": "21 Jun",
+            "venue": "Parliament Hill",
+            "position": "4",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "5.75m",
+            "next_target": "5.98m"
+          },
+          {
+            "event": "Triple_Jump",
+            "performance": "11.20",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "5",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "11.20m",
+            "next_target": "11.75m"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -1068,6 +1365,58 @@
         "highest_level_str": "Level 9",
         "highest_event": "High_Jump",
         "highest_perf": "1.80",
+        "total_certificates": 4,
+        "ea_certificates_count": 4,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "12.41",
+            "date": "9 May",
+            "venue": "Lee Valley",
+            "position": "14",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "12.55s",
+            "next_target": "12.30s"
+          },
+          {
+            "event": "200m",
+            "performance": "24.87",
+            "date": "3 May",
+            "venue": "Eton",
+            "position": "13",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "25.30s",
+            "next_target": "24.85s"
+          },
+          {
+            "event": "High_Jump",
+            "performance": "1.80",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "1",
+            "level": 9,
+            "level_str": "Level 9",
+            "cert_title": "EA Level 9 Award",
+            "standard_achieved": "1.76m",
+            "next_target": "Max Level"
+          },
+          {
+            "event": "Long_Jump",
+            "performance": "5.57",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "5",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "5.38m",
+            "next_target": "5.63m"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -1127,6 +1476,58 @@
         "highest_level_str": "Level 9",
         "highest_event": "100m",
         "highest_perf": "13.14",
+        "total_certificates": 4,
+        "ea_certificates_count": 4,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "13.14",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "5",
+            "level": 9,
+            "level_str": "Level 9",
+            "cert_title": "EA Level 9 Award",
+            "standard_achieved": "13.20s",
+            "next_target": "Max Level"
+          },
+          {
+            "event": "200m",
+            "performance": "27.47",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "5",
+            "level": 9,
+            "level_str": "Level 9",
+            "cert_title": "EA Level 9 Award",
+            "standard_achieved": "27.85s",
+            "next_target": "Max Level"
+          },
+          {
+            "event": "60m",
+            "performance": "8.66",
+            "date": "29 Aug",
+            "venue": "Lee Valley",
+            "position": "8",
+            "level": 7,
+            "level_str": "Level 7",
+            "cert_title": "EA Level 7 Award",
+            "standard_achieved": "8.70s",
+            "next_target": "8.50s"
+          },
+          {
+            "event": "Long_Jump",
+            "performance": "4.55",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "2",
+            "level": 7,
+            "level_str": "Level 7",
+            "cert_title": "EA Level 7 Award",
+            "standard_achieved": "4.38m",
+            "next_target": "4.60m"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -1186,6 +1587,46 @@
         "highest_level_str": "Level 9",
         "highest_event": "100m",
         "highest_perf": "12.24",
+        "total_certificates": 3,
+        "ea_certificates_count": 3,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "12.24",
+            "date": "31 May",
+            "venue": "Walton",
+            "position": "1",
+            "level": 9,
+            "level_str": "Level 9",
+            "cert_title": "EA Level 9 Award",
+            "standard_achieved": "12.60s",
+            "next_target": "Max Level"
+          },
+          {
+            "event": "200m",
+            "performance": "25.03",
+            "date": "1 Aug",
+            "venue": "Guildford",
+            "position": "1",
+            "level": 9,
+            "level_str": "Level 9",
+            "cert_title": "EA Level 9 Award",
+            "standard_achieved": "26.75s",
+            "next_target": "Max Level"
+          },
+          {
+            "event": "300m",
+            "performance": "39.84",
+            "date": "31 May",
+            "venue": "Walton",
+            "position": "1",
+            "level": 9,
+            "level_str": "Level 9",
+            "cert_title": "EA Level 9 Award",
+            "standard_achieved": "41.65s",
+            "next_target": "Max Level"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -1210,6 +1651,18 @@
             "cert_title": "EA Level 9 Award",
             "standard_achieved": "26.75s",
             "next_target": "Max Level"
+          },
+          "300m": {
+            "event": "300m",
+            "performance": "39.84",
+            "date": "31 May",
+            "venue": "Walton",
+            "position": "1",
+            "level": 9,
+            "level_str": "Level 9",
+            "cert_title": "EA Level 9 Award",
+            "standard_achieved": "41.65s",
+            "next_target": "Max Level"
           }
         }
       },
@@ -1221,6 +1674,46 @@
         "highest_level_str": "Level 8",
         "highest_event": "200m",
         "highest_perf": "28.20",
+        "total_certificates": 3,
+        "ea_certificates_count": 3,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "13.84",
+            "date": "3 May",
+            "venue": "Eton",
+            "position": "13",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "14.05s",
+            "next_target": "13.75s"
+          },
+          {
+            "event": "200m",
+            "performance": "28.20",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "10",
+            "level": 8,
+            "level_str": "Level 8",
+            "cert_title": "EA Level 8 Award",
+            "standard_achieved": "28.50s",
+            "next_target": "27.85s"
+          },
+          {
+            "event": "Long_Jump",
+            "performance": "4.13",
+            "date": "26 Jul",
+            "venue": "Guildford",
+            "position": "6",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "4.13m",
+            "next_target": "4.38m"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -1268,6 +1761,34 @@
         "highest_level_str": "Level 8",
         "highest_event": "200m",
         "highest_perf": "25.04",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "12.56",
+            "date": "31 May",
+            "venue": "Walton",
+            "position": "15",
+            "level": 7,
+            "level_str": "Level 7",
+            "cert_title": "EA Level 7 Award",
+            "standard_achieved": "12.75s",
+            "next_target": "12.45s"
+          },
+          {
+            "event": "200m",
+            "performance": "25.04",
+            "date": "31 May",
+            "venue": "Walton",
+            "position": "14",
+            "level": 8,
+            "level_str": "Level 8",
+            "cert_title": "EA Level 8 Award",
+            "standard_achieved": "25.10s",
+            "next_target": "24.65s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -1303,6 +1824,34 @@
         "highest_level_str": "Level 8",
         "highest_event": "200m",
         "highest_perf": "28.05",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "13.80",
+            "date": "3 May",
+            "venue": "Eton",
+            "position": "11",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "14.05s",
+            "next_target": "13.75s"
+          },
+          {
+            "event": "200m",
+            "performance": "28.05",
+            "date": "31 May",
+            "venue": "Walton",
+            "position": "7",
+            "level": 8,
+            "level_str": "Level 8",
+            "cert_title": "EA Level 8 Award",
+            "standard_achieved": "28.50s",
+            "next_target": "27.85s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -1338,6 +1887,22 @@
         "highest_level_str": "Level 7",
         "highest_event": "Javelin",
         "highest_perf": "48.64",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "Javelin",
+            "performance": "48.64",
+            "date": "8 Aug",
+            "venue": "Hillingdon",
+            "position": "1",
+            "level": 7,
+            "level_str": "Level 7",
+            "cert_title": "EA Level 7 Award",
+            "standard_achieved": "47.00m",
+            "next_target": "50.00m"
+          }
+        ],
         "events": {
           "Javelin": {
             "event": "Javelin",
@@ -1354,6 +1919,69 @@
         }
       },
       {
+        "name": "Cirocco Fitzpatrick",
+        "age_group": "U16",
+        "gender": "Boys/Men",
+        "highest_level": 7,
+        "highest_level_str": "Level 7",
+        "highest_event": "Javelin",
+        "highest_perf": "42.13",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "Javelin",
+            "performance": "42.13",
+            "date": "1 Aug",
+            "venue": "Guildford",
+            "position": "1",
+            "level": 7,
+            "level_str": "Level 7",
+            "cert_title": "EA Level 7 Award",
+            "standard_achieved": "41.00m",
+            "next_target": "44.00m"
+          },
+          {
+            "event": "Discus",
+            "performance": "25.30",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "3",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "24.00m",
+            "next_target": "26.50m"
+          }
+        ],
+        "events": {
+          "Javelin": {
+            "event": "Javelin",
+            "performance": "42.13",
+            "date": "1 Aug",
+            "venue": "Guildford",
+            "position": "1",
+            "level": 7,
+            "level_str": "Level 7",
+            "cert_title": "EA Level 7 Award",
+            "standard_achieved": "41.00m",
+            "next_target": "44.00m"
+          },
+          "Discus": {
+            "event": "Discus",
+            "performance": "25.30",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "3",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "24.00m",
+            "next_target": "26.50m"
+          }
+        }
+      },
+      {
         "name": "Darcy Rae De Vere",
         "age_group": "U14",
         "gender": "Girls/Women",
@@ -1361,6 +1989,58 @@
         "highest_level_str": "Level 7",
         "highest_event": "200m",
         "highest_perf": "28.86",
+        "total_certificates": 4,
+        "ea_certificates_count": 4,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "14.0",
+            "date": "5 Jul",
+            "venue": "Basingstoke",
+            "position": "15",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "14.05s",
+            "next_target": "13.75s"
+          },
+          {
+            "event": "200m",
+            "performance": "28.86",
+            "date": "3 May",
+            "venue": "Eton",
+            "position": "13",
+            "level": 7,
+            "level_str": "Level 7",
+            "cert_title": "EA Level 7 Award",
+            "standard_achieved": "29.10s",
+            "next_target": "28.50s"
+          },
+          {
+            "event": "High_Jump",
+            "performance": "1.20",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "5",
+            "level": 3,
+            "level_str": "Level 3",
+            "cert_title": "EA Level 3 Award",
+            "standard_achieved": "1.18m",
+            "next_target": "1.23m"
+          },
+          {
+            "event": "Long_Jump",
+            "performance": "3.64",
+            "date": "7 Jun",
+            "venue": "Aldershot",
+            "position": "12",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "3.63m",
+            "next_target": "3.88m"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -1420,6 +2100,34 @@
         "highest_level_str": "Level 7",
         "highest_event": "100m",
         "highest_perf": "12.69",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "12.69",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "18",
+            "level": 7,
+            "level_str": "Level 7",
+            "cert_title": "EA Level 7 Award",
+            "standard_achieved": "12.75s",
+            "next_target": "12.45s"
+          },
+          {
+            "event": "200m",
+            "performance": "27.07",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "20",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "27.25s",
+            "next_target": "26.50s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -1455,6 +2163,46 @@
         "highest_level_str": "Level 7",
         "highest_event": "100m",
         "highest_perf": "12.6",
+        "total_certificates": 3,
+        "ea_certificates_count": 3,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "12.6",
+            "date": "5 Jul",
+            "venue": "Basingstoke",
+            "position": "16",
+            "level": 7,
+            "level_str": "Level 7",
+            "cert_title": "EA Level 7 Award",
+            "standard_achieved": "12.75s",
+            "next_target": "12.45s"
+          },
+          {
+            "event": "200m",
+            "performance": "26.21",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "17",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "26.50s",
+            "next_target": "25.80s"
+          },
+          {
+            "event": "High_Jump",
+            "performance": "1.40",
+            "date": "5 Jul",
+            "venue": "Basingstoke",
+            "position": "7",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "1.38m",
+            "next_target": "1.43m"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -1502,6 +2250,34 @@
         "highest_level_str": "Level 7",
         "highest_event": "1500m",
         "highest_perf": "5:08.09",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "5:08.09",
+            "date": "22 Jul",
+            "venue": "Watford",
+            "position": "2",
+            "level": 7,
+            "level_str": "Level 7",
+            "cert_title": "EA Level 7 Award",
+            "standard_achieved": "5:10.00",
+            "next_target": "5:03.50"
+          },
+          {
+            "event": "800m",
+            "performance": "2:36.74",
+            "date": "2 Sep",
+            "venue": "Watford",
+            "position": "5",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "2:40.50",
+            "next_target": "2:36.50"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -1537,6 +2313,46 @@
         "highest_level_str": "Level 7",
         "highest_event": "Long_Jump",
         "highest_perf": "4.88",
+        "total_certificates": 3,
+        "ea_certificates_count": 3,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "13.44",
+            "date": "31 May",
+            "venue": "Walton",
+            "position": "22",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "13.45s",
+            "next_target": "13.15s"
+          },
+          {
+            "event": "200m",
+            "performance": "27.88",
+            "date": "7 Jun",
+            "venue": "Aldershot",
+            "position": "21",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "28.00s",
+            "next_target": "27.25s"
+          },
+          {
+            "event": "Long_Jump",
+            "performance": "4.88",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "9",
+            "level": 7,
+            "level_str": "Level 7",
+            "cert_title": "EA Level 7 Award",
+            "standard_achieved": "4.88m",
+            "next_target": "5.13m"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -1584,6 +2400,46 @@
         "highest_level_str": "Level 7",
         "highest_event": "800m",
         "highest_perf": "1:59.94",
+        "total_certificates": 3,
+        "ea_certificates_count": 3,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "4:16.89",
+            "date": "19 Aug",
+            "venue": "Watford",
+            "position": "4",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "4:20.00",
+            "next_target": "4:15.00"
+          },
+          {
+            "event": "400m",
+            "performance": "53.3",
+            "date": "26 Jul",
+            "venue": "Guildford",
+            "position": "3",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "54.30s",
+            "next_target": "53.10s"
+          },
+          {
+            "event": "800m",
+            "performance": "1:59.94",
+            "date": "10 Jun",
+            "venue": "Watford",
+            "position": "2",
+            "level": 7,
+            "level_str": "Level 7",
+            "cert_title": "EA Level 7 Award",
+            "standard_achieved": "2:01.00",
+            "next_target": "1:59.00"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -1631,6 +2487,46 @@
         "highest_level_str": "Level 7",
         "highest_event": "100m",
         "highest_perf": "11.78",
+        "total_certificates": 3,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "11.78",
+            "date": "31 May",
+            "venue": "Walton",
+            "position": "3",
+            "level": 7,
+            "level_str": "Level 7",
+            "cert_title": "EA Level 7 Award",
+            "standard_achieved": "11.80s",
+            "next_target": "11.60s"
+          },
+          {
+            "event": "200m",
+            "performance": "24.2",
+            "date": "26 Jul",
+            "venue": "Guildford",
+            "position": "7",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "24.40s",
+            "next_target": "24.00s"
+          },
+          {
+            "event": "800m",
+            "performance": "2:54.40",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "27",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 2:24.00"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -1671,6 +2567,69 @@
         }
       },
       {
+        "name": "Oliver Baker",
+        "age_group": "U16",
+        "gender": "Boys/Men",
+        "highest_level": 7,
+        "highest_level_str": "Level 7",
+        "highest_event": "Shot",
+        "highest_perf": "11.65",
+        "total_certificates": 2,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "Shot",
+            "performance": "11.65",
+            "date": "7 Jun",
+            "venue": "Aldershot",
+            "position": "2",
+            "level": 7,
+            "level_str": "Level 7",
+            "cert_title": "EA Level 7 Award",
+            "standard_achieved": "11.60m",
+            "next_target": "12.40m"
+          },
+          {
+            "event": "Javelin",
+            "performance": "21.26",
+            "date": "13 Jun",
+            "venue": "Milton Keynes",
+            "position": "5",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 23.00m"
+          }
+        ],
+        "events": {
+          "Shot": {
+            "event": "Shot",
+            "performance": "11.65",
+            "date": "7 Jun",
+            "venue": "Aldershot",
+            "position": "2",
+            "level": 7,
+            "level_str": "Level 7",
+            "cert_title": "EA Level 7 Award",
+            "standard_achieved": "11.60m",
+            "next_target": "12.40m"
+          },
+          "Javelin": {
+            "event": "Javelin",
+            "performance": "21.26",
+            "date": "13 Jun",
+            "venue": "Milton Keynes",
+            "position": "5",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 23.00m"
+          }
+        }
+      },
+      {
         "name": "Reuben D'Souza",
         "age_group": "U18",
         "gender": "Boys/Men",
@@ -1678,6 +2637,46 @@
         "highest_level_str": "Level 7",
         "highest_event": "400m",
         "highest_perf": "52.13",
+        "total_certificates": 3,
+        "ea_certificates_count": 3,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "11.8",
+            "date": "26 Jul",
+            "venue": "Guildford",
+            "position": "4",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "11.90s",
+            "next_target": "11.70s"
+          },
+          {
+            "event": "200m",
+            "performance": "23.6",
+            "date": "24 May",
+            "venue": "Hemel Hempstead",
+            "position": "3",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "23.60s",
+            "next_target": "23.30s"
+          },
+          {
+            "event": "400m",
+            "performance": "52.13",
+            "date": "7 Jun",
+            "venue": "Aldershot",
+            "position": "1",
+            "level": 7,
+            "level_str": "Level 7",
+            "cert_title": "EA Level 7 Award",
+            "standard_achieved": "53.10s",
+            "next_target": "52.00s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -1725,6 +2724,34 @@
         "highest_level_str": "Level 6",
         "highest_event": "1500m",
         "highest_perf": "5:14.98",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "5:14.98",
+            "date": "31 May",
+            "venue": "Walton",
+            "position": "4",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "5:18.00",
+            "next_target": "5:10.00"
+          },
+          {
+            "event": "800m",
+            "performance": "2:33.62",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "4",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "2:36.50",
+            "next_target": "2:33.00"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -1760,6 +2787,34 @@
         "highest_level_str": "Level 6",
         "highest_event": "100m",
         "highest_perf": "12.00",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "12.00",
+            "date": "13 Jun",
+            "venue": "Watford",
+            "position": "8",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "12.10s",
+            "next_target": "11.80s"
+          },
+          {
+            "event": "Long_Jump",
+            "performance": "5.06",
+            "date": "5 Jul",
+            "venue": "Basingstoke",
+            "position": "7",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "4.88m",
+            "next_target": "5.13m"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -1795,6 +2850,22 @@
         "highest_level_str": "Level 6",
         "highest_event": "400m",
         "highest_perf": "63.03",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "400m",
+            "performance": "63.03",
+            "date": "12 Jul",
+            "venue": "Perivale",
+            "position": "2",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "1:04.00",
+            "next_target": "1:02.00"
+          }
+        ],
         "events": {
           "400m": {
             "event": "400m",
@@ -1818,6 +2889,34 @@
         "highest_level_str": "Level 6",
         "highest_event": "100m",
         "highest_perf": "11.87",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "11.87",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "5",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "12.10s",
+            "next_target": "11.80s"
+          },
+          {
+            "event": "200m",
+            "performance": "24.28",
+            "date": "1 Aug",
+            "venue": "Guildford",
+            "position": "9",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "24.40s",
+            "next_target": "24.00s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -1853,6 +2952,22 @@
         "highest_level_str": "Level 6",
         "highest_event": "100m",
         "highest_perf": "13.08",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "13.08",
+            "date": "13 Jun",
+            "venue": "Watford",
+            "position": "4",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "13.10s",
+            "next_target": "12.90s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -1876,6 +2991,46 @@
         "highest_level_str": "Level 6",
         "highest_event": "400m",
         "highest_perf": "63.73",
+        "total_certificates": 3,
+        "ea_certificates_count": 3,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "5:03.0",
+            "date": "8 Aug",
+            "venue": "Hillingdon",
+            "position": "1",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "5:03.00",
+            "next_target": "4:57.50"
+          },
+          {
+            "event": "400m",
+            "performance": "63.73",
+            "date": "12 Jul",
+            "venue": "Perivale",
+            "position": "3",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "1:04.00",
+            "next_target": "1:02.00"
+          },
+          {
+            "event": "800m",
+            "performance": "2:22.52",
+            "date": "13 Sep",
+            "venue": "Kingston",
+            "position": "2",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "2:23.00",
+            "next_target": "2:21.00"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -1916,6 +3071,69 @@
         }
       },
       {
+        "name": "Jayden Adjei",
+        "age_group": "U17",
+        "gender": "Boys/Men",
+        "highest_level": 6,
+        "highest_level_str": "Level 6",
+        "highest_event": "60m",
+        "highest_perf": "7.58",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "60m",
+            "performance": "7.58",
+            "date": "21 Jan",
+            "venue": "Uxbridge",
+            "position": "2",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "7.65s",
+            "next_target": "7.55s"
+          },
+          {
+            "event": "100m",
+            "performance": "11.83",
+            "date": "31 May",
+            "venue": "Walton",
+            "position": "9",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "11.90s",
+            "next_target": "11.70s"
+          }
+        ],
+        "events": {
+          "60m": {
+            "event": "60m",
+            "performance": "7.58",
+            "date": "21 Jan",
+            "venue": "Uxbridge",
+            "position": "2",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "7.65s",
+            "next_target": "7.55s"
+          },
+          "100m": {
+            "event": "100m",
+            "performance": "11.83",
+            "date": "31 May",
+            "venue": "Walton",
+            "position": "9",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "11.90s",
+            "next_target": "11.70s"
+          }
+        }
+      },
+      {
         "name": "Jayden Mwatsama",
         "age_group": "U14",
         "gender": "Boys/Men",
@@ -1923,6 +3141,22 @@
         "highest_level_str": "Level 6",
         "highest_event": "High_Jump",
         "highest_perf": "1.45",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "High_Jump",
+            "performance": "1.45",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "6",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "1.43m",
+            "next_target": "1.48m"
+          }
+        ],
         "events": {
           "High_Jump": {
             "event": "High_Jump",
@@ -1946,6 +3180,34 @@
         "highest_level_str": "Level 6",
         "highest_event": "200m",
         "highest_perf": "28.08",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "13.37",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "7",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "13.50s",
+            "next_target": "13.30s"
+          },
+          {
+            "event": "200m",
+            "performance": "28.08",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "9",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "28.50s",
+            "next_target": "27.85s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -1981,6 +3243,34 @@
         "highest_level_str": "Level 6",
         "highest_event": "100m",
         "highest_perf": "12.1",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "12.1",
+            "date": "26 Jul",
+            "venue": "Guildford",
+            "position": "10",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "12.10s",
+            "next_target": "11.80s"
+          },
+          {
+            "event": "200m",
+            "performance": "24.66",
+            "date": "1 Aug",
+            "venue": "Guildford",
+            "position": "11",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "24.85s",
+            "next_target": "24.40s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -2009,6 +3299,93 @@
         }
       },
       {
+        "name": "Kian Nynan",
+        "age_group": "U16",
+        "gender": "Boys/Men",
+        "highest_level": 6,
+        "highest_level_str": "Level 6",
+        "highest_event": "Discus",
+        "highest_perf": "31.91",
+        "total_certificates": 3,
+        "ea_certificates_count": 3,
+        "events_list": [
+          {
+            "event": "Discus",
+            "performance": "31.91",
+            "date": "31 May",
+            "venue": "Walton",
+            "position": "2",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "29.00m",
+            "next_target": "32.00m"
+          },
+          {
+            "event": "Shot",
+            "performance": "10.43",
+            "date": "7 Jun",
+            "venue": "Aldershot",
+            "position": "3",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "10.10m",
+            "next_target": "10.80m"
+          },
+          {
+            "event": "Hammer",
+            "performance": "27.11",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "1",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "25.50m",
+            "next_target": "28.50m"
+          }
+        ],
+        "events": {
+          "Discus": {
+            "event": "Discus",
+            "performance": "31.91",
+            "date": "31 May",
+            "venue": "Walton",
+            "position": "2",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "29.00m",
+            "next_target": "32.00m"
+          },
+          "Shot": {
+            "event": "Shot",
+            "performance": "10.43",
+            "date": "7 Jun",
+            "venue": "Aldershot",
+            "position": "3",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "10.10m",
+            "next_target": "10.80m"
+          },
+          "Hammer": {
+            "event": "Hammer",
+            "performance": "27.11",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "1",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "25.50m",
+            "next_target": "28.50m"
+          }
+        }
+      },
+      {
         "name": "Lucy Adnett",
         "age_group": "U14",
         "gender": "Girls/Women",
@@ -2016,6 +3393,34 @@
         "highest_level_str": "Level 6",
         "highest_event": "High_Jump",
         "highest_perf": "1.35",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "High_Jump",
+            "performance": "1.35",
+            "date": "31 May",
+            "venue": "Walton",
+            "position": "2",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "1.33m",
+            "next_target": "1.38m"
+          },
+          {
+            "event": "Long_Jump",
+            "performance": "4.12",
+            "date": "9 May",
+            "venue": "Milton Keynes",
+            "position": "7",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "3.88m",
+            "next_target": "4.13m"
+          }
+        ],
         "events": {
           "High_Jump": {
             "event": "High_Jump",
@@ -2044,6 +3449,69 @@
         }
       },
       {
+        "name": "Nathan Griffiths",
+        "age_group": "U17",
+        "gender": "Boys/Men",
+        "highest_level": 6,
+        "highest_level_str": "Level 6",
+        "highest_event": "Javelin",
+        "highest_perf": "41.79",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "Javelin",
+            "performance": "41.79",
+            "date": "24 May",
+            "venue": "Hemel Hempstead",
+            "position": "1",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "41.00m",
+            "next_target": "44.00m"
+          },
+          {
+            "event": "60m",
+            "performance": "7.91",
+            "date": "7 Jan",
+            "venue": "Uxbridge",
+            "position": "11",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "8.00s",
+            "next_target": "7.80s"
+          }
+        ],
+        "events": {
+          "Javelin": {
+            "event": "Javelin",
+            "performance": "41.79",
+            "date": "24 May",
+            "venue": "Hemel Hempstead",
+            "position": "1",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "41.00m",
+            "next_target": "44.00m"
+          },
+          "60m": {
+            "event": "60m",
+            "performance": "7.91",
+            "date": "7 Jan",
+            "venue": "Uxbridge",
+            "position": "11",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "8.00s",
+            "next_target": "7.80s"
+          }
+        }
+      },
+      {
         "name": "Nina Bakermans",
         "age_group": "U18",
         "gender": "Girls/Women",
@@ -2051,6 +3519,34 @@
         "highest_level_str": "Level 6",
         "highest_event": "200m",
         "highest_perf": "27.14",
+        "total_certificates": 2,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "13.8",
+            "date": "8 Aug",
+            "venue": "Hillingdon",
+            "position": "12",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 13.75s"
+          },
+          {
+            "event": "200m",
+            "performance": "27.14",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "3",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "27.25s",
+            "next_target": "26.75s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -2086,6 +3582,46 @@
         "highest_level_str": "Level 6",
         "highest_event": "200m",
         "highest_perf": "24.09",
+        "total_certificates": 3,
+        "ea_certificates_count": 3,
+        "events_list": [
+          {
+            "event": "200m",
+            "performance": "24.09",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "6",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "24.40s",
+            "next_target": "24.00s"
+          },
+          {
+            "event": "Long_Jump",
+            "performance": "4.96",
+            "date": "3 May",
+            "venue": "Eton",
+            "position": "8",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "4.88m",
+            "next_target": "5.13m"
+          },
+          {
+            "event": "Triple_Jump",
+            "performance": "11.46",
+            "date": "13 Sep",
+            "venue": "Kingston",
+            "position": "2",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "11.20m",
+            "next_target": "11.75m"
+          }
+        ],
         "events": {
           "200m": {
             "event": "200m",
@@ -2133,6 +3669,34 @@
         "highest_level_str": "Level 6",
         "highest_event": "200m",
         "highest_perf": "28.05",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "13.5",
+            "date": "26 Jul",
+            "venue": "Guildford",
+            "position": "9",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "13.50s",
+            "next_target": "13.30s"
+          },
+          {
+            "event": "200m",
+            "performance": "28.05",
+            "date": "3 May",
+            "venue": "Eton",
+            "position": "7",
+            "level": 6,
+            "level_str": "Level 6",
+            "cert_title": "EA Level 6 Award",
+            "standard_achieved": "28.50s",
+            "next_target": "27.85s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -2168,6 +3732,34 @@
         "highest_level_str": "Level 5",
         "highest_event": "High_Jump",
         "highest_perf": "1.44",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "High_Jump",
+            "performance": "1.44",
+            "date": "24 May",
+            "venue": "Hemel Hempstead",
+            "position": "1",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "1.43m",
+            "next_target": "1.48m"
+          },
+          {
+            "event": "Long_Jump",
+            "performance": "4.58",
+            "date": "24 May",
+            "venue": "Hemel Hempstead",
+            "position": "1",
+            "level": 3,
+            "level_str": "Level 3",
+            "cert_title": "EA Level 3 Award",
+            "standard_achieved": "4.38m",
+            "next_target": "4.63m"
+          }
+        ],
         "events": {
           "High_Jump": {
             "event": "High_Jump",
@@ -2203,6 +3795,34 @@
         "highest_level_str": "Level 5",
         "highest_event": "1500m",
         "highest_perf": "5:25.41",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "5:25.41",
+            "date": "3 May",
+            "venue": "Eton",
+            "position": "5",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "5:26.00",
+            "next_target": "5:18.00"
+          },
+          {
+            "event": "800m",
+            "performance": "2:42.2",
+            "date": "5 Jul",
+            "venue": "Basingstoke",
+            "position": "11",
+            "level": 3,
+            "level_str": "Level 3",
+            "cert_title": "EA Level 3 Award",
+            "standard_achieved": "2:45.00",
+            "next_target": "2:40.50"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -2238,6 +3858,34 @@
         "highest_level_str": "Level 5",
         "highest_event": "200m",
         "highest_perf": "28.75",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "13.74",
+            "date": "13 Jun",
+            "venue": "Watford",
+            "position": "10",
+            "level": 3,
+            "level_str": "Level 3",
+            "cert_title": "EA Level 3 Award",
+            "standard_achieved": "13.75s",
+            "next_target": "13.50s"
+          },
+          {
+            "event": "200m",
+            "performance": "28.75",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "12",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "29.10s",
+            "next_target": "28.50s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -2273,6 +3921,34 @@
         "highest_level_str": "Level 5",
         "highest_event": "100m",
         "highest_perf": "14.1",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "14.1",
+            "date": "19 Apr",
+            "venue": "Watford",
+            "position": "18",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "14.35s",
+            "next_target": "14.05s"
+          },
+          {
+            "event": "200m",
+            "performance": "30.10",
+            "date": "1 Aug",
+            "venue": "Guildford",
+            "position": "18",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "30.25s",
+            "next_target": "29.85s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -2308,6 +3984,34 @@
         "highest_level_str": "Level 5",
         "highest_event": "Long_Jump",
         "highest_perf": "4.07",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "15.0",
+            "date": "5 Jul",
+            "venue": "Basingstoke",
+            "position": "25",
+            "level": 3,
+            "level_str": "Level 3",
+            "cert_title": "EA Level 3 Award",
+            "standard_achieved": "15.00s",
+            "next_target": "14.65s"
+          },
+          {
+            "event": "Long_Jump",
+            "performance": "4.07",
+            "date": "5 Jul",
+            "venue": "Basingstoke",
+            "position": "8",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "3.88m",
+            "next_target": "4.13m"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -2343,6 +4047,34 @@
         "highest_level_str": "Level 5",
         "highest_event": "100m",
         "highest_perf": "12.15",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "12.15",
+            "date": "13 Jun",
+            "venue": "Watford",
+            "position": "11",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "12.30s",
+            "next_target": "12.10s"
+          },
+          {
+            "event": "200m",
+            "performance": "24.47",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "10",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "24.85s",
+            "next_target": "24.40s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -2378,6 +4110,34 @@
         "highest_level_str": "Level 5",
         "highest_event": "800m",
         "highest_perf": "2:26.18",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "5:12.30",
+            "date": "13 Jun",
+            "venue": "Watford",
+            "position": "3",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "5:16.00",
+            "next_target": "5:09.00"
+          },
+          {
+            "event": "800m",
+            "performance": "2:26.18",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "3",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "2:27.00",
+            "next_target": "2:25.00"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -2413,6 +4173,22 @@
         "highest_level_str": "Level 5",
         "highest_event": "800m",
         "highest_perf": "2:09.96",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "800m",
+            "performance": "2:09.96",
+            "date": "3 May",
+            "venue": "Eton",
+            "position": "6",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "2:11.00",
+            "next_target": "2:08.50"
+          }
+        ],
         "events": {
           "800m": {
             "event": "800m",
@@ -2436,6 +4212,46 @@
         "highest_level_str": "Level 5",
         "highest_event": "200m",
         "highest_perf": "26.51",
+        "total_certificates": 3,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "14.76",
+            "date": "7 Jun",
+            "venue": "Aldershot",
+            "position": "28",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "15.10s",
+            "next_target": "14.65s"
+          },
+          {
+            "event": "200m",
+            "performance": "26.51",
+            "date": "3 May",
+            "venue": "Eton",
+            "position": "18",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "27.25s",
+            "next_target": "26.50s"
+          },
+          {
+            "event": "800m",
+            "performance": "2:42.37",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "25",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 2:40.00"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -2483,6 +4299,34 @@
         "highest_level_str": "Level 5",
         "highest_event": "100m",
         "highest_perf": "13.17",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "13.17",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "19",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "13.45s",
+            "next_target": "13.15s"
+          },
+          {
+            "event": "200m",
+            "performance": "28.13",
+            "date": "7 Jun",
+            "venue": "Aldershot",
+            "position": "22",
+            "level": 3,
+            "level_str": "Level 3",
+            "cert_title": "EA Level 3 Award",
+            "standard_achieved": "29.00s",
+            "next_target": "28.00s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -2518,6 +4362,34 @@
         "highest_level_str": "Level 5",
         "highest_event": "200m",
         "highest_perf": "28.6",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "13.9",
+            "date": "26 Jul",
+            "venue": "Guildford",
+            "position": "14",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "14.05s",
+            "next_target": "13.75s"
+          },
+          {
+            "event": "200m",
+            "performance": "28.6",
+            "date": "26 Jul",
+            "venue": "Guildford",
+            "position": "11",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "29.10s",
+            "next_target": "28.50s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -2553,6 +4425,46 @@
         "highest_level_str": "Level 5",
         "highest_event": "200m",
         "highest_perf": "27.4",
+        "total_certificates": 3,
+        "ea_certificates_count": 3,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "13.2",
+            "date": "24 May",
+            "venue": "Hemel Hempstead",
+            "position": "6",
+            "level": 3,
+            "level_str": "Level 3",
+            "cert_title": "EA Level 3 Award",
+            "standard_achieved": "13.30s",
+            "next_target": "13.10s"
+          },
+          {
+            "event": "200m",
+            "performance": "27.4",
+            "date": "24 May",
+            "venue": "Hemel Hempstead",
+            "position": "4",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "27.85s",
+            "next_target": "27.25s"
+          },
+          {
+            "event": "Long_Jump",
+            "performance": "4.33",
+            "date": "8 Aug",
+            "venue": "Hillingdon",
+            "position": "4",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "4.13m",
+            "next_target": "4.38m"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -2600,6 +4512,58 @@
         "highest_level_str": "Level 5",
         "highest_event": "200m",
         "highest_perf": "23.6",
+        "total_certificates": 4,
+        "ea_certificates_count": 4,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "11.77",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "2",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "11.90s",
+            "next_target": "11.70s"
+          },
+          {
+            "event": "200m",
+            "performance": "23.6",
+            "date": "24 May",
+            "venue": "Hemel Hempstead",
+            "position": "3",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "23.60s",
+            "next_target": "23.30s"
+          },
+          {
+            "event": "Long_Jump",
+            "performance": "5.79",
+            "date": "19 Jul",
+            "venue": "Parliament Hill",
+            "position": "3",
+            "level": 5,
+            "level_str": "Level 5",
+            "cert_title": "EA Level 5 Award",
+            "standard_achieved": "5.75m",
+            "next_target": "5.98m"
+          },
+          {
+            "event": "Triple_Jump",
+            "performance": "11.28",
+            "date": "16 May",
+            "venue": "Lee Valley",
+            "position": "3",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "11.20m",
+            "next_target": "11.75m"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -2659,6 +4623,34 @@
         "highest_level_str": "Level 4",
         "highest_event": "800m",
         "highest_perf": "2:38.19",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "5:36.1",
+            "date": "26 Jul",
+            "venue": "Guildford",
+            "position": "7",
+            "level": 3,
+            "level_str": "Level 3",
+            "cert_title": "EA Level 3 Award",
+            "standard_achieved": "5:45.00",
+            "next_target": "5:35.00"
+          },
+          {
+            "event": "800m",
+            "performance": "2:38.19",
+            "date": "1 Aug",
+            "venue": "Guildford",
+            "position": "8",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "2:40.50",
+            "next_target": "2:36.50"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -2694,6 +4686,22 @@
         "highest_level_str": "Level 4",
         "highest_event": "Long_Jump",
         "highest_perf": "5.92",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "Long_Jump",
+            "performance": "5.92",
+            "date": "3 May",
+            "venue": "Cardiff",
+            "position": "2",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "5.75m",
+            "next_target": "6.00m"
+          }
+        ],
         "events": {
           "Long_Jump": {
             "event": "Long_Jump",
@@ -2717,6 +4725,22 @@
         "highest_level_str": "Level 4",
         "highest_event": "1500m",
         "highest_perf": "4:43.6",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "4:43.6",
+            "date": "26 Jul",
+            "venue": "Guildford",
+            "position": "8",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "4:45.00",
+            "next_target": "4:37.50"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -2740,6 +4764,46 @@
         "highest_level_str": "Level 4",
         "highest_event": "Discus",
         "highest_perf": "27.53",
+        "total_certificates": 3,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "Discus",
+            "performance": "27.53",
+            "date": "19 Jul",
+            "venue": "Parliament Hill",
+            "position": "4",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "27.50m",
+            "next_target": "30.50m"
+          },
+          {
+            "event": "Javelin",
+            "performance": "22.18",
+            "date": "21 Jun",
+            "venue": "Parliament Hill",
+            "position": "5",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 29.00m"
+          },
+          {
+            "event": "Shot",
+            "performance": "8.57",
+            "date": "16 May",
+            "venue": "Lee Valley",
+            "position": "6",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 8.60m"
+          }
+        ],
         "events": {
           "Discus": {
             "event": "Discus",
@@ -2787,6 +4851,34 @@
         "highest_level_str": "Level 4",
         "highest_event": "200m",
         "highest_perf": "29.6",
+        "total_certificates": 2,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "200m",
+            "performance": "29.6",
+            "date": "26 Jul",
+            "venue": "Guildford",
+            "position": "16",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "29.85s",
+            "next_target": "29.10s"
+          },
+          {
+            "event": "800m",
+            "performance": "2:48.2",
+            "date": "5 Jul",
+            "venue": "Basingstoke",
+            "position": "17",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 2:42.50"
+          }
+        ],
         "events": {
           "200m": {
             "event": "200m",
@@ -2822,6 +4914,22 @@
         "highest_level_str": "Level 4",
         "highest_event": "200m",
         "highest_perf": "29.80",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "200m",
+            "performance": "29.80",
+            "date": "31 May",
+            "venue": "Walton",
+            "position": "17",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "29.85s",
+            "next_target": "29.10s"
+          }
+        ],
         "events": {
           "200m": {
             "event": "200m",
@@ -2845,6 +4953,58 @@
         "highest_level_str": "Level 4",
         "highest_event": "Discus",
         "highest_perf": "28.16",
+        "total_certificates": 4,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "13.78",
+            "date": "7 Jun",
+            "venue": "Aldershot",
+            "position": "23",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 12.75s"
+          },
+          {
+            "event": "Discus",
+            "performance": "28.16",
+            "date": "16 May",
+            "venue": "Lee Valley",
+            "position": "2",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "27.50m",
+            "next_target": "30.50m"
+          },
+          {
+            "event": "Hammer",
+            "performance": "20.98",
+            "date": "19 Jul",
+            "venue": "Parliament Hill",
+            "position": "3",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 28.50m"
+          },
+          {
+            "event": "Shot",
+            "performance": "9.10",
+            "date": "21 Jun",
+            "venue": "Parliament Hill",
+            "position": "4",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "8.60m",
+            "next_target": "9.20m"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -2897,6 +5057,45 @@
         }
       },
       {
+        "name": "Daniel Borowski",
+        "age_group": "U14",
+        "gender": "Boys/Men",
+        "highest_level": 4,
+        "highest_level_str": "Level 4",
+        "highest_event": "Javelin",
+        "highest_perf": "27.11",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "Javelin",
+            "performance": "27.11",
+            "date": "1 Jun",
+            "venue": "Eton",
+            "position": "3",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "24.50m",
+            "next_target": "27.50m"
+          }
+        ],
+        "events": {
+          "Javelin": {
+            "event": "Javelin",
+            "performance": "27.11",
+            "date": "1 Jun",
+            "venue": "Eton",
+            "position": "3",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "24.50m",
+            "next_target": "27.50m"
+          }
+        }
+      },
+      {
         "name": "Diego Monteiro",
         "age_group": "U16",
         "gender": "Boys/Men",
@@ -2904,6 +5103,22 @@
         "highest_level_str": "Level 4",
         "highest_event": "100m",
         "highest_perf": "12.36",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "12.36",
+            "date": "3 May",
+            "venue": "Eton",
+            "position": "13",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "12.55s",
+            "next_target": "12.30s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -2927,6 +5142,22 @@
         "highest_level_str": "Level 4",
         "highest_event": "Long_Jump",
         "highest_perf": "4.36",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "Long_Jump",
+            "performance": "4.36",
+            "date": "12 Sep",
+            "venue": "Kingston",
+            "position": "13",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "4.13m",
+            "next_target": "4.38m"
+          }
+        ],
         "events": {
           "Long_Jump": {
             "event": "Long_Jump",
@@ -2950,6 +5181,34 @@
         "highest_level_str": "Level 4",
         "highest_event": "400m",
         "highest_perf": "56.3",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "400m",
+            "performance": "56.3",
+            "date": "24 May",
+            "venue": "Hemel Hempstead",
+            "position": "6",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "57.05s",
+            "next_target": "55.60s"
+          },
+          {
+            "event": "Long_Jump",
+            "performance": "4.81",
+            "date": "26 Jul",
+            "venue": "Guildford",
+            "position": "10",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "4.75m",
+            "next_target": "5.00m"
+          }
+        ],
         "events": {
           "400m": {
             "event": "400m",
@@ -2985,6 +5244,34 @@
         "highest_level_str": "Level 4",
         "highest_event": "High_Jump",
         "highest_perf": "1.35",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "800m",
+            "performance": "2:42.38",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "12",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "2:42.50",
+            "next_target": "2:37.50"
+          },
+          {
+            "event": "High_Jump",
+            "performance": "1.35",
+            "date": "13 Jun",
+            "venue": "Watford",
+            "position": "2",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "1.33m",
+            "next_target": "1.38m"
+          }
+        ],
         "events": {
           "800m": {
             "event": "800m",
@@ -3020,6 +5307,22 @@
         "highest_level_str": "Level 4",
         "highest_event": "100m",
         "highest_perf": "12.92",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "12.92",
+            "date": "13 Jun",
+            "venue": "Watford",
+            "position": "3",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "13.10s",
+            "next_target": "12.90s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -3043,6 +5346,34 @@
         "highest_level_str": "Level 4",
         "highest_event": "1500m",
         "highest_perf": "4:38.51",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "4:38.51",
+            "date": "29 Apr",
+            "venue": "Watford",
+            "position": "7",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "4:45.00",
+            "next_target": "4:37.50"
+          },
+          {
+            "event": "800m",
+            "performance": "2:12.30",
+            "date": "10 Jun",
+            "venue": "Watford",
+            "position": "8",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "2:13.50",
+            "next_target": "2:11.00"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -3078,6 +5409,82 @@
         "highest_level_str": "Level 4",
         "highest_event": "High_Jump",
         "highest_perf": "1.65",
+        "total_certificates": 6,
+        "ea_certificates_count": 5,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "4:56.0",
+            "date": "26 Jul",
+            "venue": "Guildford",
+            "position": "9",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 4:50.00"
+          },
+          {
+            "event": "400m",
+            "performance": "59.80",
+            "date": "19 Jul",
+            "venue": "Parliament Hill",
+            "position": "9",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "1:00.25",
+            "next_target": "58.50s"
+          },
+          {
+            "event": "800m",
+            "performance": "2:10.03",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "7",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "2:12.00",
+            "next_target": "2:09.50"
+          },
+          {
+            "event": "High_Jump",
+            "performance": "1.65",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "4",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "1.61m",
+            "next_target": "1.67m"
+          },
+          {
+            "event": "Long_Jump",
+            "performance": "5.20",
+            "date": "19 Jul",
+            "venue": "Parliament Hill",
+            "position": "6",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "5.00m",
+            "next_target": "5.25m"
+          },
+          {
+            "event": "Triple_Jump",
+            "performance": "11.23",
+            "date": "19 Apr",
+            "venue": "Perivale",
+            "position": "4",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "11.20m",
+            "next_target": "11.75m"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -3161,6 +5568,34 @@
         "highest_level_str": "Level 4",
         "highest_event": "200m",
         "highest_perf": "29.22",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "200m",
+            "performance": "29.22",
+            "date": "3 May",
+            "venue": "Eton",
+            "position": "15",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "29.85s",
+            "next_target": "29.10s"
+          },
+          {
+            "event": "Long_Jump",
+            "performance": "4.34",
+            "date": "7 Jun",
+            "venue": "Aldershot",
+            "position": "3",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "4.25m",
+            "next_target": "4.50m"
+          }
+        ],
         "events": {
           "200m": {
             "event": "200m",
@@ -3196,6 +5631,34 @@
         "highest_level_str": "Level 4",
         "highest_event": "100m",
         "highest_perf": "11.9",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "11.9",
+            "date": "26 Jul",
+            "venue": "Guildford",
+            "position": "6",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "11.90s",
+            "next_target": "11.70s"
+          },
+          {
+            "event": "200m",
+            "performance": "24.2",
+            "date": "8 Aug",
+            "venue": "Hillingdon",
+            "position": "7",
+            "level": 3,
+            "level_str": "Level 3",
+            "cert_title": "EA Level 3 Award",
+            "standard_achieved": "24.40s",
+            "next_target": "24.00s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -3231,6 +5694,46 @@
         "highest_level_str": "Level 4",
         "highest_event": "Long_Jump",
         "highest_perf": "4.37",
+        "total_certificates": 3,
+        "ea_certificates_count": 3,
+        "events_list": [
+          {
+            "event": "200m",
+            "performance": "30.66",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "28",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "31.00s",
+            "next_target": "30.00s"
+          },
+          {
+            "event": "High_Jump",
+            "performance": "1.20",
+            "date": "3 May",
+            "venue": "Eton",
+            "position": "10",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "1.18m",
+            "next_target": "1.23m"
+          },
+          {
+            "event": "Long_Jump",
+            "performance": "4.37",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "12",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "4.13m",
+            "next_target": "4.38m"
+          }
+        ],
         "events": {
           "200m": {
             "event": "200m",
@@ -3278,6 +5781,22 @@
         "highest_level_str": "Level 4",
         "highest_event": "Long_Jump",
         "highest_perf": "3.75",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "Long_Jump",
+            "performance": "3.75",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "9",
+            "level": 4,
+            "level_str": "Level 4",
+            "cert_title": "EA Level 4 Award",
+            "standard_achieved": "3.63m",
+            "next_target": "3.88m"
+          }
+        ],
         "events": {
           "Long_Jump": {
             "event": "Long_Jump",
@@ -3301,6 +5820,34 @@
         "highest_level_str": "Level 3",
         "highest_event": "1500m",
         "highest_perf": "5:19.99",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "5:19.99",
+            "date": "31 May",
+            "venue": "Walton",
+            "position": "14",
+            "level": 3,
+            "level_str": "Level 3",
+            "cert_title": "EA Level 3 Award",
+            "standard_achieved": "5:20.00",
+            "next_target": "5:10.00"
+          },
+          {
+            "event": "800m",
+            "performance": "2:38.5",
+            "date": "5 Jul",
+            "venue": "Basingstoke",
+            "position": "24",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "2:40.00",
+            "next_target": "2:35.00"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -3336,6 +5883,34 @@
         "highest_level_str": "Level 3",
         "highest_event": "800m",
         "highest_perf": "2:44.74",
+        "total_certificates": 2,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "6:21.35",
+            "date": "7 Jun",
+            "venue": "Aldershot",
+            "position": "18",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 6:05.00"
+          },
+          {
+            "event": "800m",
+            "performance": "2:44.74",
+            "date": "3 May",
+            "venue": "Eton",
+            "position": "15",
+            "level": 3,
+            "level_str": "Level 3",
+            "cert_title": "EA Level 3 Award",
+            "standard_achieved": "2:45.00",
+            "next_target": "2:40.50"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -3371,6 +5946,46 @@
         "highest_level_str": "Level 3",
         "highest_event": "800m",
         "highest_perf": "2:28.66",
+        "total_certificates": 3,
+        "ea_certificates_count": 3,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "14.86",
+            "date": "3 May",
+            "venue": "Eton",
+            "position": "29",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "15.10s",
+            "next_target": "14.65s"
+          },
+          {
+            "event": "200m",
+            "performance": "29.5",
+            "date": "26 Jul",
+            "venue": "Guildford",
+            "position": "25",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "30.00s",
+            "next_target": "29.00s"
+          },
+          {
+            "event": "800m",
+            "performance": "2:28.66",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "16",
+            "level": 3,
+            "level_str": "Level 3",
+            "cert_title": "EA Level 3 Award",
+            "standard_achieved": "2:30.50",
+            "next_target": "2:26.50"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -3418,6 +6033,46 @@
         "highest_level_str": "Level 3",
         "highest_event": "100m",
         "highest_perf": "14.68",
+        "total_certificates": 3,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "14.68",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "22",
+            "level": 3,
+            "level_str": "Level 3",
+            "cert_title": "EA Level 3 Award",
+            "standard_achieved": "15.00s",
+            "next_target": "14.65s"
+          },
+          {
+            "event": "1500m",
+            "performance": "6:20.1",
+            "date": "26 Jul",
+            "venue": "Guildford",
+            "position": "17",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 6:05.00"
+          },
+          {
+            "event": "800m",
+            "performance": "2:43.50",
+            "date": "31 May",
+            "venue": "Walton",
+            "position": "13",
+            "level": 3,
+            "level_str": "Level 3",
+            "cert_title": "EA Level 3 Award",
+            "standard_achieved": "2:45.00",
+            "next_target": "2:40.50"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -3465,6 +6120,46 @@
         "highest_level_str": "Level 3",
         "highest_event": "Long_Jump",
         "highest_perf": "4.22",
+        "total_certificates": 3,
+        "ea_certificates_count": 3,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "14.28",
+            "date": "1 Aug",
+            "venue": "Guildford",
+            "position": "19",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "14.40s",
+            "next_target": "14.05s"
+          },
+          {
+            "event": "200m",
+            "performance": "30.32",
+            "date": "1 Aug",
+            "venue": "Guildford",
+            "position": "19",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "31.10s",
+            "next_target": "30.25s"
+          },
+          {
+            "event": "Long_Jump",
+            "performance": "4.22",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "5",
+            "level": 3,
+            "level_str": "Level 3",
+            "cert_title": "EA Level 3 Award",
+            "standard_achieved": "4.00m",
+            "next_target": "4.25m"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -3512,6 +6207,22 @@
         "highest_level_str": "Level 3",
         "highest_event": "Discus",
         "highest_perf": "20.42",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "Discus",
+            "performance": "20.42",
+            "date": "1 Aug",
+            "venue": "Guildford",
+            "position": "2",
+            "level": 3,
+            "level_str": "Level 3",
+            "cert_title": "EA Level 3 Award",
+            "standard_achieved": "20.00m",
+            "next_target": "22.00m"
+          }
+        ],
         "events": {
           "Discus": {
             "event": "Discus",
@@ -3535,6 +6246,22 @@
         "highest_level_str": "Level 3",
         "highest_event": "800m",
         "highest_perf": "2:41.35",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "800m",
+            "performance": "2:41.35",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "10",
+            "level": 3,
+            "level_str": "Level 3",
+            "cert_title": "EA Level 3 Award",
+            "standard_achieved": "2:45.00",
+            "next_target": "2:40.50"
+          }
+        ],
         "events": {
           "800m": {
             "event": "800m",
@@ -3558,6 +6285,58 @@
         "highest_level_str": "Level 3",
         "highest_event": "Long_Jump",
         "highest_perf": "4.06",
+        "total_certificates": 4,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "15.60",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "32",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 15.10s"
+          },
+          {
+            "event": "800m",
+            "performance": "3:02.02",
+            "date": "31 May",
+            "venue": "Walton",
+            "position": "28",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 2:40.00"
+          },
+          {
+            "event": "High_Jump",
+            "performance": "1.20",
+            "date": "7 Jun",
+            "venue": "Aldershot",
+            "position": "10",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "1.18m",
+            "next_target": "1.23m"
+          },
+          {
+            "event": "Long_Jump",
+            "performance": "4.06",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "16",
+            "level": 3,
+            "level_str": "Level 3",
+            "cert_title": "EA Level 3 Award",
+            "standard_achieved": "3.88m",
+            "next_target": "4.13m"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -3617,6 +6396,22 @@
         "highest_level_str": "Level 3",
         "highest_event": "1500m",
         "highest_perf": "5:10.79",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "5:10.79",
+            "date": "1 Aug",
+            "venue": "Guildford",
+            "position": "10",
+            "level": 3,
+            "level_str": "Level 3",
+            "cert_title": "EA Level 3 Award",
+            "standard_achieved": "5:20.00",
+            "next_target": "5:10.00"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -3640,6 +6435,22 @@
         "highest_level_str": "Level 2",
         "highest_event": "1500m",
         "highest_perf": "4:33.62",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "4:33.62",
+            "date": "16 May",
+            "venue": "Lee Valley",
+            "position": "6",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "4:40.00",
+            "next_target": "4:32.50"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -3663,6 +6474,22 @@
         "highest_level_str": "Level 2",
         "highest_event": "100m",
         "highest_perf": "14.0",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "14.0",
+            "date": "5 Jul",
+            "venue": "Basingstoke",
+            "position": "15",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "14.05s",
+            "next_target": "13.75s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -3686,6 +6513,34 @@
         "highest_level_str": "Level 2",
         "highest_event": "100m",
         "highest_perf": "14.3",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "14.3",
+            "date": "5 Jul",
+            "venue": "Basingstoke",
+            "position": "25",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "14.65s",
+            "next_target": "14.20s"
+          },
+          {
+            "event": "Long_Jump",
+            "performance": "3.82",
+            "date": "7 Jun",
+            "venue": "Aldershot",
+            "position": "18",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "3.63m",
+            "next_target": "3.88m"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -3721,6 +6576,22 @@
         "highest_level_str": "Level 2",
         "highest_event": "200m",
         "highest_perf": "26.12",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "200m",
+            "performance": "26.12",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "16",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "26.75s",
+            "next_target": "26.00s"
+          }
+        ],
         "events": {
           "200m": {
             "event": "200m",
@@ -3744,6 +6615,22 @@
         "highest_level_str": "Level 2",
         "highest_event": "400m",
         "highest_perf": "68.81",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "400m",
+            "performance": "68.81",
+            "date": "19 Apr",
+            "venue": "Perivale",
+            "position": "4",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "1:09.50",
+            "next_target": "1:07.00"
+          }
+        ],
         "events": {
           "400m": {
             "event": "400m",
@@ -3767,6 +6654,34 @@
         "highest_level_str": "Level 2",
         "highest_event": "400m",
         "highest_perf": "60.2",
+        "total_certificates": 2,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "400m",
+            "performance": "60.2",
+            "date": "8 Aug",
+            "venue": "Hillingdon",
+            "position": "10",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "1:00.25",
+            "next_target": "58.50s"
+          },
+          {
+            "event": "800m",
+            "performance": "2:21.17",
+            "date": "19 Jul",
+            "venue": "Parliament Hill",
+            "position": "12",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 2:15.00"
+          }
+        ],
         "events": {
           "400m": {
             "event": "400m",
@@ -3802,6 +6717,22 @@
         "highest_level_str": "Level 2",
         "highest_event": "800m",
         "highest_perf": "2:18.98",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "800m",
+            "performance": "2:18.98",
+            "date": "3 May",
+            "venue": "Eton",
+            "position": "10",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "2:20.00",
+            "next_target": "2:16.50"
+          }
+        ],
         "events": {
           "800m": {
             "event": "800m",
@@ -3825,6 +6756,22 @@
         "highest_level_str": "Level 2",
         "highest_event": "100m",
         "highest_perf": "14.45",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "14.45",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "26",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "14.65s",
+            "next_target": "14.20s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -3848,6 +6795,22 @@
         "highest_level_str": "Level 2",
         "highest_event": "1500m",
         "highest_perf": "5:48.30",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "5:48.30",
+            "date": "6 Jun",
+            "venue": "Hemel Hempstead",
+            "position": "11",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "5:55.00",
+            "next_target": "5:45.00"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -3871,6 +6834,34 @@
         "highest_level_str": "Level 2",
         "highest_event": "1500m",
         "highest_perf": "5:21.74",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "5:21.74",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "15",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "5:30.00",
+            "next_target": "5:20.00"
+          },
+          {
+            "event": "800m",
+            "performance": "2:37.79",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "22",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "2:40.00",
+            "next_target": "2:35.00"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -3899,6 +6890,69 @@
         }
       },
       {
+        "name": "Oliver Needham",
+        "age_group": "U16",
+        "gender": "Boys/Men",
+        "highest_level": 2,
+        "highest_level_str": "Level 2",
+        "highest_event": "Discus",
+        "highest_perf": "20.28",
+        "total_certificates": 2,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "Discus",
+            "performance": "20.28",
+            "date": "31 May",
+            "venue": "Walton",
+            "position": "4",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "20.00m",
+            "next_target": "22.00m"
+          },
+          {
+            "event": "Hammer",
+            "performance": "15.67",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "3",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 22.50m"
+          }
+        ],
+        "events": {
+          "Discus": {
+            "event": "Discus",
+            "performance": "20.28",
+            "date": "31 May",
+            "venue": "Walton",
+            "position": "4",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "20.00m",
+            "next_target": "22.00m"
+          },
+          "Hammer": {
+            "event": "Hammer",
+            "performance": "15.67",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "3",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 22.50m"
+          }
+        }
+      },
+      {
         "name": "Rhea Abbi",
         "age_group": "U16",
         "gender": "Girls/Women",
@@ -3906,6 +6960,34 @@
         "highest_level_str": "Level 2",
         "highest_event": "200m",
         "highest_perf": "31.10",
+        "total_certificates": 2,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "14.86",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "24",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 14.40s"
+          },
+          {
+            "event": "200m",
+            "performance": "31.10",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "21",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "31.10s",
+            "next_target": "30.25s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -3941,6 +7023,34 @@
         "highest_level_str": "Level 2",
         "highest_event": "100m",
         "highest_perf": "13.42",
+        "total_certificates": 2,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "13.42",
+            "date": "7 Jun",
+            "venue": "Aldershot",
+            "position": "8",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "13.50s",
+            "next_target": "13.30s"
+          },
+          {
+            "event": "Long_Jump",
+            "performance": "3.61",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "13",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 3.88m"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -3976,6 +7086,34 @@
         "highest_level_str": "Level 2",
         "highest_event": "Discus",
         "highest_perf": "22.23",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "Discus",
+            "performance": "22.23",
+            "date": "24 May",
+            "venue": "Hemel Hempstead",
+            "position": "1",
+            "level": 2,
+            "level_str": "Level 2",
+            "cert_title": "EA Level 2 Award",
+            "standard_achieved": "22.00m",
+            "next_target": "24.00m"
+          },
+          {
+            "event": "Javelin",
+            "performance": "27.64",
+            "date": "16 May",
+            "venue": "Lee Valley",
+            "position": "1",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "25.25m",
+            "next_target": "27.75m"
+          }
+        ],
         "events": {
           "Discus": {
             "event": "Discus",
@@ -4011,6 +7149,22 @@
         "highest_level_str": "Level 1",
         "highest_event": "100m",
         "highest_perf": "13.43",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "13.43",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "21",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "13.60s",
+            "next_target": "13.25s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -4034,6 +7188,34 @@
         "highest_level_str": "Level 1",
         "highest_event": "1500m",
         "highest_perf": "5:15.00",
+        "total_certificates": 2,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "5:15.00",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "12",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "5:15.00",
+            "next_target": "5:05.00"
+          },
+          {
+            "event": "800m",
+            "performance": "2:30.02",
+            "date": "31 May",
+            "venue": "Walton",
+            "position": "18",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 2:24.00"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -4069,6 +7251,22 @@
         "highest_level_str": "Level 1",
         "highest_event": "Discus",
         "highest_perf": "16.24",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "Discus",
+            "performance": "16.24",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "4",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "16.00m",
+            "next_target": "18.00m"
+          }
+        ],
         "events": {
           "Discus": {
             "event": "Discus",
@@ -4092,6 +7290,34 @@
         "highest_level_str": "Level 1",
         "highest_event": "1500m",
         "highest_perf": "5:44.12",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "5:44.12",
+            "date": "7 Jun",
+            "venue": "Aldershot",
+            "position": "10",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "5:45.00",
+            "next_target": "5:35.00"
+          },
+          {
+            "event": "800m",
+            "performance": "2:37.98",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "7",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "2:42.50",
+            "next_target": "2:37.50"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -4127,6 +7353,34 @@
         "highest_level_str": "Level 1",
         "highest_event": "200m",
         "highest_perf": "26.8",
+        "total_certificates": 2,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "200m",
+            "performance": "26.8",
+            "date": "26 Jul",
+            "venue": "Guildford",
+            "position": "19",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "27.50s",
+            "next_target": "26.75s"
+          },
+          {
+            "event": "800m",
+            "performance": "2:26.0",
+            "date": "5 Jul",
+            "venue": "Basingstoke",
+            "position": "15",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 2:24.00"
+          }
+        ],
         "events": {
           "200m": {
             "event": "200m",
@@ -4162,6 +7416,46 @@
         "highest_level_str": "Level 1",
         "highest_event": "1500m",
         "highest_perf": "5:40.54",
+        "total_certificates": 3,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "5:40.54",
+            "date": "3 May",
+            "venue": "Eton",
+            "position": "9",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "5:45.00",
+            "next_target": "5:35.00"
+          },
+          {
+            "event": "800m",
+            "performance": "2:45.60",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "16",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 2:42.50"
+          },
+          {
+            "event": "High_Jump",
+            "performance": "1.15",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "6",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 1.18m"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -4209,6 +7503,22 @@
         "highest_level_str": "Level 1",
         "highest_event": "1500m",
         "highest_perf": "5:37.40",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "5:37.40",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "19",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "5:45.00",
+            "next_target": "5:30.00"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -4232,6 +7542,22 @@
         "highest_level_str": "Level 1",
         "highest_event": "100m",
         "highest_perf": "14.07",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "14.07",
+            "date": "3 May",
+            "venue": "Eton",
+            "position": "17",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "14.40s",
+            "next_target": "14.05s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -4255,6 +7581,34 @@
         "highest_level_str": "Level 1",
         "highest_event": "800m",
         "highest_perf": "2:50.67",
+        "total_certificates": 2,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "6:16.85",
+            "date": "7 Jun",
+            "venue": "Aldershot",
+            "position": "16",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 6:05.00"
+          },
+          {
+            "event": "800m",
+            "performance": "2:50.67",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "19",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "2:57.50",
+            "next_target": "2:50.00"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -4290,6 +7644,34 @@
         "highest_level_str": "Level 1",
         "highest_event": "1500m",
         "highest_perf": "5:38.81",
+        "total_certificates": 2,
+        "ea_certificates_count": 2,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "5:38.81",
+            "date": "7 Jun",
+            "venue": "Aldershot",
+            "position": "8",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "5:45.00",
+            "next_target": "5:35.00"
+          },
+          {
+            "event": "800m",
+            "performance": "2:39.35",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "9",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "2:42.50",
+            "next_target": "2:37.50"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -4325,6 +7707,22 @@
         "highest_level_str": "Level 1",
         "highest_event": "Triple_Jump",
         "highest_perf": "8.82",
+        "total_certificates": 1,
+        "ea_certificates_count": 1,
+        "events_list": [
+          {
+            "event": "Triple_Jump",
+            "performance": "8.82",
+            "date": "5 Jul",
+            "venue": "Basingstoke",
+            "position": "1",
+            "level": 1,
+            "level_str": "Level 1",
+            "cert_title": "EA Level 1 Award",
+            "standard_achieved": "8.63m",
+            "next_target": "9.00m"
+          }
+        ],
         "events": {
           "Triple_Jump": {
             "event": "Triple_Jump",
@@ -4348,6 +7746,22 @@
         "highest_level_str": "Club PB Award",
         "highest_event": "800m",
         "highest_perf": "2:49.88",
+        "total_certificates": 1,
+        "ea_certificates_count": 0,
+        "events_list": [
+          {
+            "event": "800m",
+            "performance": "2:49.88",
+            "date": "3 May",
+            "venue": "Eton",
+            "position": "18",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 2:42.50"
+          }
+        ],
         "events": {
           "800m": {
             "event": "800m",
@@ -4371,6 +7785,34 @@
         "highest_level_str": "Club PB Award",
         "highest_event": "3000m",
         "highest_perf": "13:14.0",
+        "total_certificates": 2,
+        "ea_certificates_count": 0,
+        "events_list": [
+          {
+            "event": "3000m",
+            "performance": "13:14.0",
+            "date": "24 May",
+            "venue": "Hemel Hempstead",
+            "position": "12",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 10:00.00"
+          },
+          {
+            "event": "800m",
+            "performance": "2:24.88",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "14",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 2:15.00"
+          }
+        ],
         "events": {
           "3000m": {
             "event": "3000m",
@@ -4406,6 +7848,22 @@
         "highest_level_str": "Club PB Award",
         "highest_event": "800m",
         "highest_perf": "2:51.29",
+        "total_certificates": 1,
+        "ea_certificates_count": 0,
+        "events_list": [
+          {
+            "event": "800m",
+            "performance": "2:51.29",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "20",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 2:42.50"
+          }
+        ],
         "events": {
           "800m": {
             "event": "800m",
@@ -4429,6 +7887,22 @@
         "highest_level_str": "Club PB Award",
         "highest_event": "800m",
         "highest_perf": "3:03.52",
+        "total_certificates": 1,
+        "ea_certificates_count": 0,
+        "events_list": [
+          {
+            "event": "800m",
+            "performance": "3:03.52",
+            "date": "1 Aug",
+            "venue": "Guildford",
+            "position": "24",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 2:42.50"
+          }
+        ],
         "events": {
           "800m": {
             "event": "800m",
@@ -4452,6 +7926,34 @@
         "highest_level_str": "Club PB Award",
         "highest_event": "1500m",
         "highest_perf": "5:59.96",
+        "total_certificates": 2,
+        "ea_certificates_count": 0,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "5:59.96",
+            "date": "19 Apr",
+            "venue": "Perivale",
+            "position": "13",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 5:35.00"
+          },
+          {
+            "event": "800m",
+            "performance": "2:43.6",
+            "date": "8 Aug",
+            "venue": "Hillingdon",
+            "position": "14",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 2:37.50"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -4487,6 +7989,34 @@
         "highest_level_str": "Club PB Award",
         "highest_event": "400m",
         "highest_perf": "79.28",
+        "total_certificates": 2,
+        "ea_certificates_count": 0,
+        "events_list": [
+          {
+            "event": "400m",
+            "performance": "79.28",
+            "date": "19 Jul",
+            "venue": "Parliament Hill",
+            "position": "7",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 1:15.00"
+          },
+          {
+            "event": "800m",
+            "performance": "3:08.73",
+            "date": "19 Jul",
+            "venue": "Parliament Hill",
+            "position": "25",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 2:37.50"
+          }
+        ],
         "events": {
           "400m": {
             "event": "400m",
@@ -4522,6 +8052,22 @@
         "highest_level_str": "Club PB Award",
         "highest_event": "1500m",
         "highest_perf": "6:00.87",
+        "total_certificates": 1,
+        "ea_certificates_count": 0,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "6:00.87",
+            "date": "18 Jul",
+            "venue": "Hillingdon",
+            "position": "23",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 5:45.00"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -4545,6 +8091,22 @@
         "highest_level_str": "Club PB Award",
         "highest_event": "1500m",
         "highest_perf": "5:56.05",
+        "total_certificates": 1,
+        "ea_certificates_count": 0,
+        "events_list": [
+          {
+            "event": "1500m",
+            "performance": "5:56.05",
+            "date": "13 Jun",
+            "venue": "Watford",
+            "position": "12",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 5:45.00"
+          }
+        ],
         "events": {
           "1500m": {
             "event": "1500m",
@@ -4568,6 +8130,22 @@
         "highest_level_str": "Club PB Award",
         "highest_event": "800m",
         "highest_perf": "2:52.59",
+        "total_certificates": 1,
+        "ea_certificates_count": 0,
+        "events_list": [
+          {
+            "event": "800m",
+            "performance": "2:52.59",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "21",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 2:37.50"
+          }
+        ],
         "events": {
           "800m": {
             "event": "800m",
@@ -4591,6 +8169,22 @@
         "highest_level_str": "Club PB Award",
         "highest_event": "100m",
         "highest_perf": "14.49",
+        "total_certificates": 1,
+        "ea_certificates_count": 0,
+        "events_list": [
+          {
+            "event": "100m",
+            "performance": "14.49",
+            "date": "26 Apr",
+            "venue": "Hillingdon",
+            "position": "21",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 14.40s"
+          }
+        ],
         "events": {
           "100m": {
             "event": "100m",
@@ -4614,6 +8208,22 @@
         "highest_level_str": "Club PB Award",
         "highest_event": "800m",
         "highest_perf": "2:56.84",
+        "total_certificates": 1,
+        "ea_certificates_count": 0,
+        "events_list": [
+          {
+            "event": "800m",
+            "performance": "2:56.84",
+            "date": "1 Aug",
+            "venue": "Guildford",
+            "position": "22",
+            "level": 0,
+            "level_str": "Club PB",
+            "cert_title": "Club PB Recognition",
+            "standard_achieved": "Below Level 1",
+            "next_target": "L1: 2:42.50"
+          }
+        ],
         "events": {
           "800m": {
             "event": "800m",
@@ -4867,7 +8477,7 @@
         "age_clean": "M45",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "5’28.4”",
+        "perf": "5\u201928.4\u201d",
         "points_scored": 3,
         "league_points": 3
       },
@@ -4884,7 +8494,7 @@
         "age_clean": "M65",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "5’23.9”",
+        "perf": "5\u201923.9\u201d",
         "points_scored": 4,
         "league_points": 4
       },
@@ -4901,7 +8511,7 @@
         "age_clean": "M50",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "5’59.7”",
+        "perf": "5\u201959.7\u201d",
         "points_scored": 2,
         "league_points": 2
       },
@@ -4918,7 +8528,7 @@
         "age_clean": "M60",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "5’46.9”",
+        "perf": "5\u201946.9\u201d",
         "points_scored": 5,
         "league_points": 5
       },
@@ -4935,7 +8545,7 @@
         "age_clean": "M45",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "13’26.7”",
+        "perf": "13\u201926.7\u201d",
         "points_scored": 7,
         "league_points": 7
       },
@@ -4952,7 +8562,7 @@
         "age_clean": "M50",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "15’28.1”",
+        "perf": "15\u201928.1\u201d",
         "points_scored": 5,
         "league_points": 5
       },
@@ -4969,7 +8579,7 @@
         "age_clean": "M65",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "13’17.8”",
+        "perf": "13\u201917.8\u201d",
         "points_scored": 7,
         "league_points": 7
       },
@@ -4986,7 +8596,7 @@
         "age_clean": "M85",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "15’32.1”",
+        "perf": "15\u201932.1\u201d",
         "points_scored": 2,
         "league_points": 2
       },
@@ -5207,7 +8817,7 @@
         "age_clean": "M35",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "4’40.4”",
+        "perf": "4\u201940.4\u201d",
         "points_scored": 6,
         "league_points": 6
       },
@@ -5309,7 +8919,7 @@
         "age_clean": "W35",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "1’40.2”",
+        "perf": "1\u201940.2\u201d",
         "points_scored": 5,
         "league_points": 5
       },
@@ -5326,7 +8936,7 @@
         "age_clean": "W50",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "1’54.6”",
+        "perf": "1\u201954.6\u201d",
         "points_scored": 3,
         "league_points": 3
       },
@@ -5343,7 +8953,7 @@
         "age_clean": "W70",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "1’42.7\"",
+        "perf": "1\u201942.7\"",
         "points_scored": 5,
         "league_points": 5
       },
@@ -5360,7 +8970,7 @@
         "age_clean": "W45",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "6’38.8”",
+        "perf": "6\u201938.8\u201d",
         "points_scored": 5,
         "league_points": 5
       },
@@ -5377,7 +8987,7 @@
         "age_clean": "W35",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "8’25.6”",
+        "perf": "8\u201925.6\u201d",
         "points_scored": 5,
         "league_points": 5
       },
@@ -5394,7 +9004,7 @@
         "age_clean": "W50",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "8’48.5”",
+        "perf": "8\u201948.5\u201d",
         "points_scored": 4,
         "league_points": 4
       },
@@ -5411,7 +9021,7 @@
         "age_clean": "W70",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "8’00.1”",
+        "perf": "8\u201900.1\u201d",
         "points_scored": 5,
         "league_points": 5
       },
@@ -5428,7 +9038,7 @@
         "age_clean": "W45",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "14’01.0”",
+        "perf": "14\u201901.0\u201d",
         "points_scored": 8,
         "league_points": 8
       },
@@ -5445,7 +9055,7 @@
         "age_clean": "W70",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "14’49.8”",
+        "perf": "14\u201949.8\u201d",
         "points_scored": 7,
         "league_points": 7
       },
@@ -5462,7 +9072,7 @@
         "age_clean": "W75",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "16’19.2”",
+        "perf": "16\u201919.2\u201d",
         "points_scored": 4,
         "league_points": 4
       },
@@ -5666,7 +9276,7 @@
         "age_clean": "W35",
         "club_raw": "Hillingdon",
         "club_clean": "Hillingdon AC",
-        "perf": "7’25.1”",
+        "perf": "7\u201925.1\u201d",
         "points_scored": 5,
         "league_points": 5
       },
