@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import fallbackData from '../assets/vets_league_2026.json';
 import juniorPBsData from '../assets/junior_pbs_2026.json';
-import { Activity, ArrowLeft, X, Award, Download, Search, Printer, Calendar, MapPin, Trophy, Sparkles, Filter, CheckCircle2, FileSpreadsheet, Star, ShoppingCart, Info, Layers, Check, TrendingUp, Database, RefreshCw, BarChart3, Terminal } from 'lucide-react';
+import { APP_VERSION, COMMIT_HASH, COMMIT_URL } from '../config/version';
+import { Activity, ArrowLeft, X, Award, Download, Search, Printer, Calendar, MapPin, Trophy, Sparkles, Filter, CheckCircle2, FileSpreadsheet, Star, ShoppingCart, Info, Layers, Check, TrendingUp, Database, RefreshCw, BarChart3, Terminal, GitBranch } from 'lucide-react';
 
 const PowerOf10Insights = ({ onClose }) => {
     const [database, setDatabase] = useState(null);
@@ -196,9 +197,20 @@ const PowerOf10Insights = ({ onClose }) => {
                             <h1 className="text-4xl font-black tracking-tight text-white">
                                 Power of 10 <span className="text-purple-400 italic">Insights</span>
                             </h1>
-                            <span className="bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs px-2.5 py-1 rounded-full font-bold flex items-center gap-1.5 shadow-sm">
-                                <Sparkles size={12} /> 2026 Fresh Extract
-                            </span>
+                            <a
+                                href={COMMIT_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="bg-amber-500/20 text-amber-300 hover:text-white border border-amber-500/30 hover:border-amber-400 text-xs px-2.5 py-1 rounded-full font-bold flex items-center gap-1.5 shadow-sm transition-all"
+                                title={`Commit ${COMMIT_HASH} on GitHub`}
+                            >
+                                <Sparkles size={12} className="text-amber-400" />
+                                <span>v{APP_VERSION}</span>
+                                <span className="text-amber-500/60">•</span>
+                                <span className="font-mono text-amber-300 font-semibold">{COMMIT_HASH}</span>
+                                <span className="text-amber-500/60">•</span>
+                                <span>2026 Fresh Extract</span>
+                            </a>
                         </div>
                         <p className="text-slate-400 font-medium mt-1">Official Hillingdon AC Rankings & Junior EA PB Certificates</p>
                     </div>

@@ -7,6 +7,7 @@ import HacLiGoThrows from './components/HacLiGoThrows';
 import MeetManager from './components/MeetManager';
 import HacyChatbot from './components/hacy/HacyChatbot';
 import HacyFloatingWidget from './components/hacy/HacyFloatingWidget';
+import { APP_VERSION, COMMIT_HASH, COMMIT_URL, BUILD_DATE } from './config/version';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     UserPlus,
@@ -21,7 +22,8 @@ import {
     Activity,
     Flame,
     Bot,
-    Trophy
+    Trophy,
+    GitBranch
 } from 'lucide-react';
 
 const LandingPage = ({ onSelect }) => {
@@ -176,6 +178,22 @@ const LandingPage = ({ onSelect }) => {
                         <Zap className="text-emerald-400" size={16} />
                         <span className="text-xs font-bold uppercase tracking-widest">Real-time</span>
                     </div>
+                </div>
+
+                <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 text-xs text-slate-500">
+                    <a
+                        href={COMMIT_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-3 py-1 bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-emerald-500/50 rounded-full font-mono transition-all shadow-md group"
+                        title="View commit details on GitHub"
+                    >
+                        <GitBranch size={13} className="text-emerald-400 group-hover:rotate-12 transition-transform" />
+                        <span className="font-bold text-slate-200">v{APP_VERSION}</span>
+                        <span className="text-slate-600">•</span>
+                        <span className="text-emerald-400 font-semibold">{COMMIT_HASH}</span>
+                    </a>
+                    <span className="text-[11px] text-slate-500">Built {BUILD_DATE} • Connected to GitHub main</span>
                 </div>
             </motion.div>
         </div>
