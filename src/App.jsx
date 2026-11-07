@@ -7,7 +7,8 @@ import HacLiGoThrows from './components/HacLiGoThrows';
 import MeetManager from './components/MeetManager';
 import HacyChatbot from './components/hacy/HacyChatbot';
 import HacyFloatingWidget from './components/hacy/HacyFloatingWidget';
-import { APP_VERSION, COMMIT_HASH, COMMIT_URL, BUILD_DATE } from './config/version';
+import HelpAboutModal from './components/HelpAboutModal';
+import { APP_VERSION, COMMIT_HASH, BUILD_DATE } from './config/version';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     UserPlus,
@@ -23,10 +24,11 @@ import {
     Flame,
     Bot,
     Trophy,
-    GitBranch
+    GitBranch,
+    HelpCircle
 } from 'lucide-react';
 
-const LandingPage = ({ onSelect }) => {
+const LandingPage = ({ onSelect, onOpenHelp }) => {
     return (
         <div className="min-h-screen bg-[#0f172a] text-white flex flex-col justify-center items-center p-6 font-sans">
             {/* Background elements */}
@@ -181,19 +183,19 @@ const LandingPage = ({ onSelect }) => {
                 </div>
 
                 <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 text-xs text-slate-500">
-                    <a
-                        href={COMMIT_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-3 py-1 bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-emerald-500/50 rounded-full font-mono transition-all shadow-md group"
-                        title="View commit details on GitHub"
+                    <button
+                        onClick={onOpenHelp}
+                        className="inline-flex items-center gap-2 px-3 py-1 bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-emerald-500/50 rounded-full font-mono transition-all shadow-md group cursor-pointer"
+                        title="Click to view Version Details & Changelog"
                     >
-                        <GitBranch size={13} className="text-emerald-400 group-hover:rotate-12 transition-transform" />
+                        <HelpCircle size={13} className="text-emerald-400 group-hover:rotate-12 transition-transform" />
                         <span className="font-bold text-slate-200">v{APP_VERSION}</span>
                         <span className="text-slate-600">•</span>
                         <span className="text-emerald-400 font-semibold">{COMMIT_HASH}</span>
-                    </a>
-                    <span className="text-[11px] text-slate-500">Built {BUILD_DATE} • Connected to GitHub main</span>
+                        <span className="text-slate-600">•</span>
+                        <span className="text-slate-400 text-[11px] font-sans">Help / About</span>
+                    </button>
+                    <span className="text-[11px] text-slate-500">Built {BUILD_DATE} • Hillingdon AC Production</span>
                 </div>
             </motion.div>
         </div>
@@ -202,12 +204,13 @@ const LandingPage = ({ onSelect }) => {
 
 const App = () => {
     const [view, setView] = useState('landing');
+    const [showHelpModal, setShowHelpModal] = useState(false);
 
     const handleBackToLanding = () => setView('landing');
 
     return (
         <div className="font-sans">
-            {view === 'landing' && <LandingPage onSelect={setView} />}
+            {view === 'landing' && <LandingPage onSelect={setView} onOpenHelp={() => setShowHelpModal(true)} />}
 
             {view === 'register' && (
                 <div className="relative">
@@ -278,6 +281,12 @@ const App = () => {
 
             {/* Persistent Global Floating Assistant */}
             {view !== 'hacy' && <HacyFloatingWidget />}
+
+            {/* Global Help & About Modal */}
+            <HelpAboutModal
+                isOpen={showHelpModal}
+                onClose={() => setShowHelpModal(false)}
+            />
         </div>
     );
 };

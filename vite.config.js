@@ -7,12 +7,28 @@ import fs from 'fs'
 
 const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'))
 
-let commitHash = 'bf37d6a'
+let commitHash = '4247e4e'
+let changelog = []
 try {
     commitHash = (process.env.VERCEL_GIT_COMMIT_SHA || process.env.COMMIT_REF || '').slice(0, 7) ||
         execSync('git rev-parse --short HEAD').toString().trim()
 } catch (e) {
-    commitHash = 'bf37d6a'
+    commitHash = '4247e4e'
+}
+
+try {
+    const raw = execSync('git log --pretty=format:\'{"hash":"%h","date":"%ad","subject":"%s"}\' --date=short -n 12').toString()
+    changelog = raw.trim().split('\n').filter(Boolean).map(line => JSON.parse(line))
+} catch (e) {
+    changelog = [
+        { hash: commitHash, date: "2026-11-07", subject: "Add dynamic application version, Help/About modal and internal release changelog" },
+        { hash: "bf37d6a", date: "2026-11-07", subject: "Implement Athlete Analytics tab and Comprehensive Po10 Scraper engine" },
+        { hash: "a86a3a2", date: "2026-11-07", subject: "Add missing junior athletes to EA PB certificates dataset and enhance discipline awards" },
+        { hash: "b304380", date: "2026-11-01", subject: "Add Meet Manager Document Archive & OneDrive integration, and separate per-meet independent checklists" },
+        { hash: "32bf625", date: "2026-10-31", subject: "Add Meet Manager tile with autonomous agents, checklists, timetables, contacts & enhance HACY AI" },
+        { hash: "c3eabe7", date: "2026-10-31", subject: "Add England Athletics Age Group Changes & UKA 2026 Rules for Competition to HACY RAG" },
+        { hash: "3e8aaa5", date: "2026-10-28", subject: "Add HACY AI Chatbot with RAG, Live Weather, Admin Supervision, and Free SLM support" }
+    ]
 }
 
 const buildDate = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -22,7 +38,8 @@ export default defineConfig({
     define: {
         __APP_VERSION__: JSON.stringify(pkg.version || '1.2.0'),
         __COMMIT_HASH__: JSON.stringify(commitHash),
-        __BUILD_DATE__: JSON.stringify(buildDate)
+        __BUILD_DATE__: JSON.stringify(buildDate),
+        __CHANGELOG__: JSON.stringify(changelog)
     },
     plugins: [
         react(),

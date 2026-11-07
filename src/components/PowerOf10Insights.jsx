@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import fallbackData from '../assets/vets_league_2026.json';
 import juniorPBsData from '../assets/junior_pbs_2026.json';
-import { APP_VERSION, COMMIT_HASH, COMMIT_URL } from '../config/version';
-import { Activity, ArrowLeft, X, Award, Download, Search, Printer, Calendar, MapPin, Trophy, Sparkles, Filter, CheckCircle2, FileSpreadsheet, Star, ShoppingCart, Info, Layers, Check, TrendingUp, Database, RefreshCw, BarChart3, Terminal, GitBranch } from 'lucide-react';
+import { APP_VERSION, COMMIT_HASH } from '../config/version';
+import HelpAboutModal from './HelpAboutModal';
+import { Activity, ArrowLeft, X, Award, Download, Search, Printer, Calendar, MapPin, Trophy, Sparkles, Filter, CheckCircle2, FileSpreadsheet, Star, ShoppingCart, Info, Layers, Check, TrendingUp, Database, RefreshCw, BarChart3, Terminal, HelpCircle } from 'lucide-react';
 
 const PowerOf10Insights = ({ onClose }) => {
     const [database, setDatabase] = useState(null);
@@ -11,6 +12,7 @@ const PowerOf10Insights = ({ onClose }) => {
     const [certificateAthlete, setCertificateAthlete] = useState(null);
     const [selectedDisciplineIdx, setSelectedDisciplineIdx] = useState(null); // null = all, number = single discipline index
     const [showProcurementModal, setShowProcurementModal] = useState(false);
+    const [showHelpModal, setShowHelpModal] = useState(false);
     
     // Rankings tab filters
     const [genderFilter, setGenderFilter] = useState('All');
@@ -197,12 +199,10 @@ const PowerOf10Insights = ({ onClose }) => {
                             <h1 className="text-4xl font-black tracking-tight text-white">
                                 Power of 10 <span className="text-purple-400 italic">Insights</span>
                             </h1>
-                            <a
-                                href={COMMIT_URL}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="bg-amber-500/20 text-amber-300 hover:text-white border border-amber-500/30 hover:border-amber-400 text-xs px-2.5 py-1 rounded-full font-bold flex items-center gap-1.5 shadow-sm transition-all"
-                                title={`Commit ${COMMIT_HASH} on GitHub`}
+                            <button
+                                onClick={() => setShowHelpModal(true)}
+                                className="bg-amber-500/20 text-amber-300 hover:text-white border border-amber-500/30 hover:border-amber-400 text-xs px-2.5 py-1 rounded-full font-bold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
+                                title="Click to view Version Details & Changelog"
                             >
                                 <Sparkles size={12} className="text-amber-400" />
                                 <span>v{APP_VERSION}</span>
@@ -210,12 +210,18 @@ const PowerOf10Insights = ({ onClose }) => {
                                 <span className="font-mono text-amber-300 font-semibold">{COMMIT_HASH}</span>
                                 <span className="text-amber-500/60">•</span>
                                 <span>2026 Fresh Extract</span>
-                            </a>
+                            </button>
                         </div>
                         <p className="text-slate-400 font-medium mt-1">Official Hillingdon AC Rankings & Junior EA PB Certificates</p>
                     </div>
 
                     <div className="flex items-center gap-3">
+                        <button
+                            onClick={() => setShowHelpModal(true)}
+                            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white rounded-xl flex items-center gap-2 font-bold shadow-xl transition-all border border-slate-700"
+                        >
+                            <HelpCircle size={16} className="text-amber-400" /> Help / About
+                        </button>
                         <button
                             onClick={onClose}
                             className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl flex items-center gap-2 font-bold shadow-xl transition-all"
@@ -1196,6 +1202,12 @@ const PowerOf10Insights = ({ onClose }) => {
                     </div>
                 </div>
             )}
+
+            {/* Help / About Modal */}
+            <HelpAboutModal
+                isOpen={showHelpModal}
+                onClose={() => setShowHelpModal(false)}
+            />
         </div>
     );
 };
