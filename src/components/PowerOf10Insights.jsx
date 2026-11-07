@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import fallbackData from '../assets/vets_league_2026.json';
 import juniorPBsData from '../assets/junior_pbs_2026.json';
-import { Activity, ArrowLeft, X, Award, Download, Search, Printer, Calendar, MapPin, Trophy, Sparkles, Filter, CheckCircle2, FileSpreadsheet, Star, ShoppingCart, Info, Layers, Check } from 'lucide-react';
+import { Activity, ArrowLeft, X, Award, Download, Search, Printer, Calendar, MapPin, Trophy, Sparkles, Filter, CheckCircle2, FileSpreadsheet, Star, ShoppingCart, Info, Layers, Check, TrendingUp, Database, RefreshCw, BarChart3, Terminal } from 'lucide-react';
 
 const PowerOf10Insights = ({ onClose }) => {
     const [database, setDatabase] = useState(null);
@@ -241,6 +241,20 @@ const PowerOf10Insights = ({ onClose }) => {
                         Full Club Rankings & Events
                         <span className="bg-purple-500/20 text-purple-300 text-xs px-2 py-0.5 rounded-full font-mono">
                             {database?.po10_results?.length || 389} Records
+                        </span>
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('analytics')}
+                        className={`pb-3 px-4 font-bold text-sm flex items-center gap-2 transition-all border-b-2 ${
+                            activeTab === 'analytics'
+                                ? 'border-cyan-400 text-cyan-400 bg-cyan-400/5 rounded-t-xl'
+                                : 'border-transparent text-slate-400 hover:text-slate-200'
+                        }`}
+                    >
+                        <TrendingUp size={18} />
+                        Athlete Analytics & Scraping Engine
+                        <span className="bg-cyan-500/20 text-cyan-300 text-xs px-2 py-0.5 rounded-full font-mono">
+                            Comprehensive Pipeline
                         </span>
                     </button>
                 </div>
@@ -575,6 +589,272 @@ const PowerOf10Insights = ({ onClose }) => {
                                     </ul>
                                 </div>
                             ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* TAB 3: ATHLETE ANALYTICS & COMPREHENSIVE SCRAPING ENGINE */}
+                {activeTab === 'analytics' && (
+                    <div className="space-y-6">
+                        {/* Pipeline Status Banner */}
+                        <div className="bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10 border border-cyan-500/30 rounded-2xl p-6 backdrop-blur-md">
+                            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+                                <div>
+                                    <div className="flex items-center gap-2 text-cyan-400 font-bold text-xs uppercase tracking-wider mb-1">
+                                        <Database size={16} /> Power of 10 Comprehensive Ingestion Engine
+                                    </div>
+                                    <h2 className="text-2xl font-black text-white">
+                                        Athlete Analytics & Auto-Scraping Pipeline
+                                    </h2>
+                                    <p className="text-slate-300 text-sm mt-1 max-w-3xl">
+                                        End-to-end athlete analytics engine designed to crawl all Hillingdon AC athlete profile pages on Power of 10, resolving indoor & outdoor personal bests, multi-event Pentathlons, and league match sheets into verified England Athletics standards.
+                                    </p>
+                                </div>
+                                <div className="flex flex-wrap items-center gap-3">
+                                    <a
+                                        href="/HAC_Junior_EA_PB_Certificates_2026.xlsx"
+                                        download="HAC_Junior_EA_PB_Certificates_2026.xlsx"
+                                        className="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-xl flex items-center gap-2 font-black shadow-lg transition-all hover:scale-105"
+                                    >
+                                        <FileSpreadsheet size={18} /> Export Master Excel (.xlsx)
+                                    </a>
+                                </div>
+                            </div>
+
+                            {/* Pipeline Architecture Visual */}
+                            <div className="mt-6 pt-6 border-t border-white/10">
+                                <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+                                    Automated 5-Stage Scraping & Ingestion Architecture:
+                                </p>
+                                <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+                                    <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800">
+                                        <span className="text-[10px] font-bold text-cyan-400 uppercase">Stage 1: Club Feed</span>
+                                        <p className="text-sm font-bold text-white mt-1">HAC Directory</p>
+                                        <p className="text-[11px] text-slate-400 mt-0.5">Po10 ID: 7bb92b30... across all age groups.</p>
+                                    </div>
+                                    <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800">
+                                        <span className="text-[10px] font-bold text-blue-400 uppercase">Stage 2: Profiles</span>
+                                        <p className="text-sm font-bold text-white mt-1">Deep Crawler</p>
+                                        <p className="text-[11px] text-slate-400 mt-0.5">Scrapes athlete IDs & personal best tables.</p>
+                                    </div>
+                                    <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800">
+                                        <span className="text-[10px] font-bold text-purple-400 uppercase">Stage 3: Match Sheets</span>
+                                        <p className="text-sm font-bold text-white mt-1">League Resolvers</p>
+                                        <p className="text-[11px] text-slate-400 mt-0.5">UKYDL, Alder Valley, Vets & OpenTrack.</p>
+                                    </div>
+                                    <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800">
+                                        <span className="text-[10px] font-bold text-amber-400 uppercase">Stage 4: Standards</span>
+                                        <p className="text-sm font-bold text-white mt-1">EA PB Evaluator</p>
+                                        <p className="text-[11px] text-slate-400 mt-0.5">Grades marks Levels 1 to 9 & Pentathlon.</p>
+                                    </div>
+                                    <div className="p-3 rounded-xl bg-slate-950/70 border border-emerald-500/40">
+                                        <span className="text-[10px] font-bold text-emerald-400 uppercase">Stage 5: Live Sync</span>
+                                        <p className="text-sm font-bold text-emerald-300 mt-1">Portal & Excel</p>
+                                        <p className="text-[11px] text-slate-400 mt-0.5">Auto-generates certificates & RAG knowledge.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Scraper Engine Status & Execution Terminal Box */}
+                        <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6">
+                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
+                                <div>
+                                    <h3 className="text-lg font-black text-white flex items-center gap-2">
+                                        <Terminal className="text-cyan-400" size={20} />
+                                        Scraper Engine Implementation & CLI Triggers
+                                    </h3>
+                                    <p className="text-slate-400 text-xs mt-0.5">
+                                        The standalone automated crawler is implemented in <code className="text-cyan-300 bg-slate-950 px-1.5 py-0.5 rounded font-mono">scripts/comprehensive_po10_scraper.py</code>.
+                                    </p>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
+                                        <Check size={13} /> Engine Built & Ready
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 font-mono text-xs space-y-2 text-slate-300">
+                                <div className="flex items-center justify-between text-slate-500 pb-2 border-b border-slate-800/80">
+                                    <span># Run complete Power of 10 profile crawler (Playwright headless)</span>
+                                    <span className="text-[11px]">Command Line</span>
+                                </div>
+                                <p className="text-emerald-400 font-bold">$ npm run scrape:po10</p>
+                                <p className="text-slate-500 text-[11px]">or directly with options: python3 scripts/comprehensive_po10_scraper.py --year 2026 --limit 100</p>
+                                <div className="flex items-center justify-between text-slate-500 pt-2 border-t border-slate-800/80">
+                                    <span># Rebuild EA PB certificates & award standards without network scrape</span>
+                                </div>
+                                <p className="text-amber-400 font-bold">$ npm run build:awards</p>
+                            </div>
+                        </div>
+
+                        {/* Multi-Discipline Athlete Spotlights */}
+                        <div>
+                            <div className="flex justify-between items-center mb-4">
+                                <div>
+                                    <h3 className="text-lg font-black text-white flex items-center gap-2">
+                                        <Trophy className="text-amber-400" size={20} />
+                                        Multi-Discipline Analytics & Standout Performers
+                                    </h3>
+                                    <p className="text-slate-400 text-xs mt-0.5">
+                                        Athletes achieving awards across multiple separate disciplines or combined events:
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {/* Bradley Stone */}
+                                <div className="p-5 rounded-2xl bg-slate-900/60 border border-amber-500/40 shadow-lg">
+                                    <div className="flex justify-between items-start">
+                                        <div>
+                                            <h4 className="text-base font-black text-white">Bradley Stone</h4>
+                                            <p className="text-xs text-slate-400">U16 Boys • Combined Events</p>
+                                        </div>
+                                        <span className="px-2 py-0.5 rounded-md text-xs font-black bg-amber-400 text-slate-950">
+                                            Level 9 Total 🏆
+                                        </span>
+                                    </div>
+                                    <div className="mt-3 p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-300">
+                                        <strong>⭐ Pentathlon Exception:</strong> Achieves Level 9 total score (2,800+ pts) across his multi-event competition.
+                                    </div>
+                                    <div className="mt-3 space-y-1.5 text-xs">
+                                        <div className="flex justify-between text-slate-300">
+                                            <span>Pentathlon</span><span className="font-mono text-amber-400 font-bold">2,800 pts (L9)</span>
+                                        </div>
+                                        <div className="flex justify-between text-slate-300">
+                                            <span>High Jump</span><span className="font-mono text-amber-400 font-bold">1.80m (L9)</span>
+                                        </div>
+                                        <div className="flex justify-between text-slate-300">
+                                            <span>Long Jump</span><span className="font-mono text-amber-400 font-bold">6.16m (L9)</span>
+                                        </div>
+                                        <div className="flex justify-between text-slate-300">
+                                            <span>Triple Jump</span><span className="font-mono text-purple-300 font-bold">12.63m (L8)</span>
+                                        </div>
+                                        <div className="flex justify-between text-slate-300">
+                                            <span>800m</span><span className="font-mono text-emerald-400 font-bold">2:16.59 (L2)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Sydney Taylor */}
+                                <div className="p-5 rounded-2xl bg-slate-900/60 border border-purple-500/40 shadow-lg">
+                                    <div className="flex justify-between items-start">
+                                        <div>
+                                            <h4 className="text-base font-black text-white">Sydney Taylor</h4>
+                                            <p className="text-xs text-slate-400">U16 Girls • Sprints Specialist</p>
+                                        </div>
+                                        <span className="px-2 py-0.5 rounded-md text-xs font-black bg-purple-500/20 text-purple-300 border border-purple-400/30">
+                                            Treble L9 🏆
+                                        </span>
+                                    </div>
+                                    <div className="mt-3 p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-xs text-purple-300">
+                                        <strong>✨ Sprints Treble:</strong> Achieved Level 9 in 100m, 200m, and the newly added 300m PB!
+                                    </div>
+                                    <div className="mt-3 space-y-1.5 text-xs">
+                                        <div className="flex justify-between text-slate-300">
+                                            <span>300m (Walton)</span><span className="font-mono text-amber-400 font-bold">39.84s (L9)</span>
+                                        </div>
+                                        <div className="flex justify-between text-slate-300">
+                                            <span>100m (Walton)</span><span className="font-mono text-amber-400 font-bold">12.24s (L9)</span>
+                                        </div>
+                                        <div className="flex justify-between text-slate-300">
+                                            <span>200m (Guildford)</span><span className="font-mono text-amber-400 font-bold">25.03s (L9)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Kian Nynan */}
+                                <div className="p-5 rounded-2xl bg-slate-900/60 border border-cyan-500/40 shadow-lg">
+                                    <div className="flex justify-between items-start">
+                                        <div>
+                                            <h4 className="text-base font-black text-white">Kian Nynan</h4>
+                                            <p className="text-xs text-slate-400">U16 Boys • Heavy Throws</p>
+                                        </div>
+                                        <span className="px-2 py-0.5 rounded-md text-xs font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-400/30">
+                                            3 Disciplines
+                                        </span>
+                                    </div>
+                                    <p className="text-xs text-slate-400 mt-2">Competed across three throwing disciplines in UKYDL league matches:</p>
+                                    <div className="mt-3 space-y-1.5 text-xs">
+                                        <div className="flex justify-between text-slate-300">
+                                            <span>Discus (1.25kg)</span><span className="font-mono text-cyan-300 font-bold">31.91m (L6)</span>
+                                        </div>
+                                        <div className="flex justify-between text-slate-300">
+                                            <span>Shot Put (4kg)</span><span className="font-mono text-cyan-300 font-bold">10.43m (L5)</span>
+                                        </div>
+                                        <div className="flex justify-between text-slate-300">
+                                            <span>Hammer (4kg)</span><span className="font-mono text-emerald-400 font-bold">27.11m (L2)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Cirocco Fitzpatrick */}
+                                <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 shadow-lg">
+                                    <div className="flex justify-between items-start">
+                                        <div>
+                                            <h4 className="text-base font-black text-white">Cirocco Fitzpatrick</h4>
+                                            <p className="text-xs text-slate-400">U16 Boys • Javelin & Throws</p>
+                                        </div>
+                                        <span className="px-2 py-0.5 rounded-md text-xs font-black bg-purple-500/20 text-purple-300">
+                                            Level 7 ⭐
+                                        </span>
+                                    </div>
+                                    <div className="mt-3 space-y-1.5 text-xs">
+                                        <div className="flex justify-between text-slate-300">
+                                            <span>Javelin (600g)</span><span className="font-mono text-purple-300 font-bold">42.13m (L7)</span>
+                                        </div>
+                                        <div className="flex justify-between text-slate-300">
+                                            <span>Discus (1.25kg)</span><span className="font-mono text-cyan-300 font-bold">25.30m (L4)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Oliver Baker */}
+                                <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 shadow-lg">
+                                    <div className="flex justify-between items-start">
+                                        <div>
+                                            <h4 className="text-base font-black text-white">Oliver Baker</h4>
+                                            <p className="text-xs text-slate-400">U16 Boys • Shot & Javelin</p>
+                                        </div>
+                                        <span className="px-2 py-0.5 rounded-md text-xs font-black bg-purple-500/20 text-purple-300">
+                                            Level 7 ⭐
+                                        </span>
+                                    </div>
+                                    <div className="mt-3 space-y-1.5 text-xs">
+                                        <div className="flex justify-between text-slate-300">
+                                            <span>Shot Put (4kg)</span><span className="font-mono text-purple-300 font-bold">11.65m (L7)</span>
+                                        </div>
+                                        <div className="flex justify-between text-slate-300">
+                                            <span>Javelin (600g)</span><span className="font-mono text-slate-400 font-bold">21.26m (Club PB)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Nathan Griffiths & Jayden Adjei */}
+                                <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 shadow-lg">
+                                    <div className="flex justify-between items-start">
+                                        <div>
+                                            <h4 className="text-base font-black text-white">Nathan Griffiths & Jayden Adjei</h4>
+                                            <p className="text-xs text-slate-400">U17 Boys • Multi-Discipline</p>
+                                        </div>
+                                        <span className="px-2 py-0.5 rounded-md text-xs font-bold bg-cyan-500/20 text-cyan-300">
+                                            Level 6
+                                        </span>
+                                    </div>
+                                    <div className="mt-3 space-y-1.5 text-xs">
+                                        <div className="flex justify-between text-slate-300">
+                                            <span>Nathan (Javelin / 60m)</span><span className="font-mono text-cyan-300 font-bold">41.79m (L6) / 7.91s (L4)</span>
+                                        </div>
+                                        <div className="flex justify-between text-slate-300">
+                                            <span>Jayden (60m / 100m)</span><span className="font-mono text-cyan-300 font-bold">7.58s (L6) / 11.83s (L5)</span>
+                                        </div>
+                                        <div className="flex justify-between text-slate-300">
+                                            <span>Daniel Borowski (Javelin)</span><span className="font-mono text-cyan-300 font-bold">27.11m (L4)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 )}

@@ -7,7 +7,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "scrape:po10": "python3 scripts/comprehensive_po10_scraper.py",
+    "build:awards": "python3 ../hac_utils/scripts/generate_ea_pb_awards.py"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.95.3",
